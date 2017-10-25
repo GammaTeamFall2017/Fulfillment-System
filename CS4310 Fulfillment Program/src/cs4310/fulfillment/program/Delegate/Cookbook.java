@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cs4310.fulfillment.program;
+package cs4310.fulfillment.program.Delegate;
 
+import cs4310.fulfillment.program.Delegate.Meal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

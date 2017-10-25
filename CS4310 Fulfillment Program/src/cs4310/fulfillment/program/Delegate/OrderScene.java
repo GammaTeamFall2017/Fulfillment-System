@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cs4310.fulfillment.program;
+package cs4310.fulfillment.program.Delegate;
 
+import cs4310.fulfillment.program.Delegate.SceneController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
