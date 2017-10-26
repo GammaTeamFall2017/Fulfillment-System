@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField layoutX="566.0" layoutY="23.0" promptText="Input Menu Item Name" />
+      <TextField layoutX="458.0" layoutY="65.0" promptText="Input Price" />
+      <TextField layoutX="673.0" layoutY="65.0" promptText="Input ETA" />
+      <Button layoutX="757.0" layoutY="663.0" mnemonicParsing="false" text="Add Item" />
+      <TextField layoutX="40.0" layoutY="152.0" promptText="Input Sub-item Name" />
+      <ChoiceBox layoutX="244.0" layoutY="152.0" prefWidth="150.0" />
+      <CheckBox layoutX="197.0" layoutY="156.0" mnemonicParsing="false" />
+      <CheckBox layoutX="197.0" layoutY="184.0" mnemonicParsing="false" />
+      <CheckBox layoutX="244.0" layoutY="184.0" mnemonicParsing="false" text="CheckBox" />
+      <TextField layoutX="748.0" layoutY="152.0" promptText="Input Price" />
+      <TextField layoutX="994.0" layoutY="152.0" promptText="Input ETA" />
+      <Button layoutX="458.0" layoutY="663.0" mnemonicParsing="false" text="Cancel" />
+      <Button layoutX="577.0" layoutY="272.0" mnemonicParsing="false" text="Add Another Add on" />
+      <VBox layoutX="492.0" layoutY="152.0" prefHeight="115.0" prefWidth="149.0" spacing="2.0">
+         <children>
+            <TextField />
+            <TextField />
+            <TextField />
+            <Button mnemonicParsing="false" text="Add More" />
+         </children>
+      </VBox>
+      <Button layoutX="9.0" layoutY="152.0" mnemonicParsing="false" text="X" textFill="#fc0101" />
+   </children>
+</AnchorPane>

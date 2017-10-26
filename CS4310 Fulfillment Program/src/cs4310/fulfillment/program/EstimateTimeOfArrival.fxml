@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="270.0" layoutY="189.0" text="Your Food is Estimated to Arrive In">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="522.0" layoutY="290.0" text="10">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="615.0" layoutY="290.0" text="Minute(s)">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Button layoutX="476.0" layoutY="473.0" mnemonicParsing="false" text="Request Waitstaff">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

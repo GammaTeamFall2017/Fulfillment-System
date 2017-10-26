@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="566.0" layoutY="42.0" text="Edit User Seleciton">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button layoutX="803.0" layoutY="212.0" mnemonicParsing="false" text="Update" />
+      <Button layoutX="881.0" layoutY="212.0" mnemonicParsing="false" text="Remove" />
+      <Label layoutX="82.0" layoutY="211.0" text="John Doe">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </Label>
+      <Label layoutX="243.0" layoutY="211.0" text="Waitstaff">
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="82.0" layoutY="258.0" text="Jane Doe">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </Label>
+      <Label layoutX="243.0" layoutY="258.0" text="Kitchen Staff">
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Button layoutX="881.0" layoutY="259.0" mnemonicParsing="false" text="Remove" />
+      <Button layoutX="803.0" layoutY="259.0" mnemonicParsing="false" text="Update" />
+   </children>
+</AnchorPane>
