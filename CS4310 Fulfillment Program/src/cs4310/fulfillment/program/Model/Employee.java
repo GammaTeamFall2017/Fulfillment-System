@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
@@ -35,8 +40,9 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "employee_id", nullable = false)
+    @Column(name = "employee_id")
     private Integer employeeId;
+    
     @Basic(optional = false)
     @Column(name = "first_name", nullable = false, length = 45)
     private String firstName;

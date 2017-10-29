@@ -1,8 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -63,13 +68,13 @@ public class Item implements Serializable {
     private int itemQuantity;
     @Column(name = "special_instructions", length = 255)
     private String specialInstructions;
-    @JoinTable(name = "Items_Ordered", joinColumns = {
+    @JoinTable(name = "ITEMS_ORDERED", joinColumns = {
         @JoinColumn(name = "item_in_order", referencedColumnName = "item_id", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "order_id", referencedColumnName = "order_number", nullable = false)})
     @ManyToMany
-    private Collection<Orders> ordersCollection;
+    private Set<Orders> ordersSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemId")
-    private Collection<Subitem> subitemCollection;
+    private Set<Subitem> subitemSet;
 
     public Item() {
     }
@@ -143,21 +148,21 @@ public class Item implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Orders> getOrdersCollection() {
-        return ordersCollection;
+    public Set<Orders> getOrdersSet() {
+        return ordersSet;
     }
 
-    public void setOrdersCollection(Collection<Orders> ordersCollection) {
-        this.ordersCollection = ordersCollection;
+    public void setOrdersSet(Set<Orders> ordersSet) {
+        this.ordersSet = ordersSet;
     }
 
     @XmlTransient
-    public Collection<Subitem> getSubitemCollection() {
-        return subitemCollection;
+    public Set<Subitem> getSubitemSet() {
+        return subitemSet;
     }
 
-    public void setSubitemCollection(Collection<Subitem> subitemCollection) {
-        this.subitemCollection = subitemCollection;
+    public void setSubitemSet(Set<Subitem> subitemSet) {
+        this.subitemSet = subitemSet;
     }
 
     @Override

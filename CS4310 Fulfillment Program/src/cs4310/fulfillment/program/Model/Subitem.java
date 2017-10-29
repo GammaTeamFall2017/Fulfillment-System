@@ -1,8 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -55,8 +60,8 @@ public class Subitem implements Serializable {
     @Basic(optional = false)
     @Column(name = "subitem_type", nullable = false, length = 45)
     private String subitemType;
-    @ManyToMany(mappedBy = "subitemCollection")
-    private Collection<Orders> ordersCollection;
+    @ManyToMany(mappedBy = "subitemSet")
+    private Set<Orders> ordersSet;
     @JoinColumn(name = "item_id", referencedColumnName = "item_id", nullable = false)
     @ManyToOne(optional = false)
     private Item itemId;
@@ -117,12 +122,12 @@ public class Subitem implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Orders> getOrdersCollection() {
-        return ordersCollection;
+    public Set<Orders> getOrdersSet() {
+        return ordersSet;
     }
 
-    public void setOrdersCollection(Collection<Orders> ordersCollection) {
-        this.ordersCollection = ordersCollection;
+    public void setOrdersSet(Set<Orders> ordersSet) {
+        this.ordersSet = ordersSet;
     }
 
     public Item getItemId() {

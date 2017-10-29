@@ -1,12 +1,19 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -41,11 +48,12 @@ public class Orders implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "order_number", nullable = false)
     private Integer orderNumber;
     @Basic(optional = false)
-    @Column(name = "table_number", nullable = false, length = 15)
+    @Column(name = "table_number", nullable = false, length = 45)
     private String tableNumber;
     @Column(name = "kitchen_complete")
     private Boolean kitchenComplete;
@@ -59,13 +67,13 @@ public class Orders implements Serializable {
     @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
-    @ManyToMany(mappedBy = "ordersCollection")
-    private Collection<Item> itemCollection;
-    @JoinTable(name = "Subitems_Ordered", joinColumns = {
+    @JoinTable(name = "SUBITEMS_ORDERED", joinColumns = {
         @JoinColumn(name = "order_id", referencedColumnName = "order_number", nullable = false)}, inverseJoinColumns = {
         @JoinColumn(name = "subitem_ordered", referencedColumnName = "subitem_id", nullable = false)})
     @ManyToMany
-    private Collection<Subitem> subitemCollection;
+    private Set<Subitem> subitemSet;
+    @ManyToMany(mappedBy = "ordersSet")
+    private Set<Item> itemSet;
 
     public Orders() {
     }
@@ -136,21 +144,21 @@ public class Orders implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Item> getItemCollection() {
-        return itemCollection;
+    public Set<Subitem> getSubitemSet() {
+        return subitemSet;
     }
 
-    public void setItemCollection(Collection<Item> itemCollection) {
-        this.itemCollection = itemCollection;
+    public void setSubitemSet(Set<Subitem> subitemSet) {
+        this.subitemSet = subitemSet;
     }
 
     @XmlTransient
-    public Collection<Subitem> getSubitemCollection() {
-        return subitemCollection;
+    public Set<Item> getItemSet() {
+        return itemSet;
     }
 
-    public void setSubitemCollection(Collection<Subitem> subitemCollection) {
-        this.subitemCollection = subitemCollection;
+    public void setItemSet(Set<Item> itemSet) {
+        this.itemSet = itemSet;
     }
 
     @Override
