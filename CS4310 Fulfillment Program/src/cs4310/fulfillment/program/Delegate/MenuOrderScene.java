@@ -26,7 +26,7 @@ import javafx.stage.Stage;
  *
  * @author jacobh
  */
-public class OrderScene  implements Initializable {
+public class MenuOrderScene  implements Initializable {
     
     @FXML private Button submitOrder;
     @FXML private Label totalPrice;

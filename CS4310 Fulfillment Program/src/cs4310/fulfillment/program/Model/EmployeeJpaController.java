@@ -5,7 +5,7 @@
  */
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException; //////exceptions was moved to a different location. not sure if intentional or not.
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
