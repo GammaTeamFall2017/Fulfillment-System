@@ -35,8 +35,8 @@ public class ItemJpaController implements Serializable {
     }
 
     public void create(Item item) {
-        if (item.getOrdersSet() == null) {
-            item.setOrdersSet(new HashSet<Orders>());
+        if (item.getItemsOrderedSet() == null) {
+            item.setItemsOrderedSet(new HashSet<ItemsOrdered>());
         }
         if (item.getSubitemSet() == null) {
             item.setSubitemSet(new HashSet<Subitem>());
@@ -45,12 +45,12 @@ public class ItemJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Set<Orders> attachedOrdersSet = new HashSet<Orders>();
-            for (Orders ordersSetOrdersToAttach : item.getOrdersSet()) {
-                ordersSetOrdersToAttach = em.getReference(ordersSetOrdersToAttach.getClass(), ordersSetOrdersToAttach.getOrderNumber());
-                attachedOrdersSet.add(ordersSetOrdersToAttach);
+            Set<ItemsOrdered> attachedItemsOrderedSet = new HashSet<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedSetItemsOrderedToAttach : item.getItemsOrderedSet()) {
+                itemsOrderedSetItemsOrderedToAttach = em.getReference(itemsOrderedSetItemsOrderedToAttach.getClass(), itemsOrderedSetItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedSet.add(itemsOrderedSetItemsOrderedToAttach);
             }
-            item.setOrdersSet(attachedOrdersSet);
+            item.setItemsOrderedSet(attachedItemsOrderedSet);
             Set<Subitem> attachedSubitemSet = new HashSet<Subitem>();
             for (Subitem subitemSetSubitemToAttach : item.getSubitemSet()) {
                 subitemSetSubitemToAttach = em.getReference(subitemSetSubitemToAttach.getClass(), subitemSetSubitemToAttach.getSubitemId());
@@ -58,9 +58,14 @@ public class ItemJpaController implements Serializable {
             }
             item.setSubitemSet(attachedSubitemSet);
             em.persist(item);
-            for (Orders ordersSetOrders : item.getOrdersSet()) {
-                ordersSetOrders.getItemSet().add(item);
-                ordersSetOrders = em.merge(ordersSetOrders);
+            for (ItemsOrdered itemsOrderedSetItemsOrdered : item.getItemsOrderedSet()) {
+                Item oldItemInOrderOfItemsOrderedSetItemsOrdered = itemsOrderedSetItemsOrdered.getItemInOrder();
+                itemsOrderedSetItemsOrdered.setItemInOrder(item);
+                itemsOrderedSetItemsOrdered = em.merge(itemsOrderedSetItemsOrdered);
+                if (oldItemInOrderOfItemsOrderedSetItemsOrdered != null) {
+                    oldItemInOrderOfItemsOrderedSetItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetItemsOrdered);
+                    oldItemInOrderOfItemsOrderedSetItemsOrdered = em.merge(oldItemInOrderOfItemsOrderedSetItemsOrdered);
+                }
             }
             for (Subitem subitemSetSubitem : item.getSubitemSet()) {
                 Item oldItemIdOfSubitemSetSubitem = subitemSetSubitem.getItemId();
@@ -85,11 +90,19 @@ public class ItemJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Item persistentItem = em.find(Item.class, item.getItemId());
-            Set<Orders> ordersSetOld = persistentItem.getOrdersSet();
-            Set<Orders> ordersSetNew = item.getOrdersSet();
+            Set<ItemsOrdered> itemsOrderedSetOld = persistentItem.getItemsOrderedSet();
+            Set<ItemsOrdered> itemsOrderedSetNew = item.getItemsOrderedSet();
             Set<Subitem> subitemSetOld = persistentItem.getSubitemSet();
             Set<Subitem> subitemSetNew = item.getSubitemSet();
             List<String> illegalOrphanMessages = null;
+            for (ItemsOrdered itemsOrderedSetOldItemsOrdered : itemsOrderedSetOld) {
+                if (!itemsOrderedSetNew.contains(itemsOrderedSetOldItemsOrdered)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain ItemsOrdered " + itemsOrderedSetOldItemsOrdered + " since its itemInOrder field is not nullable.");
+                }
+            }
             for (Subitem subitemSetOldSubitem : subitemSetOld) {
                 if (!subitemSetNew.contains(subitemSetOldSubitem)) {
                     if (illegalOrphanMessages == null) {
@@ -101,13 +114,13 @@ public class ItemJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Set<Orders> attachedOrdersSetNew = new HashSet<Orders>();
-            for (Orders ordersSetNewOrdersToAttach : ordersSetNew) {
-                ordersSetNewOrdersToAttach = em.getReference(ordersSetNewOrdersToAttach.getClass(), ordersSetNewOrdersToAttach.getOrderNumber());
-                attachedOrdersSetNew.add(ordersSetNewOrdersToAttach);
+            Set<ItemsOrdered> attachedItemsOrderedSetNew = new HashSet<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedSetNewItemsOrderedToAttach : itemsOrderedSetNew) {
+                itemsOrderedSetNewItemsOrderedToAttach = em.getReference(itemsOrderedSetNewItemsOrderedToAttach.getClass(), itemsOrderedSetNewItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedSetNew.add(itemsOrderedSetNewItemsOrderedToAttach);
             }
-            ordersSetNew = attachedOrdersSetNew;
-            item.setOrdersSet(ordersSetNew);
+            itemsOrderedSetNew = attachedItemsOrderedSetNew;
+            item.setItemsOrderedSet(itemsOrderedSetNew);
             Set<Subitem> attachedSubitemSetNew = new HashSet<Subitem>();
             for (Subitem subitemSetNewSubitemToAttach : subitemSetNew) {
                 subitemSetNewSubitemToAttach = em.getReference(subitemSetNewSubitemToAttach.getClass(), subitemSetNewSubitemToAttach.getSubitemId());
@@ -116,16 +129,15 @@ public class ItemJpaController implements Serializable {
             subitemSetNew = attachedSubitemSetNew;
             item.setSubitemSet(subitemSetNew);
             item = em.merge(item);
-            for (Orders ordersSetOldOrders : ordersSetOld) {
-                if (!ordersSetNew.contains(ordersSetOldOrders)) {
-                    ordersSetOldOrders.getItemSet().remove(item);
-                    ordersSetOldOrders = em.merge(ordersSetOldOrders);
-                }
-            }
-            for (Orders ordersSetNewOrders : ordersSetNew) {
-                if (!ordersSetOld.contains(ordersSetNewOrders)) {
-                    ordersSetNewOrders.getItemSet().add(item);
-                    ordersSetNewOrders = em.merge(ordersSetNewOrders);
+            for (ItemsOrdered itemsOrderedSetNewItemsOrdered : itemsOrderedSetNew) {
+                if (!itemsOrderedSetOld.contains(itemsOrderedSetNewItemsOrdered)) {
+                    Item oldItemInOrderOfItemsOrderedSetNewItemsOrdered = itemsOrderedSetNewItemsOrdered.getItemInOrder();
+                    itemsOrderedSetNewItemsOrdered.setItemInOrder(item);
+                    itemsOrderedSetNewItemsOrdered = em.merge(itemsOrderedSetNewItemsOrdered);
+                    if (oldItemInOrderOfItemsOrderedSetNewItemsOrdered != null && !oldItemInOrderOfItemsOrderedSetNewItemsOrdered.equals(item)) {
+                        oldItemInOrderOfItemsOrderedSetNewItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetNewItemsOrdered);
+                        oldItemInOrderOfItemsOrderedSetNewItemsOrdered = em.merge(oldItemInOrderOfItemsOrderedSetNewItemsOrdered);
+                    }
                 }
             }
             for (Subitem subitemSetNewSubitem : subitemSetNew) {
@@ -169,6 +181,13 @@ public class ItemJpaController implements Serializable {
                 throw new NonexistentEntityException("The item with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
+            Set<ItemsOrdered> itemsOrderedSetOrphanCheck = item.getItemsOrderedSet();
+            for (ItemsOrdered itemsOrderedSetOrphanCheckItemsOrdered : itemsOrderedSetOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Item (" + item + ") cannot be destroyed since the ItemsOrdered " + itemsOrderedSetOrphanCheckItemsOrdered + " in its itemsOrderedSet field has a non-nullable itemInOrder field.");
+            }
             Set<Subitem> subitemSetOrphanCheck = item.getSubitemSet();
             for (Subitem subitemSetOrphanCheckSubitem : subitemSetOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -178,11 +197,6 @@ public class ItemJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Set<Orders> ordersSet = item.getOrdersSet();
-            for (Orders ordersSetOrders : ordersSet) {
-                ordersSetOrders.getItemSet().remove(item);
-                ordersSetOrders = em.merge(ordersSetOrders);
             }
             em.remove(item);
             em.getTransaction().commit();

@@ -10,16 +10,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -67,13 +66,8 @@ public class Orders implements Serializable {
     @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
-    @JoinTable(name = "SUBITEMS_ORDERED", joinColumns = {
-        @JoinColumn(name = "order_id", referencedColumnName = "order_number", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "subitem_ordered", referencedColumnName = "subitem_id", nullable = false)})
-    @ManyToMany
-    private Set<Subitem> subitemSet;
-    @ManyToMany(mappedBy = "ordersSet")
-    private Set<Item> itemSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
+    private Set<ItemsOrdered> itemsOrderedSet;
 
     public Orders() {
     }
@@ -144,21 +138,12 @@ public class Orders implements Serializable {
     }
 
     @XmlTransient
-    public Set<Subitem> getSubitemSet() {
-        return subitemSet;
+    public Set<ItemsOrdered> getItemsOrderedSet() {
+        return itemsOrderedSet;
     }
 
-    public void setSubitemSet(Set<Subitem> subitemSet) {
-        this.subitemSet = subitemSet;
-    }
-
-    @XmlTransient
-    public Set<Item> getItemSet() {
-        return itemSet;
-    }
-
-    public void setItemSet(Set<Item> itemSet) {
-        this.itemSet = itemSet;
+    public void setItemsOrderedSet(Set<ItemsOrdered> itemsOrderedSet) {
+        this.itemsOrderedSet = itemsOrderedSet;
     }
 
     @Override
@@ -183,7 +168,7 @@ public class Orders implements Serializable {
 
     @Override
     public String toString() {
-        return "cs4310.fulfillment.program.Model.Orders[ orderNumber=" + orderNumber + " ]";
+        return "Orders[ orderNumber=" + orderNumber + " ]";
     }
     
 }

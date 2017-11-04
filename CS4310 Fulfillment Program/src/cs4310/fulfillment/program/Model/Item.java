@@ -15,9 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -40,9 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Item.findByItemName", query = "SELECT i FROM Item i WHERE i.itemName = :itemName")
     , @NamedQuery(name = "Item.findByItemDescription", query = "SELECT i FROM Item i WHERE i.itemDescription = :itemDescription")
     , @NamedQuery(name = "Item.findByItemEta", query = "SELECT i FROM Item i WHERE i.itemEta = :itemEta")
-    , @NamedQuery(name = "Item.findByItemPrice", query = "SELECT i FROM Item i WHERE i.itemPrice = :itemPrice")
-    , @NamedQuery(name = "Item.findByItemQuantity", query = "SELECT i FROM Item i WHERE i.itemQuantity = :itemQuantity")
-    , @NamedQuery(name = "Item.findBySpecialInstructions", query = "SELECT i FROM Item i WHERE i.specialInstructions = :specialInstructions")})
+    , @NamedQuery(name = "Item.findByItemPrice", query = "SELECT i FROM Item i WHERE i.itemPrice = :itemPrice")})
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,16 +58,8 @@ public class Item implements Serializable {
     @Basic(optional = false)
     @Column(name = "item_price", nullable = false, precision = 7, scale = 2)
     private BigDecimal itemPrice;
-    @Basic(optional = false)
-    @Column(name = "item_quantity", nullable = false)
-    private int itemQuantity;
-    @Column(name = "special_instructions", length = 255)
-    private String specialInstructions;
-    @JoinTable(name = "ITEMS_ORDERED", joinColumns = {
-        @JoinColumn(name = "item_in_order", referencedColumnName = "item_id", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "order_id", referencedColumnName = "order_number", nullable = false)})
-    @ManyToMany
-    private Set<Orders> ordersSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemInOrder")
+    private Set<ItemsOrdered> itemsOrderedSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemId")
     private Set<Subitem> subitemSet;
 
@@ -83,12 +70,11 @@ public class Item implements Serializable {
         this.itemId = itemId;
     }
 
-    public Item(Integer itemId, String itemName, int itemEta, BigDecimal itemPrice, int itemQuantity) {
+    public Item(Integer itemId, String itemName, int itemEta, BigDecimal itemPrice) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemEta = itemEta;
         this.itemPrice = itemPrice;
-        this.itemQuantity = itemQuantity;
     }
 
     public Integer getItemId() {
@@ -131,29 +117,13 @@ public class Item implements Serializable {
         this.itemPrice = itemPrice;
     }
 
-    public int getItemQuantity() {
-        return itemQuantity;
-    }
-
-    public void setItemQuantity(int itemQuantity) {
-        this.itemQuantity = itemQuantity;
-    }
-
-    public String getSpecialInstructions() {
-        return specialInstructions;
-    }
-
-    public void setSpecialInstructions(String specialInstructions) {
-        this.specialInstructions = specialInstructions;
-    }
-
     @XmlTransient
-    public Set<Orders> getOrdersSet() {
-        return ordersSet;
+    public Set<ItemsOrdered> getItemsOrderedSet() {
+        return itemsOrderedSet;
     }
 
-    public void setOrdersSet(Set<Orders> ordersSet) {
-        this.ordersSet = ordersSet;
+    public void setItemsOrderedSet(Set<ItemsOrdered> itemsOrderedSet) {
+        this.itemsOrderedSet = itemsOrderedSet;
     }
 
     @XmlTransient
@@ -187,7 +157,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "cs4310.fulfillment.program.Model.Item[ itemId=" + itemId + " ]";
+        return "Item[ itemId=" + itemId + " ]";
     }
     
 }

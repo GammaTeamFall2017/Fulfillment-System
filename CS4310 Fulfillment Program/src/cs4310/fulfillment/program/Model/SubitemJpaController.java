@@ -33,8 +33,8 @@ public class SubitemJpaController implements Serializable {
     }
 
     public void create(Subitem subitem) {
-        if (subitem.getOrdersSet() == null) {
-            subitem.setOrdersSet(new HashSet<Orders>());
+        if (subitem.getItemsOrderedSet() == null) {
+            subitem.setItemsOrderedSet(new HashSet<ItemsOrdered>());
         }
         EntityManager em = null;
         try {
@@ -45,20 +45,25 @@ public class SubitemJpaController implements Serializable {
                 itemId = em.getReference(itemId.getClass(), itemId.getItemId());
                 subitem.setItemId(itemId);
             }
-            Set<Orders> attachedOrdersSet = new HashSet<Orders>();
-            for (Orders ordersSetOrdersToAttach : subitem.getOrdersSet()) {
-                ordersSetOrdersToAttach = em.getReference(ordersSetOrdersToAttach.getClass(), ordersSetOrdersToAttach.getOrderNumber());
-                attachedOrdersSet.add(ordersSetOrdersToAttach);
+            Set<ItemsOrdered> attachedItemsOrderedSet = new HashSet<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedSetItemsOrderedToAttach : subitem.getItemsOrderedSet()) {
+                itemsOrderedSetItemsOrderedToAttach = em.getReference(itemsOrderedSetItemsOrderedToAttach.getClass(), itemsOrderedSetItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedSet.add(itemsOrderedSetItemsOrderedToAttach);
             }
-            subitem.setOrdersSet(attachedOrdersSet);
+            subitem.setItemsOrderedSet(attachedItemsOrderedSet);
             em.persist(subitem);
             if (itemId != null) {
                 itemId.getSubitemSet().add(subitem);
                 itemId = em.merge(itemId);
             }
-            for (Orders ordersSetOrders : subitem.getOrdersSet()) {
-                ordersSetOrders.getSubitemSet().add(subitem);
-                ordersSetOrders = em.merge(ordersSetOrders);
+            for (ItemsOrdered itemsOrderedSetItemsOrdered : subitem.getItemsOrderedSet()) {
+                Subitem oldSubitemOrderedOfItemsOrderedSetItemsOrdered = itemsOrderedSetItemsOrdered.getSubitemOrdered();
+                itemsOrderedSetItemsOrdered.setSubitemOrdered(subitem);
+                itemsOrderedSetItemsOrdered = em.merge(itemsOrderedSetItemsOrdered);
+                if (oldSubitemOrderedOfItemsOrderedSetItemsOrdered != null) {
+                    oldSubitemOrderedOfItemsOrderedSetItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetItemsOrdered);
+                    oldSubitemOrderedOfItemsOrderedSetItemsOrdered = em.merge(oldSubitemOrderedOfItemsOrderedSetItemsOrdered);
+                }
             }
             em.getTransaction().commit();
         } finally {
@@ -76,19 +81,19 @@ public class SubitemJpaController implements Serializable {
             Subitem persistentSubitem = em.find(Subitem.class, subitem.getSubitemId());
             Item itemIdOld = persistentSubitem.getItemId();
             Item itemIdNew = subitem.getItemId();
-            Set<Orders> ordersSetOld = persistentSubitem.getOrdersSet();
-            Set<Orders> ordersSetNew = subitem.getOrdersSet();
+            Set<ItemsOrdered> itemsOrderedSetOld = persistentSubitem.getItemsOrderedSet();
+            Set<ItemsOrdered> itemsOrderedSetNew = subitem.getItemsOrderedSet();
             if (itemIdNew != null) {
                 itemIdNew = em.getReference(itemIdNew.getClass(), itemIdNew.getItemId());
                 subitem.setItemId(itemIdNew);
             }
-            Set<Orders> attachedOrdersSetNew = new HashSet<Orders>();
-            for (Orders ordersSetNewOrdersToAttach : ordersSetNew) {
-                ordersSetNewOrdersToAttach = em.getReference(ordersSetNewOrdersToAttach.getClass(), ordersSetNewOrdersToAttach.getOrderNumber());
-                attachedOrdersSetNew.add(ordersSetNewOrdersToAttach);
+            Set<ItemsOrdered> attachedItemsOrderedSetNew = new HashSet<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedSetNewItemsOrderedToAttach : itemsOrderedSetNew) {
+                itemsOrderedSetNewItemsOrderedToAttach = em.getReference(itemsOrderedSetNewItemsOrderedToAttach.getClass(), itemsOrderedSetNewItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedSetNew.add(itemsOrderedSetNewItemsOrderedToAttach);
             }
-            ordersSetNew = attachedOrdersSetNew;
-            subitem.setOrdersSet(ordersSetNew);
+            itemsOrderedSetNew = attachedItemsOrderedSetNew;
+            subitem.setItemsOrderedSet(itemsOrderedSetNew);
             subitem = em.merge(subitem);
             if (itemIdOld != null && !itemIdOld.equals(itemIdNew)) {
                 itemIdOld.getSubitemSet().remove(subitem);
@@ -98,16 +103,21 @@ public class SubitemJpaController implements Serializable {
                 itemIdNew.getSubitemSet().add(subitem);
                 itemIdNew = em.merge(itemIdNew);
             }
-            for (Orders ordersSetOldOrders : ordersSetOld) {
-                if (!ordersSetNew.contains(ordersSetOldOrders)) {
-                    ordersSetOldOrders.getSubitemSet().remove(subitem);
-                    ordersSetOldOrders = em.merge(ordersSetOldOrders);
+            for (ItemsOrdered itemsOrderedSetOldItemsOrdered : itemsOrderedSetOld) {
+                if (!itemsOrderedSetNew.contains(itemsOrderedSetOldItemsOrdered)) {
+                    itemsOrderedSetOldItemsOrdered.setSubitemOrdered(null);
+                    itemsOrderedSetOldItemsOrdered = em.merge(itemsOrderedSetOldItemsOrdered);
                 }
             }
-            for (Orders ordersSetNewOrders : ordersSetNew) {
-                if (!ordersSetOld.contains(ordersSetNewOrders)) {
-                    ordersSetNewOrders.getSubitemSet().add(subitem);
-                    ordersSetNewOrders = em.merge(ordersSetNewOrders);
+            for (ItemsOrdered itemsOrderedSetNewItemsOrdered : itemsOrderedSetNew) {
+                if (!itemsOrderedSetOld.contains(itemsOrderedSetNewItemsOrdered)) {
+                    Subitem oldSubitemOrderedOfItemsOrderedSetNewItemsOrdered = itemsOrderedSetNewItemsOrdered.getSubitemOrdered();
+                    itemsOrderedSetNewItemsOrdered.setSubitemOrdered(subitem);
+                    itemsOrderedSetNewItemsOrdered = em.merge(itemsOrderedSetNewItemsOrdered);
+                    if (oldSubitemOrderedOfItemsOrderedSetNewItemsOrdered != null && !oldSubitemOrderedOfItemsOrderedSetNewItemsOrdered.equals(subitem)) {
+                        oldSubitemOrderedOfItemsOrderedSetNewItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetNewItemsOrdered);
+                        oldSubitemOrderedOfItemsOrderedSetNewItemsOrdered = em.merge(oldSubitemOrderedOfItemsOrderedSetNewItemsOrdered);
+                    }
                 }
             }
             em.getTransaction().commit();
@@ -144,10 +154,10 @@ public class SubitemJpaController implements Serializable {
                 itemId.getSubitemSet().remove(subitem);
                 itemId = em.merge(itemId);
             }
-            Set<Orders> ordersSet = subitem.getOrdersSet();
-            for (Orders ordersSetOrders : ordersSet) {
-                ordersSetOrders.getSubitemSet().remove(subitem);
-                ordersSetOrders = em.merge(ordersSetOrders);
+            Set<ItemsOrdered> itemsOrderedSet = subitem.getItemsOrderedSet();
+            for (ItemsOrdered itemsOrderedSetItemsOrdered : itemsOrderedSet) {
+                itemsOrderedSetItemsOrdered.setSubitemOrdered(null);
+                itemsOrderedSetItemsOrdered = em.merge(itemsOrderedSetItemsOrdered);
             }
             em.remove(subitem);
             em.getTransaction().commit();
