@@ -46,6 +46,22 @@ public class EmployeeJpaController implements Serializable {
             }
         }
     }
+    
+    public Employee createAndReturn(Employee employee) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            em.persist(employee);
+            em.flush();
+            em.getTransaction().commit();
+            return employee;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public void edit(Employee employee) throws NonexistentEntityException, Exception {
         EntityManager em = null;

@@ -145,7 +145,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "cs4310.fulfillment.program.Model.Employee[ employeeId=" + employeeId + " ]";
+        return "Employee[ employeeId=" + employeeId + " ]";
     }
     
 }

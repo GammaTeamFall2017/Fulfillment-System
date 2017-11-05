@@ -65,6 +65,39 @@ public class OrdersJpaController implements Serializable {
             }
         }
     }
+    
+    public Orders createAndReturn(Orders orders) {
+        if (orders.getItemsOrderedSet() == null) {
+            orders.setItemsOrderedSet(new HashSet<ItemsOrdered>());
+        }
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Set<ItemsOrdered> attachedItemsOrderedSet = new HashSet<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedSetItemsOrderedToAttach : orders.getItemsOrderedSet()) {
+                itemsOrderedSetItemsOrderedToAttach = em.getReference(itemsOrderedSetItemsOrderedToAttach.getClass(), itemsOrderedSetItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedSet.add(itemsOrderedSetItemsOrderedToAttach);
+            }
+            orders.setItemsOrderedSet(attachedItemsOrderedSet);
+            em.persist(orders);
+            for (ItemsOrdered itemsOrderedSetItemsOrdered : orders.getItemsOrderedSet()) {
+                Orders oldOrderIdOfItemsOrderedSetItemsOrdered = itemsOrderedSetItemsOrdered.getOrderId();
+                itemsOrderedSetItemsOrdered.setOrderId(orders);
+                itemsOrderedSetItemsOrdered = em.merge(itemsOrderedSetItemsOrdered);
+                if (oldOrderIdOfItemsOrderedSetItemsOrdered != null) {
+                    oldOrderIdOfItemsOrderedSetItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetItemsOrdered);
+                    oldOrderIdOfItemsOrderedSetItemsOrdered = em.merge(oldOrderIdOfItemsOrderedSetItemsOrdered);
+                }
+            }
+            em.getTransaction().commit();
+            return orders;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public void edit(Orders orders) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
