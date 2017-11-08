@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -35,6 +36,12 @@ public class EditUserPopupSceneController implements Initializable {
 
     @FXML
     private void handleOkButton(ActionEvent event) {
+        Stage stage = (Stage) okButton.getScene().getWindow();
+        stage.close();
+    }
+    public void setText(String [] arr)
+    {
+        //TODO
     }
     
 }

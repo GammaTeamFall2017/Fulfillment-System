@@ -74,6 +74,7 @@ public class EditUserSceneController implements Initializable {
         newScene = new SceneController();
         roleSelectBox.getItems().addAll("waitstaff","kitchen","admin");
         originalUsername = "uname";
+        emp = new Employee();
         setFields(originalUsername);
     }    
 
@@ -118,23 +119,23 @@ public class EditUserSceneController implements Initializable {
     {
         String [] arr;
         arr = new String[5];
-        if (firstNameField.getText().isEmpty())
+        if (firstNameField.getText() == null ||firstNameField.getText().isEmpty())
         {
             arr[0] = "First name";
         }
-        if (lastNameField.getText().isEmpty())
+        if (lastNameField.getText()== null ||lastNameField.getText().isEmpty())
         {
             arr[1] = "Last name";
         }
-        if (usernameField.getText().isEmpty())
+        if (usernameField.getText()== null ||usernameField.getText().isEmpty())
         {
             arr[2] = "Username";
         }
-        if (passwordField.getText().isEmpty())
+        if (passwordField.getText()== null ||passwordField.getText().isEmpty())
         {
             arr[3] = "Password";
         }
-        if (roleSelectBox.getValue().isEmpty())
+        if (roleSelectBox.getValue()== null ||roleSelectBox.getValue().isEmpty())
         {
             arr[4] = "Job title";
         }
@@ -144,8 +145,8 @@ public class EditUserSceneController implements Initializable {
     {
         try
         {
-        DbUtilityCollection db = new DbUtilityCollection();
-        emp = db.getEmployeeByUsername(username);
+        //DbUtilityCollection db = new DbUtilityCollection();
+        //emp = db.getEmployeeByUsername(username);
         nameLabel.setText(emp.getFirstName() + " " + emp.getLastName());
         firstNameField.setText(emp.getFirstName());
         lastNameField.setText(emp.getLastName());
@@ -163,10 +164,10 @@ public class EditUserSceneController implements Initializable {
         try //create pop up window
             {
                 Stage stage = new Stage();
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/cs4310/fulfillment/program/View/EditUserPopup.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/cs4310/fulfillment/program/View/EditUserPopupScene.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditUserPopupSceneController cont = fxmlLoader.getController();
-                //cont.setText(arr); define setText method in controller for popup
+                cont.setText(arr);
                 stage.setScene(new Scene(root));
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.initOwner(saveButton.getScene().getWindow());
