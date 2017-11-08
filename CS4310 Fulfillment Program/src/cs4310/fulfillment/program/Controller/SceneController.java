@@ -19,7 +19,7 @@ public class SceneController{
         boolean temp = false;
         try{
             this.setStage(button);
-            Parent root = FXMLLoader.load(getClass().getResource(scene));;
+            Parent root = FXMLLoader.load(getClass().getResource(scene));
             //get reference to scene1
             Scene myScene = new Scene(root);
             stage.setScene(myScene);
