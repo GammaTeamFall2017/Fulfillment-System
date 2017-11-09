@@ -8,15 +8,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Delegate.MenuOrderScene">
    <children>
       <Label layoutX="607.0" layoutY="25.0" text="Order Scene">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="submitOrder" layoutX="1180.0" layoutY="670.0" mnemonicParsing="false" text="Submit Order" />
+      <Button fx:id="submitOrder" layoutX="1161.0" layoutY="670.0" mnemonicParsing="false" text="Submit Order" />
       <ScrollPane layoutX="765.0" layoutY="80.0" prefHeight="580.0" prefWidth="500.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="578.0" prefWidth="498.0">
@@ -34,5 +33,6 @@
         </content>
       </ScrollPane>
       <AnchorPane fx:id="foodButtonPane" layoutX="15.0" layoutY="80.0" prefHeight="580.0" prefWidth="738.0" />
+      <Button layoutX="1068.0" layoutY="671.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="26.0" prefWidth="79.0" text="Cancel" />
    </children>
 </AnchorPane>

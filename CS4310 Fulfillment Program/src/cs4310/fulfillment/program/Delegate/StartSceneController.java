@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cs4310.fulfillment.program.Controller;
+package cs4310.fulfillment.program.Delegate;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
+import javafx.scene.control.Button;
 /**
  * FXML Controller class
  *
@@ -19,9 +21,21 @@ public class StartSceneController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    @FXML
+    private SceneController StartSceneController;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
+        StartSceneController = new SceneController();
+      
+       // System.out.println("here");
     }    
-    
+    @FXML
+    private void handleLoginButton(ActionEvent e){
+        StartSceneController.setScene("/cs4310/fulfillment/program/View/EnjoyScene.fxml", (Button)e.getSource());
+    }
+    @FXML
+    private void handleCustomerButton(ActionEvent e){
+        StartSceneController.setScene("/cs4310/fulfillment/program/View/MenuOrderScene.fxml", (Button)e.getSource());
+    }
 }
