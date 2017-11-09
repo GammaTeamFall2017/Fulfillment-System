@@ -1,7 +1,7 @@
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.Model.exceptions.IllegalOrphanException;
-import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
+import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import static java.lang.reflect.Array.set;
 import java.math.BigDecimal;
 import java.util.Calendar;

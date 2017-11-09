@@ -19,7 +19,7 @@ public class CS4310FulfillmentProgram extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("OrderScene.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/cs4310/fulfillment/program/View/StartScene.fxml"));
         
         Scene scene = new Scene(root);
         

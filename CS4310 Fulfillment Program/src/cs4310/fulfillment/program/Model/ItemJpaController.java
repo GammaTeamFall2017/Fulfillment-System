@@ -5,8 +5,8 @@
  */
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.Model.exceptions.IllegalOrphanException;
-import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
+import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
