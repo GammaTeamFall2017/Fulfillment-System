@@ -16,7 +16,7 @@ import javafx.scene.control.Button;
  *
  * @author John
  */
-public class StartSceneController implements Initializable {
+public class LoginSceneController implements Initializable {
 
     /**
      * Initializes the controller class.
@@ -32,10 +32,10 @@ public class StartSceneController implements Initializable {
     }    
     @FXML
     private void handleLoginButton(ActionEvent e){
-        StartSceneController.setScene("/cs4310/fulfillment/program/View/LoginScene.fxml", (Button)e.getSource());
+        StartSceneController.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)e.getSource());
     }
     @FXML
-    private void handleCustomerButton(ActionEvent e){
-        StartSceneController.setScene("/cs4310/fulfillment/program/View/MenuOrderScene.fxml", (Button)e.getSource());
+    private void handleCancelButton(ActionEvent e){
+        StartSceneController.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
     }
 }

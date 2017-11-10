@@ -45,8 +45,8 @@ public class MenuOrderScene  implements Initializable {
         newScene = new SceneController();
     }
     
-    @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
-        
+    @FXML public void handleSubmitButton(ActionEvent e) throws IOException{
+        newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", (Button)e.getSource());
     }
     @FXML private void handleCancelButton(ActionEvent e){
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
