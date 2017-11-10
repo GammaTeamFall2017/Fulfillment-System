@@ -19,6 +19,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import static java.lang.Integer.parseInt;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +30,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
+import static java.lang.Integer.parseInt;
 
 /**
  * FXML Controller class
@@ -80,15 +96,15 @@ public class EditUserSceneController implements Initializable {
 
     @FXML
     private void handleSaveButton(ActionEvent event) {
-        String [] arr = validateFields();
+        List<String> emptyFields = validateFields();
         boolean valid = true;
-        for (int i = 0; i < arr.length; i++)
+        for (int i = 0; i < emptyFields.size(); i++)
         {
-            System.out.println(arr[i]);
-            if (arr[i] != null)
+            //System.out.println(emptyFields.get(i));
+            if (emptyFields.get(i) != null)
                 valid = false;
         }
-        System.out.println(valid);
+        //System.out.println(valid);
         if (valid)
         {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
@@ -106,7 +122,7 @@ public class EditUserSceneController implements Initializable {
             }
         }
         else         {
-            createPopup(arr);
+            createPopup(emptyFields);
         }
     }
 
@@ -115,38 +131,38 @@ public class EditUserSceneController implements Initializable {
         newScene.setScene("/cs4310/fulfillment/program/View/EditSelectUserScene.fxml", (Button)event.getSource());
     }
     
-    public String[] validateFields()
+    public List<String> validateFields()
     {
-        String [] arr;
-        arr = new String[5];
+        List<String> emptyFields = new ArrayList<String>();
+
         if (firstNameField.getText() == null ||firstNameField.getText().isEmpty())
         {
-            arr[0] = "First name";
+            emptyFields.add("First name");
         }
         if (lastNameField.getText()== null ||lastNameField.getText().isEmpty())
         {
-            arr[1] = "Last name";
+            emptyFields.add("Last name");
         }
         if (usernameField.getText()== null ||usernameField.getText().isEmpty())
         {
-            arr[2] = "Username";
+            emptyFields.add("Username");
         }
         if (passwordField.getText()== null ||passwordField.getText().isEmpty())
         {
-            arr[3] = "Password";
+            emptyFields.add("Password");
         }
         if (roleSelectBox.getValue()== null ||roleSelectBox.getValue().isEmpty())
         {
-            arr[4] = "Job title";
+            emptyFields.add("Job title");
         }
-        return arr;
+        return emptyFields;
     }
     public void setFields(String username)
     {
         try
         {
-        //DbUtilityCollection db = new DbUtilityCollection();
-        //emp = db.getEmployeeByUsername(username);
+        DbUtilityCollection db = new DbUtilityCollection();
+        emp = db.getEmployeeByUsername(username);
         nameLabel.setText(emp.getFirstName() + " " + emp.getLastName());
         firstNameField.setText(emp.getFirstName());
         lastNameField.setText(emp.getLastName());
@@ -159,7 +175,7 @@ public class EditUserSceneController implements Initializable {
             System.out.println(e);
         }
     }
-    public void createPopup(String [] arr)
+    public void createPopup(List<String> emptyFields)
     {
         try //create pop up window
             {
@@ -167,7 +183,7 @@ public class EditUserSceneController implements Initializable {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/cs4310/fulfillment/program/View/EditUserPopupScene.fxml"));
                 Parent root = (Parent) fxmlLoader.load();
                 EditUserPopupSceneController cont = fxmlLoader.getController();
-                cont.setText(arr);
+                cont.setText(emptyFields);
                 stage.setScene(new Scene(root));
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.initOwner(saveButton.getScene().getWindow());

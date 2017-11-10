@@ -6,6 +6,7 @@
 package cs4310.fulfillment.program.Controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -39,7 +40,7 @@ public class EditUserPopupSceneController implements Initializable {
         Stage stage = (Stage) okButton.getScene().getWindow();
         stage.close();
     }
-    public void setText(String [] arr)
+    public void setText(List<String> emptyFields)
     {
         //TODO
     }
