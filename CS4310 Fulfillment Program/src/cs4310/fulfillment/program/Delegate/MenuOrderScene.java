@@ -35,20 +35,22 @@ public class MenuOrderScene  implements Initializable {
     @FXML private VBox VBoxPrice;
     
     @FXML private AnchorPane foodButtonPane;
-    
+    @FXML SceneController newScene;
     
     
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //can put top food items here
+        newScene = new SceneController();
     }
     
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
-        SceneController newScene = new SceneController();
-        newScene.setScene("", submitOrder);
+        
     }
-    
+    @FXML private void handleCancelButton(ActionEvent e){
+        newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
+    }
     @FXML public void addRowToButtons(){
         
     }
