@@ -16,13 +16,13 @@ import javafx.stage.Stage;
  * @author jacobh
  */
 public class CS4310FulfillmentProgram extends Application {
-    
+    public static String currentUserRole = "";
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("OrderScene.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/cs4310/fulfillment/program/View/StartScene.fxml"));
         
         Scene scene = new Scene(root);
-        
+        stage.setTitle("EasyOrder Fulfillment System");
         stage.setScene(scene);
         stage.show();
     }

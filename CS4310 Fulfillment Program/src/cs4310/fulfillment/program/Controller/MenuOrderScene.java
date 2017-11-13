@@ -35,7 +35,7 @@ public class MenuOrderScene  implements Initializable {
     @FXML private VBox VBoxPrice;
     
     @FXML private AnchorPane foodButtonPane;
-    
+    SceneController newScene = new SceneController();   
     
     
     
@@ -45,8 +45,10 @@ public class MenuOrderScene  implements Initializable {
     }
     
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
-        SceneController newScene = new SceneController();
-        newScene.setScene("", submitOrder);
+        newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival.fxml", submitOrder);
+    }
+    @FXML private void handleCancelButton(ActionEvent e) throws IOException{
+        newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
     }
     
     @FXML public void addRowToButtons(){

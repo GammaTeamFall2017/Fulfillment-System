@@ -5,6 +5,7 @@
  */
 package cs4310.fulfillment.program.Controller;
 
+import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import cs4310.fulfillment.program.Model.Employee;
 import cs4310.fulfillment.program.Model.EmployeeJpaController;
 import java.io.IOException;

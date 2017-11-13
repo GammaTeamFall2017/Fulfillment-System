@@ -5,6 +5,7 @@
  */
 package cs4310.fulfillment.program.Controller;
 
+import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -65,12 +66,12 @@ public class UserLoginSceneController implements Initializable {
         if (db.authenticateEmployee(usernameField.getText(), passwordField.getText()))
         {
             
-            Main.currentUserRole = db.getEmployeeByUsername(usernameField.getText()).getRole();
-            if (Main.currentUserRole.equals("admin"))
+            CS4310FulfillmentProgram.currentUserRole = db.getEmployeeByUsername(usernameField.getText()).getRole();
+            if (CS4310FulfillmentProgram.currentUserRole.equals("admin"))
                 newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", loginButton);
-            if(Main.currentUserRole.equals("waitstaff"))
+            if(CS4310FulfillmentProgram.currentUserRole.equals("waitstaff"))
                 newScene.setScene("/cs4310/fulfillment/program/View/MenuOrderScene.fxml", loginButton);
-            if(Main.currentUserRole.equals("kitchen"))
+            if(CS4310FulfillmentProgram.currentUserRole.equals("kitchen"))
                 newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", loginButton);
         }
         else

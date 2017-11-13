@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cs4310.fulfillment.program.Delegate;
+package cs4310.fulfillment.program.Controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;

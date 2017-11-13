@@ -5,7 +5,7 @@
  */
 package cs4310.fulfillment.program.Controller;
 
-import cs4310.fulfillment.program.Delegate.SceneController;
+import cs4310.fulfillment.program.Controller.SceneController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -18,7 +18,7 @@ import javafx.scene.control.TextField;
 /**
  * FXML Controller class
  *
- * @author John
+ * @author Jacobh
  */
 public class StartSceneController implements Initializable {
 
@@ -29,21 +29,7 @@ public class StartSceneController implements Initializable {
     @FXML
     private Button loginButton;
     @FXML
-    private Label titleLabel;
-    @FXML
-    private Button cancelButton;
-    @FXML
-    private ChoiceBox<?> roleSelectBox;
-    @FXML
-    private TextField usernameField;
-    @FXML
-    private TextField passwordField;
-    @FXML
-    private Label usernameLabel;
-    @FXML
-    private Label passwordLabel;
-    @FXML
-    private Label roleLabel;
+    private Button customerButton;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         

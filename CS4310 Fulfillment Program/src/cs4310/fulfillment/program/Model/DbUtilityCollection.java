@@ -1,5 +1,14 @@
 package cs4310.fulfillment.program.Model;
 
+import cs4310.fulfillment.program.Model.Employee;
+import cs4310.fulfillment.program.Model.EmployeeJpaController;
+import cs4310.fulfillment.program.Model.Item;
+import cs4310.fulfillment.program.Model.ItemJpaController;
+import cs4310.fulfillment.program.Model.ItemsOrdered;
+import cs4310.fulfillment.program.Model.Orders;
+import cs4310.fulfillment.program.Model.OrdersJpaController;
+import cs4310.fulfillment.program.Model.Subitem;
+import cs4310.fulfillment.program.Model.SubitemJpaController;
 import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
 import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import static java.lang.reflect.Array.set;

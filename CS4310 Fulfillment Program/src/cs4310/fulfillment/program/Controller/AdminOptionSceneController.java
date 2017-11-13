@@ -5,8 +5,6 @@
  */
 package cs4310.fulfillment.program.Controller;
 
-import cs4310.fulfillment.program.Delegate.SceneController;
-import cs4310.fulfillment.program.Delegate.SceneController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -88,7 +86,7 @@ public class AdminOptionSceneController implements Initializable {
 
     @FXML
     private void handleLogoutButton(ActionEvent event) {
-        Main.currentUserRole = "";
+        CS4310FulfillmentProgram.currentUserRole = "";
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)event.getSource());
     }
     
