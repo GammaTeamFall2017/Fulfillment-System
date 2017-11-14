@@ -14,15 +14,15 @@ public class AdjustOrderSceneController implements Initializable {
     @FXML private Button orderCompleteButton;
     @FXML private Button changeTimeButton;
     @FXML private Button cancelButton;
-    @FXML private ChoiceBox selectTime;
+    @FXML private ChoiceBox<Integer> selectTime;
     
     @FXML
     public void handleOrderCompleteButton(ActionEvent e) {
-        
+        //TODO
     }
     @FXML
     public void handleChangeTimeButton(ActionEvent e) {
-        
+        //TODO
     }
     
     @FXML
