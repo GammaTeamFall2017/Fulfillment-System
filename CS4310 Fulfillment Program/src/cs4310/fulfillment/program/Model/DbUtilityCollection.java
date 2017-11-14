@@ -9,8 +9,8 @@ import cs4310.fulfillment.program.Model.Orders;
 import cs4310.fulfillment.program.Model.OrdersJpaController;
 import cs4310.fulfillment.program.Model.Subitem;
 import cs4310.fulfillment.program.Model.SubitemJpaController;
-import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
-import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.Model.exceptions.IllegalOrphanException;
+import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
 import static java.lang.reflect.Array.set;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -118,6 +118,12 @@ public class DbUtilityCollection {
     
     
     //*****   Item related Functions      *****//
+    
+    // Gets all Items from the database. Use this function on a new list of items to save the retrieved list.
+    // Example: List<Item> allItems = getAllItems();
+    public List<Item> getAllItems(){
+       return itemInstance.findItemEntities();
+    }
     
     // Calculate Item price with or without addons
     public BigDecimal getTotalItemPrice(Set<ItemsOrdered> itemSet, Item item){
