@@ -127,11 +127,30 @@ public class MenuOrderScene  implements Initializable {
     
     @FXML private void addItemToOrder(Item itemToAdd){
         Label newItemNameField = new Label(itemToAdd.getItemName());
-        Label newPriceField = new Label(itemToAdd.getItemPrice().toString());
+        Label newPriceField = new Label("$" + itemToAdd.getItemPrice().toString());
         Label newQuantityField = new Label("1");
         Button deleteItemButton = new Button();
         deleteItemButton.setText("X");
-        
+        deleteItemButton.setOnAction((ActionEvent event) -> {
+            int index = itemDeleteButtons.indexOf(deleteItemButton);
+            VBoxFood.getChildren().remove(index);
+            VBoxPrice.getChildren().remove(index);
+            VBoxQuantity.getChildren().remove(index);
+            VBoxDelete.getChildren().remove(index);
+            itemNameList.remove(index);
+            priceList.remove(index);
+            quantityList.remove(index);
+            itemDeleteButtons.remove(index);
+        });
+        double height = 20;
+        deleteItemButton.setMinHeight(height);
+        deleteItemButton.setMaxHeight(height);
+        newItemNameField.setMinHeight(height);
+        newItemNameField.setMaxHeight(height);
+        newPriceField.setMinHeight(height);
+        newPriceField.setMaxHeight(height);
+        newQuantityField.setMinHeight(height);
+        newQuantityField.setMaxHeight(height);
         itemDeleteButtons.add(deleteItemButton);
         itemNameList.add(newItemNameField);
         priceList.add(newPriceField);
