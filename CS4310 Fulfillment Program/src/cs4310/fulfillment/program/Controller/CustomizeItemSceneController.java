@@ -36,6 +36,10 @@ public class CustomizeItemSceneController implements Initializable {
     private Label subTotalLabel;
     @FXML
     private Button updateButton;
+    @FXML
+    private Label subTotalAmountLabel;
+    @FXML
+    private Button addButton;
 
     /**
      * Initializes the controller class.
@@ -55,6 +59,10 @@ public class CustomizeItemSceneController implements Initializable {
 
     @FXML
     private void handleUpdateButton(ActionEvent event) {
+    }
+
+    @FXML
+    private void handleAddButton(ActionEvent event) {
     }
     
 }

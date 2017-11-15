@@ -62,7 +62,6 @@ public class UserLoginSceneController implements Initializable {
     @FXML
     private void handleLoginButton(ActionEvent event) {
         DbUtilityCollection db = new DbUtilityCollection();
-        System.out.println(db.getEmployeeByUsername("uname").getPassword());
         if (db.authenticateEmployee(usernameField.getText(), passwordField.getText()))
         {
             
