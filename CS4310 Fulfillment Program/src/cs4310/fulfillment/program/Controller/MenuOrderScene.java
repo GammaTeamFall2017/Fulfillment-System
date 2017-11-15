@@ -19,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -37,7 +38,6 @@ import javafx.stage.Stage;
 public class MenuOrderScene  implements Initializable {
     
     @FXML private Button submitOrder;
-    @FXML private Label totalPrice;
     @FXML private VBox VBoxQuantity;
     @FXML private VBox VBoxFood;
     @FXML private VBox VBoxPrice;
@@ -45,6 +45,9 @@ public class MenuOrderScene  implements Initializable {
     @FXML private VBox VBoxButtons;
     @FXML private AnchorPane foodButtonPane;
     @FXML private AnchorPane orderPane;
+    @FXML private Label totalCost;
+    @FXML private Label subPrice;
+    @FXML private Label taxAmout;
     
     SceneController newScene = new SceneController();   
     DbUtilityCollection newDB = new DbUtilityCollection();
@@ -56,31 +59,33 @@ public class MenuOrderScene  implements Initializable {
     List<Item> orderArray = new ArrayList<Item>();
     int buttonsPerRow = 6;
     int buttonHeight = 100;
-    
+    int widthOfScrollPane = 720;
+    BigDecimal taxRate = new BigDecimal("0.10");
+    BigDecimal totalOrderPrice = new BigDecimal("0.00");
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //itemsArray = newDB.getAllItems();
+        itemsArray = newDB.getAllItems();///this is the connecter for the db
         foodButtonPane.setStyle("-fx-box-border: transparent;");
         orderPane.setStyle("-fx-box-border: transparent; -fx-background-color: #e0e0e0");
         
-        BigDecimal bd = new BigDecimal("1.5");
+        BigDecimal bd = new BigDecimal("1.50");
         //This is to temp fill a array of items
         
-            for(int i = 0; i < 4; i++){
+            for(int i = 0; i < 38; i++){
                 Item tempItems = new Item(i, "food" + i, i+1, bd );
                 itemsArray.add(tempItems);
             }
         
         //end of temp area
         
-        int row = (itemsArray.size() / buttonsPerRow) + 1;//gets the total rows if there are 6 buttons in a row
+        int row = (itemsArray.size() / buttonsPerRow) + 1;//gets the total rows
         int col = buttonsPerRow;
         int end = itemsArray.size() % buttonsPerRow;//gets the total for the last row
         
         int counter = 0;
         for(int i = 0; i < row; i++){
-            int buttonsWidth = 720 / buttonsPerRow; //720 is the size of the VBox
+            int buttonsWidth = widthOfScrollPane / buttonsPerRow; //720 is the size of the VBox
             HBox tempHBox = new HBox(buttonsWidth);
             tempHBox.setPrefWidth(buttonsWidth); 
             tempHBox.setPrefHeight(buttonHeight);
@@ -98,6 +103,8 @@ public class MenuOrderScene  implements Initializable {
                         //newScene.setScene("/cs4310/fulfillment/program/View/.fxml", (Button)e.getSource());
                         addItemToOrder(tempItem);
                         orderArray.add(tempItem);
+                        
+                         
                     }
                 });
                 newButton.setMinWidth(tempHBox.getPrefWidth());
@@ -118,18 +125,22 @@ public class MenuOrderScene  implements Initializable {
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
     }
     
-    @FXML private void handleItemButton(ActionEvent e) throws IOException{
-        //This is for when a customize item scene is added
-        //newScene.setScene("/cs4310/fulfillment/program/View/CustomizeItemScene.fxml", (Button)e.getSource());
-        System.out.println("First item in array is " + itemsArray.get(1).getItemName());
-        
-    }
-    
     @FXML private void addItemToOrder(Item itemToAdd){
         Label newItemNameField = new Label(itemToAdd.getItemName());
         Label newPriceField = new Label("$" + itemToAdd.getItemPrice().toString());
         Label newQuantityField = new Label("1");
         Button deleteItemButton = new Button();
+        totalOrderPrice = totalOrderPrice.add(itemToAdd.getItemPrice());
+        String tempString = "";
+        tempString = totalOrderPrice.toString();
+        subPrice.setText("$" + tempString);  
+        tempString = Double.toString(taxRate.multiply(totalOrderPrice).doubleValue());
+        tempString = tempString.substring(0, Math.min(tempString.length(), 5));
+        taxAmout.setText("$" + tempString);
+        tempString = totalOrderPrice.add(taxRate.multiply(totalOrderPrice)).toString();
+        tempString = tempString.substring(0, Math.min(tempString.length(), 5));
+        totalCost.setText("$" + tempString);
+                
         deleteItemButton.setText("X");
         deleteItemButton.setOnAction((ActionEvent event) -> {
             int index = itemDeleteButtons.indexOf(deleteItemButton);
@@ -161,6 +172,15 @@ public class MenuOrderScene  implements Initializable {
         VBoxPrice.getChildren().add(newPriceField);
         VBoxQuantity.getChildren().add(newQuantityField);
         VBoxDelete.getChildren().add(deleteItemButton);
+    }
+    
+    private double addTax(){
+        double tempAmount = 0;
+        System.out.println("tax: " + totalOrderPrice);
+        System.out.println("tax = " + taxRate.multiply(totalOrderPrice));
+        tempAmount = taxRate.multiply(totalOrderPrice).doubleValue();
+        System.out.println("amount: " + tempAmount);
+        return tempAmount;
     }
     
 }
