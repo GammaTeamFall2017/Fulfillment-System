@@ -27,6 +27,8 @@ public class ListOfOrdersSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         newScene = new SceneController();
         DbUtilityCollection db = new DbUtilityCollection();
+       // db.displayKitchenOrders();
+        System.out.println(db.getTotalOrder());
         //db.displayKitchenOrders();
         // TODO
     }    

@@ -227,7 +227,11 @@ public class DbUtilityCollection {
             }
         }
     }
-    
+    //Testing
+    public int getTotalOrder(){
+        return orderInstance.getOrdersCount();
+    }
+    //end testing
     //***** END Item related Functions  *****//
     
     /*
