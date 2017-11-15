@@ -22,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -40,6 +41,7 @@ public class MenuOrderScene  implements Initializable {
     @FXML private VBox VBoxQuantity;
     @FXML private VBox VBoxFood;
     @FXML private VBox VBoxPrice;
+    @FXML private VBox VBoxDelete;
     @FXML private VBox VBoxButtons;
     @FXML private AnchorPane foodButtonPane;
     @FXML private AnchorPane orderPane;
@@ -47,7 +49,11 @@ public class MenuOrderScene  implements Initializable {
     SceneController newScene = new SceneController();   
     DbUtilityCollection newDB = new DbUtilityCollection();
     List<Item> itemsArray = new ArrayList<Item>();
-    List<Button> itemButtons = new ArrayList<Button>();
+    List<Button> itemDeleteButtons = new ArrayList<Button>();
+    List<Label> itemNameList = new ArrayList<Label>();
+    List<Label> priceList = new ArrayList<Label>();
+    List<Label> quantityList = new ArrayList<Label>();
+    List<Item> orderArray = new ArrayList<Item>();
     int buttonsPerRow = 6;
     int buttonHeight = 100;
     
@@ -61,10 +67,10 @@ public class MenuOrderScene  implements Initializable {
         BigDecimal bd = new BigDecimal("1.5");
         //This is to temp fill a array of items
         
-        for(int i = 0; i < 4; i++){
-            Item tempItems = new Item(i, "food" + i, i+1, bd );
-            itemsArray.add(tempItems);
-        }
+            for(int i = 0; i < 4; i++){
+                Item tempItems = new Item(i, "food" + i, i+1, bd );
+                itemsArray.add(tempItems);
+            }
         
         //end of temp area
         
@@ -90,7 +96,8 @@ public class MenuOrderScene  implements Initializable {
                     
                         //add this scene in when it is created
                         //newScene.setScene("/cs4310/fulfillment/program/View/.fxml", (Button)e.getSource());
-                    
+                        addItemToOrder(tempItem);
+                        orderArray.add(tempItem);
                     }
                 });
                 newButton.setMinWidth(tempHBox.getPrefWidth());
@@ -105,7 +112,7 @@ public class MenuOrderScene  implements Initializable {
     }
     
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
-        newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival.fxml", submitOrder);
+        newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
     }
     @FXML private void handleCancelButton(ActionEvent e) throws IOException{
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
@@ -118,16 +125,23 @@ public class MenuOrderScene  implements Initializable {
         
     }
     
-    @FXML public void addRowToButtons(){
+    @FXML private void addItemToOrder(Item itemToAdd){
+        Label newItemNameField = new Label(itemToAdd.getItemName());
+        Label newPriceField = new Label(itemToAdd.getItemPrice().toString());
+        Label newQuantityField = new Label("1");
+        Button deleteItemButton = new Button();
+        deleteItemButton.setText("X");
         
-    }
-    
-    @FXML public void addColToButton(){
+        itemDeleteButtons.add(deleteItemButton);
+        itemNameList.add(newItemNameField);
+        priceList.add(newPriceField);
+        quantityList.add(newQuantityField);
         
+        
+        VBoxFood.getChildren().add(newItemNameField);
+        VBoxPrice.getChildren().add(newPriceField);
+        VBoxQuantity.getChildren().add(newQuantityField);
+        VBoxDelete.getChildren().add(deleteItemButton);
     }
-    
-    
-    
-    
     
 }
