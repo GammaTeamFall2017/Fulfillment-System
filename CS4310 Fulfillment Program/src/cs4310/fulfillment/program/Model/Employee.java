@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
@@ -24,7 +19,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(catalog = "q7bcl9r2zulifvor", schema = "", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"employee_id"})})
+    @UniqueConstraint(columnNames = {"employee_id"})
+    , @UniqueConstraint(columnNames = {"username"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Employee.findAll", query = "SELECT e FROM Employee e")
@@ -40,9 +36,8 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "employee_id")
+    @Column(name = "employee_id", nullable = false)
     private Integer employeeId;
-    
     @Basic(optional = false)
     @Column(name = "first_name", nullable = false, length = 45)
     private String firstName;
@@ -145,7 +140,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "Employee[ employeeId=" + employeeId + " ]";
+        return "cs4310.fulfillment.program.Model.Employee[ employeeId=" + employeeId + " ]";
     }
     
 }

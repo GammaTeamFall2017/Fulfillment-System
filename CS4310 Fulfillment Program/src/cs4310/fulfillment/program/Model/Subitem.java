@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,7 +56,7 @@ public class Subitem implements Serializable {
     @Column(name = "subitem_type", nullable = false, length = 45)
     private String subitemType;
     @OneToMany(mappedBy = "subitemOrdered")
-    private Set<ItemsOrdered> itemsOrderedSet;
+    private Collection<ItemsOrdered> itemsOrderedCollection;
     @JoinColumn(name = "item_id", referencedColumnName = "item_id", nullable = false)
     @ManyToOne(optional = false)
     private Item itemId;
@@ -122,12 +117,12 @@ public class Subitem implements Serializable {
     }
 
     @XmlTransient
-    public Set<ItemsOrdered> getItemsOrderedSet() {
-        return itemsOrderedSet;
+    public Collection<ItemsOrdered> getItemsOrderedCollection() {
+        return itemsOrderedCollection;
     }
 
-    public void setItemsOrderedSet(Set<ItemsOrdered> itemsOrderedSet) {
-        this.itemsOrderedSet = itemsOrderedSet;
+    public void setItemsOrderedCollection(Collection<ItemsOrdered> itemsOrderedCollection) {
+        this.itemsOrderedCollection = itemsOrderedCollection;
     }
 
     public Item getItemId() {
@@ -160,7 +155,7 @@ public class Subitem implements Serializable {
 
     @Override
     public String toString() {
-        return "Subitem[ subitemId=" + subitemId + " ]";
+        return "cs4310.fulfillment.program.Model.Subitem[ subitemId=" + subitemId + " ]";
     }
     
 }

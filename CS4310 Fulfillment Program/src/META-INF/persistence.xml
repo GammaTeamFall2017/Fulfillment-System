@@ -2,11 +2,11 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="CS4310_Fulfillment_ProgramPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>cs4310.fulfillment.program.Model.Subitem</class>
     <class>cs4310.fulfillment.program.Model.Orders</class>
     <class>cs4310.fulfillment.program.Model.Employee</class>
     <class>cs4310.fulfillment.program.Model.Item</class>
     <class>cs4310.fulfillment.program.Model.ItemsOrdered</class>
+    <class>cs4310.fulfillment.program.Model.Subitem</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://dyud5fa2qycz1o3v.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/q7bcl9r2zulifvor"/>
       <property name="javax.persistence.jdbc.user" value="hoi0d7xyt14jf54m"/>

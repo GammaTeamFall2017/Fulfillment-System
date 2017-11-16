@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Item.findByItemName", query = "SELECT i FROM Item i WHERE i.itemName = :itemName")
     , @NamedQuery(name = "Item.findByItemDescription", query = "SELECT i FROM Item i WHERE i.itemDescription = :itemDescription")
     , @NamedQuery(name = "Item.findByItemEta", query = "SELECT i FROM Item i WHERE i.itemEta = :itemEta")
-    , @NamedQuery(name = "Item.findByItemPrice", query = "SELECT i FROM Item i WHERE i.itemPrice = :itemPrice")})
+    , @NamedQuery(name = "Item.findByItemPrice", query = "SELECT i FROM Item i WHERE i.itemPrice = :itemPrice")
+    , @NamedQuery(name = "Item.findByImgPath", query = "SELECT i FROM Item i WHERE i.imgPath = :imgPath")})
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -58,10 +54,12 @@ public class Item implements Serializable {
     @Basic(optional = false)
     @Column(name = "item_price", nullable = false, precision = 7, scale = 2)
     private BigDecimal itemPrice;
+    @Column(name = "img_path", length = 255)
+    private String imgPath;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemInOrder")
-    private Set<ItemsOrdered> itemsOrderedSet;
+    private Collection<ItemsOrdered> itemsOrderedCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemId")
-    private Set<Subitem> subitemSet;
+    private Collection<Subitem> subitemCollection;
 
     public Item() {
     }
@@ -117,22 +115,30 @@ public class Item implements Serializable {
         this.itemPrice = itemPrice;
     }
 
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
     @XmlTransient
-    public Set<ItemsOrdered> getItemsOrderedSet() {
-        return itemsOrderedSet;
+    public Collection<ItemsOrdered> getItemsOrderedCollection() {
+        return itemsOrderedCollection;
     }
 
-    public void setItemsOrderedSet(Set<ItemsOrdered> itemsOrderedSet) {
-        this.itemsOrderedSet = itemsOrderedSet;
+    public void setItemsOrderedCollection(Collection<ItemsOrdered> itemsOrderedCollection) {
+        this.itemsOrderedCollection = itemsOrderedCollection;
     }
 
     @XmlTransient
-    public Set<Subitem> getSubitemSet() {
-        return subitemSet;
+    public Collection<Subitem> getSubitemCollection() {
+        return subitemCollection;
     }
 
-    public void setSubitemSet(Set<Subitem> subitemSet) {
-        this.subitemSet = subitemSet;
+    public void setSubitemCollection(Collection<Subitem> subitemCollection) {
+        this.subitemCollection = subitemCollection;
     }
 
     @Override
@@ -157,7 +163,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "Item[ itemId=" + itemId + " ]";
+        return "cs4310.fulfillment.program.Model.Item[ itemId=" + itemId + " ]";
     }
     
 }

@@ -5,6 +5,7 @@
  */
 package cs4310.fulfillment.program.Controller;
 
+import cs4310.fulfillment.program.Controller.SceneController;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -40,6 +41,8 @@ public class CustomizeItemSceneController implements Initializable {
     private Label subTotalAmountLabel;
     @FXML
     private Button addButton;
+    
+    private SceneController newScene;
 
     /**
      * Initializes the controller class.
@@ -47,10 +50,14 @@ public class CustomizeItemSceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        newScene = new SceneController();
+        //disable submitButton if quantity field is empty; avoid empty orders
+        submitButton.disableProperty().bind(quantityField.textProperty().isEmpty());
     }    
 
     @FXML
     private void handleCancelButton(ActionEvent event) {
+        newScene.setScene("/cs4310/fulfillment/program/View/MenuOrderScene.fxml", (Button)event.getSource());
     }
 
     @FXML

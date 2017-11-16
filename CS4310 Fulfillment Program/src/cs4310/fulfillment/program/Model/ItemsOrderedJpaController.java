@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -52,18 +47,60 @@ public class ItemsOrderedJpaController implements Serializable {
             }
             em.persist(itemsOrdered);
             if (itemInOrder != null) {
-                itemInOrder.getItemsOrderedSet().add(itemsOrdered);
+                itemInOrder.getItemsOrderedCollection().add(itemsOrdered);
                 itemInOrder = em.merge(itemInOrder);
             }
             if (orderId != null) {
-                orderId.getItemsOrderedSet().add(itemsOrdered);
+                orderId.getItemsOrderedCollection().add(itemsOrdered);
                 orderId = em.merge(orderId);
             }
             if (subitemOrdered != null) {
-                subitemOrdered.getItemsOrderedSet().add(itemsOrdered);
+                subitemOrdered.getItemsOrderedCollection().add(itemsOrdered);
                 subitemOrdered = em.merge(subitemOrdered);
             }
             em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public ItemsOrdered createAndReturn(ItemsOrdered itemsOrdered) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Item itemInOrder = itemsOrdered.getItemInOrder();
+            if (itemInOrder != null) {
+                itemInOrder = em.getReference(itemInOrder.getClass(), itemInOrder.getItemId());
+                itemsOrdered.setItemInOrder(itemInOrder);
+            }
+            Orders orderId = itemsOrdered.getOrderId();
+            if (orderId != null) {
+                orderId = em.getReference(orderId.getClass(), orderId.getOrderNumber());
+                itemsOrdered.setOrderId(orderId);
+            }
+            Subitem subitemOrdered = itemsOrdered.getSubitemOrdered();
+            if (subitemOrdered != null) {
+                subitemOrdered = em.getReference(subitemOrdered.getClass(), subitemOrdered.getSubitemId());
+                itemsOrdered.setSubitemOrdered(subitemOrdered);
+            }
+            em.persist(itemsOrdered);
+            if (itemInOrder != null) {
+                itemInOrder.getItemsOrderedCollection().add(itemsOrdered);
+                itemInOrder = em.merge(itemInOrder);
+            }
+            if (orderId != null) {
+                orderId.getItemsOrderedCollection().add(itemsOrdered);
+                orderId = em.merge(orderId);
+            }
+            if (subitemOrdered != null) {
+                subitemOrdered.getItemsOrderedCollection().add(itemsOrdered);
+                subitemOrdered = em.merge(subitemOrdered);
+            }
+            em.getTransaction().commit();
+            return itemsOrdered;
         } finally {
             if (em != null) {
                 em.close();
@@ -97,27 +134,27 @@ public class ItemsOrderedJpaController implements Serializable {
             }
             itemsOrdered = em.merge(itemsOrdered);
             if (itemInOrderOld != null && !itemInOrderOld.equals(itemInOrderNew)) {
-                itemInOrderOld.getItemsOrderedSet().remove(itemsOrdered);
+                itemInOrderOld.getItemsOrderedCollection().remove(itemsOrdered);
                 itemInOrderOld = em.merge(itemInOrderOld);
             }
             if (itemInOrderNew != null && !itemInOrderNew.equals(itemInOrderOld)) {
-                itemInOrderNew.getItemsOrderedSet().add(itemsOrdered);
+                itemInOrderNew.getItemsOrderedCollection().add(itemsOrdered);
                 itemInOrderNew = em.merge(itemInOrderNew);
             }
             if (orderIdOld != null && !orderIdOld.equals(orderIdNew)) {
-                orderIdOld.getItemsOrderedSet().remove(itemsOrdered);
+                orderIdOld.getItemsOrderedCollection().remove(itemsOrdered);
                 orderIdOld = em.merge(orderIdOld);
             }
             if (orderIdNew != null && !orderIdNew.equals(orderIdOld)) {
-                orderIdNew.getItemsOrderedSet().add(itemsOrdered);
+                orderIdNew.getItemsOrderedCollection().add(itemsOrdered);
                 orderIdNew = em.merge(orderIdNew);
             }
             if (subitemOrderedOld != null && !subitemOrderedOld.equals(subitemOrderedNew)) {
-                subitemOrderedOld.getItemsOrderedSet().remove(itemsOrdered);
+                subitemOrderedOld.getItemsOrderedCollection().remove(itemsOrdered);
                 subitemOrderedOld = em.merge(subitemOrderedOld);
             }
             if (subitemOrderedNew != null && !subitemOrderedNew.equals(subitemOrderedOld)) {
-                subitemOrderedNew.getItemsOrderedSet().add(itemsOrdered);
+                subitemOrderedNew.getItemsOrderedCollection().add(itemsOrdered);
                 subitemOrderedNew = em.merge(subitemOrderedNew);
             }
             em.getTransaction().commit();
@@ -151,17 +188,17 @@ public class ItemsOrderedJpaController implements Serializable {
             }
             Item itemInOrder = itemsOrdered.getItemInOrder();
             if (itemInOrder != null) {
-                itemInOrder.getItemsOrderedSet().remove(itemsOrdered);
+                itemInOrder.getItemsOrderedCollection().remove(itemsOrdered);
                 itemInOrder = em.merge(itemInOrder);
             }
             Orders orderId = itemsOrdered.getOrderId();
             if (orderId != null) {
-                orderId.getItemsOrderedSet().remove(itemsOrdered);
+                orderId.getItemsOrderedCollection().remove(itemsOrdered);
                 orderId = em.merge(orderId);
             }
             Subitem subitemOrdered = itemsOrdered.getSubitemOrdered();
             if (subitemOrdered != null) {
-                subitemOrdered.getItemsOrderedSet().remove(itemsOrdered);
+                subitemOrdered.getItemsOrderedCollection().remove(itemsOrdered);
                 subitemOrdered = em.merge(subitemOrdered);
             }
             em.remove(itemsOrdered);

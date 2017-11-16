@@ -1,20 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
-import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.Model.exceptions.IllegalOrphanException;
+import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,45 +29,45 @@ public class ItemJpaController implements Serializable {
     }
 
     public void create(Item item) {
-        if (item.getItemsOrderedSet() == null) {
-            item.setItemsOrderedSet(new HashSet<ItemsOrdered>());
+        if (item.getItemsOrderedCollection() == null) {
+            item.setItemsOrderedCollection(new ArrayList<ItemsOrdered>());
         }
-        if (item.getSubitemSet() == null) {
-            item.setSubitemSet(new HashSet<Subitem>());
+        if (item.getSubitemCollection() == null) {
+            item.setSubitemCollection(new ArrayList<Subitem>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Set<ItemsOrdered> attachedItemsOrderedSet = new HashSet<ItemsOrdered>();
-            for (ItemsOrdered itemsOrderedSetItemsOrderedToAttach : item.getItemsOrderedSet()) {
-                itemsOrderedSetItemsOrderedToAttach = em.getReference(itemsOrderedSetItemsOrderedToAttach.getClass(), itemsOrderedSetItemsOrderedToAttach.getLineItemId());
-                attachedItemsOrderedSet.add(itemsOrderedSetItemsOrderedToAttach);
+            Collection<ItemsOrdered> attachedItemsOrderedCollection = new ArrayList<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedCollectionItemsOrderedToAttach : item.getItemsOrderedCollection()) {
+                itemsOrderedCollectionItemsOrderedToAttach = em.getReference(itemsOrderedCollectionItemsOrderedToAttach.getClass(), itemsOrderedCollectionItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedCollection.add(itemsOrderedCollectionItemsOrderedToAttach);
             }
-            item.setItemsOrderedSet(attachedItemsOrderedSet);
-            Set<Subitem> attachedSubitemSet = new HashSet<Subitem>();
-            for (Subitem subitemSetSubitemToAttach : item.getSubitemSet()) {
-                subitemSetSubitemToAttach = em.getReference(subitemSetSubitemToAttach.getClass(), subitemSetSubitemToAttach.getSubitemId());
-                attachedSubitemSet.add(subitemSetSubitemToAttach);
+            item.setItemsOrderedCollection(attachedItemsOrderedCollection);
+            Collection<Subitem> attachedSubitemCollection = new ArrayList<Subitem>();
+            for (Subitem subitemCollectionSubitemToAttach : item.getSubitemCollection()) {
+                subitemCollectionSubitemToAttach = em.getReference(subitemCollectionSubitemToAttach.getClass(), subitemCollectionSubitemToAttach.getSubitemId());
+                attachedSubitemCollection.add(subitemCollectionSubitemToAttach);
             }
-            item.setSubitemSet(attachedSubitemSet);
+            item.setSubitemCollection(attachedSubitemCollection);
             em.persist(item);
-            for (ItemsOrdered itemsOrderedSetItemsOrdered : item.getItemsOrderedSet()) {
-                Item oldItemInOrderOfItemsOrderedSetItemsOrdered = itemsOrderedSetItemsOrdered.getItemInOrder();
-                itemsOrderedSetItemsOrdered.setItemInOrder(item);
-                itemsOrderedSetItemsOrdered = em.merge(itemsOrderedSetItemsOrdered);
-                if (oldItemInOrderOfItemsOrderedSetItemsOrdered != null) {
-                    oldItemInOrderOfItemsOrderedSetItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetItemsOrdered);
-                    oldItemInOrderOfItemsOrderedSetItemsOrdered = em.merge(oldItemInOrderOfItemsOrderedSetItemsOrdered);
+            for (ItemsOrdered itemsOrderedCollectionItemsOrdered : item.getItemsOrderedCollection()) {
+                Item oldItemInOrderOfItemsOrderedCollectionItemsOrdered = itemsOrderedCollectionItemsOrdered.getItemInOrder();
+                itemsOrderedCollectionItemsOrdered.setItemInOrder(item);
+                itemsOrderedCollectionItemsOrdered = em.merge(itemsOrderedCollectionItemsOrdered);
+                if (oldItemInOrderOfItemsOrderedCollectionItemsOrdered != null) {
+                    oldItemInOrderOfItemsOrderedCollectionItemsOrdered.getItemsOrderedCollection().remove(itemsOrderedCollectionItemsOrdered);
+                    oldItemInOrderOfItemsOrderedCollectionItemsOrdered = em.merge(oldItemInOrderOfItemsOrderedCollectionItemsOrdered);
                 }
             }
-            for (Subitem subitemSetSubitem : item.getSubitemSet()) {
-                Item oldItemIdOfSubitemSetSubitem = subitemSetSubitem.getItemId();
-                subitemSetSubitem.setItemId(item);
-                subitemSetSubitem = em.merge(subitemSetSubitem);
-                if (oldItemIdOfSubitemSetSubitem != null) {
-                    oldItemIdOfSubitemSetSubitem.getSubitemSet().remove(subitemSetSubitem);
-                    oldItemIdOfSubitemSetSubitem = em.merge(oldItemIdOfSubitemSetSubitem);
+            for (Subitem subitemCollectionSubitem : item.getSubitemCollection()) {
+                Item oldItemIdOfSubitemCollectionSubitem = subitemCollectionSubitem.getItemId();
+                subitemCollectionSubitem.setItemId(item);
+                subitemCollectionSubitem = em.merge(subitemCollectionSubitem);
+                if (oldItemIdOfSubitemCollectionSubitem != null) {
+                    oldItemIdOfSubitemCollectionSubitem.getSubitemCollection().remove(subitemCollectionSubitem);
+                    oldItemIdOfSubitemCollectionSubitem = em.merge(oldItemIdOfSubitemCollectionSubitem);
                 }
             }
             em.getTransaction().commit();
@@ -90,64 +84,64 @@ public class ItemJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Item persistentItem = em.find(Item.class, item.getItemId());
-            Set<ItemsOrdered> itemsOrderedSetOld = persistentItem.getItemsOrderedSet();
-            Set<ItemsOrdered> itemsOrderedSetNew = item.getItemsOrderedSet();
-            Set<Subitem> subitemSetOld = persistentItem.getSubitemSet();
-            Set<Subitem> subitemSetNew = item.getSubitemSet();
+            Collection<ItemsOrdered> itemsOrderedCollectionOld = persistentItem.getItemsOrderedCollection();
+            Collection<ItemsOrdered> itemsOrderedCollectionNew = item.getItemsOrderedCollection();
+            Collection<Subitem> subitemCollectionOld = persistentItem.getSubitemCollection();
+            Collection<Subitem> subitemCollectionNew = item.getSubitemCollection();
             List<String> illegalOrphanMessages = null;
-            for (ItemsOrdered itemsOrderedSetOldItemsOrdered : itemsOrderedSetOld) {
-                if (!itemsOrderedSetNew.contains(itemsOrderedSetOldItemsOrdered)) {
+            for (ItemsOrdered itemsOrderedCollectionOldItemsOrdered : itemsOrderedCollectionOld) {
+                if (!itemsOrderedCollectionNew.contains(itemsOrderedCollectionOldItemsOrdered)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain ItemsOrdered " + itemsOrderedSetOldItemsOrdered + " since its itemInOrder field is not nullable.");
+                    illegalOrphanMessages.add("You must retain ItemsOrdered " + itemsOrderedCollectionOldItemsOrdered + " since its itemInOrder field is not nullable.");
                 }
             }
-            for (Subitem subitemSetOldSubitem : subitemSetOld) {
-                if (!subitemSetNew.contains(subitemSetOldSubitem)) {
+            for (Subitem subitemCollectionOldSubitem : subitemCollectionOld) {
+                if (!subitemCollectionNew.contains(subitemCollectionOldSubitem)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Subitem " + subitemSetOldSubitem + " since its itemId field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Subitem " + subitemCollectionOldSubitem + " since its itemId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Set<ItemsOrdered> attachedItemsOrderedSetNew = new HashSet<ItemsOrdered>();
-            for (ItemsOrdered itemsOrderedSetNewItemsOrderedToAttach : itemsOrderedSetNew) {
-                itemsOrderedSetNewItemsOrderedToAttach = em.getReference(itemsOrderedSetNewItemsOrderedToAttach.getClass(), itemsOrderedSetNewItemsOrderedToAttach.getLineItemId());
-                attachedItemsOrderedSetNew.add(itemsOrderedSetNewItemsOrderedToAttach);
+            Collection<ItemsOrdered> attachedItemsOrderedCollectionNew = new ArrayList<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedCollectionNewItemsOrderedToAttach : itemsOrderedCollectionNew) {
+                itemsOrderedCollectionNewItemsOrderedToAttach = em.getReference(itemsOrderedCollectionNewItemsOrderedToAttach.getClass(), itemsOrderedCollectionNewItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedCollectionNew.add(itemsOrderedCollectionNewItemsOrderedToAttach);
             }
-            itemsOrderedSetNew = attachedItemsOrderedSetNew;
-            item.setItemsOrderedSet(itemsOrderedSetNew);
-            Set<Subitem> attachedSubitemSetNew = new HashSet<Subitem>();
-            for (Subitem subitemSetNewSubitemToAttach : subitemSetNew) {
-                subitemSetNewSubitemToAttach = em.getReference(subitemSetNewSubitemToAttach.getClass(), subitemSetNewSubitemToAttach.getSubitemId());
-                attachedSubitemSetNew.add(subitemSetNewSubitemToAttach);
+            itemsOrderedCollectionNew = attachedItemsOrderedCollectionNew;
+            item.setItemsOrderedCollection(itemsOrderedCollectionNew);
+            Collection<Subitem> attachedSubitemCollectionNew = new ArrayList<Subitem>();
+            for (Subitem subitemCollectionNewSubitemToAttach : subitemCollectionNew) {
+                subitemCollectionNewSubitemToAttach = em.getReference(subitemCollectionNewSubitemToAttach.getClass(), subitemCollectionNewSubitemToAttach.getSubitemId());
+                attachedSubitemCollectionNew.add(subitemCollectionNewSubitemToAttach);
             }
-            subitemSetNew = attachedSubitemSetNew;
-            item.setSubitemSet(subitemSetNew);
+            subitemCollectionNew = attachedSubitemCollectionNew;
+            item.setSubitemCollection(subitemCollectionNew);
             item = em.merge(item);
-            for (ItemsOrdered itemsOrderedSetNewItemsOrdered : itemsOrderedSetNew) {
-                if (!itemsOrderedSetOld.contains(itemsOrderedSetNewItemsOrdered)) {
-                    Item oldItemInOrderOfItemsOrderedSetNewItemsOrdered = itemsOrderedSetNewItemsOrdered.getItemInOrder();
-                    itemsOrderedSetNewItemsOrdered.setItemInOrder(item);
-                    itemsOrderedSetNewItemsOrdered = em.merge(itemsOrderedSetNewItemsOrdered);
-                    if (oldItemInOrderOfItemsOrderedSetNewItemsOrdered != null && !oldItemInOrderOfItemsOrderedSetNewItemsOrdered.equals(item)) {
-                        oldItemInOrderOfItemsOrderedSetNewItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetNewItemsOrdered);
-                        oldItemInOrderOfItemsOrderedSetNewItemsOrdered = em.merge(oldItemInOrderOfItemsOrderedSetNewItemsOrdered);
+            for (ItemsOrdered itemsOrderedCollectionNewItemsOrdered : itemsOrderedCollectionNew) {
+                if (!itemsOrderedCollectionOld.contains(itemsOrderedCollectionNewItemsOrdered)) {
+                    Item oldItemInOrderOfItemsOrderedCollectionNewItemsOrdered = itemsOrderedCollectionNewItemsOrdered.getItemInOrder();
+                    itemsOrderedCollectionNewItemsOrdered.setItemInOrder(item);
+                    itemsOrderedCollectionNewItemsOrdered = em.merge(itemsOrderedCollectionNewItemsOrdered);
+                    if (oldItemInOrderOfItemsOrderedCollectionNewItemsOrdered != null && !oldItemInOrderOfItemsOrderedCollectionNewItemsOrdered.equals(item)) {
+                        oldItemInOrderOfItemsOrderedCollectionNewItemsOrdered.getItemsOrderedCollection().remove(itemsOrderedCollectionNewItemsOrdered);
+                        oldItemInOrderOfItemsOrderedCollectionNewItemsOrdered = em.merge(oldItemInOrderOfItemsOrderedCollectionNewItemsOrdered);
                     }
                 }
             }
-            for (Subitem subitemSetNewSubitem : subitemSetNew) {
-                if (!subitemSetOld.contains(subitemSetNewSubitem)) {
-                    Item oldItemIdOfSubitemSetNewSubitem = subitemSetNewSubitem.getItemId();
-                    subitemSetNewSubitem.setItemId(item);
-                    subitemSetNewSubitem = em.merge(subitemSetNewSubitem);
-                    if (oldItemIdOfSubitemSetNewSubitem != null && !oldItemIdOfSubitemSetNewSubitem.equals(item)) {
-                        oldItemIdOfSubitemSetNewSubitem.getSubitemSet().remove(subitemSetNewSubitem);
-                        oldItemIdOfSubitemSetNewSubitem = em.merge(oldItemIdOfSubitemSetNewSubitem);
+            for (Subitem subitemCollectionNewSubitem : subitemCollectionNew) {
+                if (!subitemCollectionOld.contains(subitemCollectionNewSubitem)) {
+                    Item oldItemIdOfSubitemCollectionNewSubitem = subitemCollectionNewSubitem.getItemId();
+                    subitemCollectionNewSubitem.setItemId(item);
+                    subitemCollectionNewSubitem = em.merge(subitemCollectionNewSubitem);
+                    if (oldItemIdOfSubitemCollectionNewSubitem != null && !oldItemIdOfSubitemCollectionNewSubitem.equals(item)) {
+                        oldItemIdOfSubitemCollectionNewSubitem.getSubitemCollection().remove(subitemCollectionNewSubitem);
+                        oldItemIdOfSubitemCollectionNewSubitem = em.merge(oldItemIdOfSubitemCollectionNewSubitem);
                     }
                 }
             }
@@ -181,19 +175,19 @@ public class ItemJpaController implements Serializable {
                 throw new NonexistentEntityException("The item with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Set<ItemsOrdered> itemsOrderedSetOrphanCheck = item.getItemsOrderedSet();
-            for (ItemsOrdered itemsOrderedSetOrphanCheckItemsOrdered : itemsOrderedSetOrphanCheck) {
+            Collection<ItemsOrdered> itemsOrderedCollectionOrphanCheck = item.getItemsOrderedCollection();
+            for (ItemsOrdered itemsOrderedCollectionOrphanCheckItemsOrdered : itemsOrderedCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Item (" + item + ") cannot be destroyed since the ItemsOrdered " + itemsOrderedSetOrphanCheckItemsOrdered + " in its itemsOrderedSet field has a non-nullable itemInOrder field.");
+                illegalOrphanMessages.add("This Item (" + item + ") cannot be destroyed since the ItemsOrdered " + itemsOrderedCollectionOrphanCheckItemsOrdered + " in its itemsOrderedCollection field has a non-nullable itemInOrder field.");
             }
-            Set<Subitem> subitemSetOrphanCheck = item.getSubitemSet();
-            for (Subitem subitemSetOrphanCheckSubitem : subitemSetOrphanCheck) {
+            Collection<Subitem> subitemCollectionOrphanCheck = item.getSubitemCollection();
+            for (Subitem subitemCollectionOrphanCheckSubitem : subitemCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Item (" + item + ") cannot be destroyed since the Subitem " + subitemSetOrphanCheckSubitem + " in its subitemSet field has a non-nullable itemId field.");
+                illegalOrphanMessages.add("This Item (" + item + ") cannot be destroyed since the Subitem " + subitemCollectionOrphanCheckSubitem + " in its subitemCollection field has a non-nullable itemId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
