@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
-import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,27 +28,27 @@ public class OrdersJpaController implements Serializable {
     }
 
     public void create(Orders orders) {
-        if (orders.getItemsOrderedSet() == null) {
-            orders.setItemsOrderedSet(new HashSet<ItemsOrdered>());
+        if (orders.getItemsOrderedCollection() == null) {
+            orders.setItemsOrderedCollection(new ArrayList<ItemsOrdered>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Set<ItemsOrdered> attachedItemsOrderedSet = new HashSet<ItemsOrdered>();
-            for (ItemsOrdered itemsOrderedSetItemsOrderedToAttach : orders.getItemsOrderedSet()) {
-                itemsOrderedSetItemsOrderedToAttach = em.getReference(itemsOrderedSetItemsOrderedToAttach.getClass(), itemsOrderedSetItemsOrderedToAttach.getLineItemId());
-                attachedItemsOrderedSet.add(itemsOrderedSetItemsOrderedToAttach);
+            Collection<ItemsOrdered> attachedItemsOrderedCollection = new ArrayList<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedCollectionItemsOrderedToAttach : orders.getItemsOrderedCollection()) {
+                itemsOrderedCollectionItemsOrderedToAttach = em.getReference(itemsOrderedCollectionItemsOrderedToAttach.getClass(), itemsOrderedCollectionItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedCollection.add(itemsOrderedCollectionItemsOrderedToAttach);
             }
-            orders.setItemsOrderedSet(attachedItemsOrderedSet);
+            orders.setItemsOrderedCollection(attachedItemsOrderedCollection);
             em.persist(orders);
-            for (ItemsOrdered itemsOrderedSetItemsOrdered : orders.getItemsOrderedSet()) {
-                Orders oldOrderIdOfItemsOrderedSetItemsOrdered = itemsOrderedSetItemsOrdered.getOrderId();
-                itemsOrderedSetItemsOrdered.setOrderId(orders);
-                itemsOrderedSetItemsOrdered = em.merge(itemsOrderedSetItemsOrdered);
-                if (oldOrderIdOfItemsOrderedSetItemsOrdered != null) {
-                    oldOrderIdOfItemsOrderedSetItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetItemsOrdered);
-                    oldOrderIdOfItemsOrderedSetItemsOrdered = em.merge(oldOrderIdOfItemsOrderedSetItemsOrdered);
+            for (ItemsOrdered itemsOrderedCollectionItemsOrdered : orders.getItemsOrderedCollection()) {
+                Orders oldOrderIdOfItemsOrderedCollectionItemsOrdered = itemsOrderedCollectionItemsOrdered.getOrderId();
+                itemsOrderedCollectionItemsOrdered.setOrderId(orders);
+                itemsOrderedCollectionItemsOrdered = em.merge(itemsOrderedCollectionItemsOrdered);
+                if (oldOrderIdOfItemsOrderedCollectionItemsOrdered != null) {
+                    oldOrderIdOfItemsOrderedCollectionItemsOrdered.getItemsOrderedCollection().remove(itemsOrderedCollectionItemsOrdered);
+                    oldOrderIdOfItemsOrderedCollectionItemsOrdered = em.merge(oldOrderIdOfItemsOrderedCollectionItemsOrdered);
                 }
             }
             em.getTransaction().commit();
@@ -67,27 +60,27 @@ public class OrdersJpaController implements Serializable {
     }
     
     public Orders createAndReturn(Orders orders) {
-        if (orders.getItemsOrderedSet() == null) {
-            orders.setItemsOrderedSet(new HashSet<ItemsOrdered>());
+        if (orders.getItemsOrderedCollection() == null) {
+            orders.setItemsOrderedCollection(new ArrayList<ItemsOrdered>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Set<ItemsOrdered> attachedItemsOrderedSet = new HashSet<ItemsOrdered>();
-            for (ItemsOrdered itemsOrderedSetItemsOrderedToAttach : orders.getItemsOrderedSet()) {
-                itemsOrderedSetItemsOrderedToAttach = em.getReference(itemsOrderedSetItemsOrderedToAttach.getClass(), itemsOrderedSetItemsOrderedToAttach.getLineItemId());
-                attachedItemsOrderedSet.add(itemsOrderedSetItemsOrderedToAttach);
+            Collection<ItemsOrdered> attachedItemsOrderedCollection = new ArrayList<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedCollectionItemsOrderedToAttach : orders.getItemsOrderedCollection()) {
+                itemsOrderedCollectionItemsOrderedToAttach = em.getReference(itemsOrderedCollectionItemsOrderedToAttach.getClass(), itemsOrderedCollectionItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedCollection.add(itemsOrderedCollectionItemsOrderedToAttach);
             }
-            orders.setItemsOrderedSet(attachedItemsOrderedSet);
+            orders.setItemsOrderedCollection(attachedItemsOrderedCollection);
             em.persist(orders);
-            for (ItemsOrdered itemsOrderedSetItemsOrdered : orders.getItemsOrderedSet()) {
-                Orders oldOrderIdOfItemsOrderedSetItemsOrdered = itemsOrderedSetItemsOrdered.getOrderId();
-                itemsOrderedSetItemsOrdered.setOrderId(orders);
-                itemsOrderedSetItemsOrdered = em.merge(itemsOrderedSetItemsOrdered);
-                if (oldOrderIdOfItemsOrderedSetItemsOrdered != null) {
-                    oldOrderIdOfItemsOrderedSetItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetItemsOrdered);
-                    oldOrderIdOfItemsOrderedSetItemsOrdered = em.merge(oldOrderIdOfItemsOrderedSetItemsOrdered);
+            for (ItemsOrdered itemsOrderedCollectionItemsOrdered : orders.getItemsOrderedCollection()) {
+                Orders oldOrderIdOfItemsOrderedCollectionItemsOrdered = itemsOrderedCollectionItemsOrdered.getOrderId();
+                itemsOrderedCollectionItemsOrdered.setOrderId(orders);
+                itemsOrderedCollectionItemsOrdered = em.merge(itemsOrderedCollectionItemsOrdered);
+                if (oldOrderIdOfItemsOrderedCollectionItemsOrdered != null) {
+                    oldOrderIdOfItemsOrderedCollectionItemsOrdered.getItemsOrderedCollection().remove(itemsOrderedCollectionItemsOrdered);
+                    oldOrderIdOfItemsOrderedCollectionItemsOrdered = em.merge(oldOrderIdOfItemsOrderedCollectionItemsOrdered);
                 }
             }
             em.getTransaction().commit();
@@ -99,42 +92,36 @@ public class OrdersJpaController implements Serializable {
         }
     }
 
-    public void edit(Orders orders) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Orders orders) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Orders persistentOrders = em.find(Orders.class, orders.getOrderNumber());
-            Set<ItemsOrdered> itemsOrderedSetOld = persistentOrders.getItemsOrderedSet();
-            Set<ItemsOrdered> itemsOrderedSetNew = orders.getItemsOrderedSet();
-            List<String> illegalOrphanMessages = null;
-            for (ItemsOrdered itemsOrderedSetOldItemsOrdered : itemsOrderedSetOld) {
-                if (!itemsOrderedSetNew.contains(itemsOrderedSetOldItemsOrdered)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain ItemsOrdered " + itemsOrderedSetOldItemsOrdered + " since its orderId field is not nullable.");
+            Collection<ItemsOrdered> itemsOrderedCollectionOld = persistentOrders.getItemsOrderedCollection();
+            Collection<ItemsOrdered> itemsOrderedCollectionNew = orders.getItemsOrderedCollection();
+            Collection<ItemsOrdered> attachedItemsOrderedCollectionNew = new ArrayList<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedCollectionNewItemsOrderedToAttach : itemsOrderedCollectionNew) {
+                itemsOrderedCollectionNewItemsOrderedToAttach = em.getReference(itemsOrderedCollectionNewItemsOrderedToAttach.getClass(), itemsOrderedCollectionNewItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedCollectionNew.add(itemsOrderedCollectionNewItemsOrderedToAttach);
+            }
+            itemsOrderedCollectionNew = attachedItemsOrderedCollectionNew;
+            orders.setItemsOrderedCollection(itemsOrderedCollectionNew);
+            orders = em.merge(orders);
+            for (ItemsOrdered itemsOrderedCollectionOldItemsOrdered : itemsOrderedCollectionOld) {
+                if (!itemsOrderedCollectionNew.contains(itemsOrderedCollectionOldItemsOrdered)) {
+                    itemsOrderedCollectionOldItemsOrdered.setOrderId(null);
+                    itemsOrderedCollectionOldItemsOrdered = em.merge(itemsOrderedCollectionOldItemsOrdered);
                 }
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            Set<ItemsOrdered> attachedItemsOrderedSetNew = new HashSet<ItemsOrdered>();
-            for (ItemsOrdered itemsOrderedSetNewItemsOrderedToAttach : itemsOrderedSetNew) {
-                itemsOrderedSetNewItemsOrderedToAttach = em.getReference(itemsOrderedSetNewItemsOrderedToAttach.getClass(), itemsOrderedSetNewItemsOrderedToAttach.getLineItemId());
-                attachedItemsOrderedSetNew.add(itemsOrderedSetNewItemsOrderedToAttach);
-            }
-            itemsOrderedSetNew = attachedItemsOrderedSetNew;
-            orders.setItemsOrderedSet(itemsOrderedSetNew);
-            orders = em.merge(orders);
-            for (ItemsOrdered itemsOrderedSetNewItemsOrdered : itemsOrderedSetNew) {
-                if (!itemsOrderedSetOld.contains(itemsOrderedSetNewItemsOrdered)) {
-                    Orders oldOrderIdOfItemsOrderedSetNewItemsOrdered = itemsOrderedSetNewItemsOrdered.getOrderId();
-                    itemsOrderedSetNewItemsOrdered.setOrderId(orders);
-                    itemsOrderedSetNewItemsOrdered = em.merge(itemsOrderedSetNewItemsOrdered);
-                    if (oldOrderIdOfItemsOrderedSetNewItemsOrdered != null && !oldOrderIdOfItemsOrderedSetNewItemsOrdered.equals(orders)) {
-                        oldOrderIdOfItemsOrderedSetNewItemsOrdered.getItemsOrderedSet().remove(itemsOrderedSetNewItemsOrdered);
-                        oldOrderIdOfItemsOrderedSetNewItemsOrdered = em.merge(oldOrderIdOfItemsOrderedSetNewItemsOrdered);
+            for (ItemsOrdered itemsOrderedCollectionNewItemsOrdered : itemsOrderedCollectionNew) {
+                if (!itemsOrderedCollectionOld.contains(itemsOrderedCollectionNewItemsOrdered)) {
+                    Orders oldOrderIdOfItemsOrderedCollectionNewItemsOrdered = itemsOrderedCollectionNewItemsOrdered.getOrderId();
+                    itemsOrderedCollectionNewItemsOrdered.setOrderId(orders);
+                    itemsOrderedCollectionNewItemsOrdered = em.merge(itemsOrderedCollectionNewItemsOrdered);
+                    if (oldOrderIdOfItemsOrderedCollectionNewItemsOrdered != null && !oldOrderIdOfItemsOrderedCollectionNewItemsOrdered.equals(orders)) {
+                        oldOrderIdOfItemsOrderedCollectionNewItemsOrdered.getItemsOrderedCollection().remove(itemsOrderedCollectionNewItemsOrdered);
+                        oldOrderIdOfItemsOrderedCollectionNewItemsOrdered = em.merge(oldOrderIdOfItemsOrderedCollectionNewItemsOrdered);
                     }
                 }
             }
@@ -155,7 +142,7 @@ public class OrdersJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -167,16 +154,10 @@ public class OrdersJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The orders with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Set<ItemsOrdered> itemsOrderedSetOrphanCheck = orders.getItemsOrderedSet();
-            for (ItemsOrdered itemsOrderedSetOrphanCheckItemsOrdered : itemsOrderedSetOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Orders (" + orders + ") cannot be destroyed since the ItemsOrdered " + itemsOrderedSetOrphanCheckItemsOrdered + " in its itemsOrderedSet field has a non-nullable orderId field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            Collection<ItemsOrdered> itemsOrderedCollection = orders.getItemsOrderedCollection();
+            for (ItemsOrdered itemsOrderedCollectionItemsOrdered : itemsOrderedCollection) {
+                itemsOrderedCollectionItemsOrdered.setOrderId(null);
+                itemsOrderedCollectionItemsOrdered = em.merge(itemsOrderedCollectionItemsOrdered);
             }
             em.remove(orders);
             em.getTransaction().commit();

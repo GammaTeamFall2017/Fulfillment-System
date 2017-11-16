@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,9 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -57,6 +56,10 @@ public class Item implements Serializable {
     private BigDecimal itemPrice;
     @Column(name = "img_path", length = 255)
     private String imgPath;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemInOrder")
+    private Collection<ItemsOrdered> itemsOrderedCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemId")
+    private Collection<Subitem> subitemCollection;
 
     public Item() {
     }
@@ -118,6 +121,24 @@ public class Item implements Serializable {
 
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    @XmlTransient
+    public Collection<ItemsOrdered> getItemsOrderedCollection() {
+        return itemsOrderedCollection;
+    }
+
+    public void setItemsOrderedCollection(Collection<ItemsOrdered> itemsOrderedCollection) {
+        this.itemsOrderedCollection = itemsOrderedCollection;
+    }
+
+    @XmlTransient
+    public Collection<Subitem> getSubitemCollection() {
+        return subitemCollection;
+    }
+
+    public void setSubitemCollection(Collection<Subitem> subitemCollection) {
+        this.subitemCollection = subitemCollection;
     }
 
     @Override

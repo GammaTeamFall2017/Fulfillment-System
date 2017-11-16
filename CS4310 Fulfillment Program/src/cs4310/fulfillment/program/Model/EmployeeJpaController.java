@@ -1,18 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.exceptions.NonexistentEntityException; //////exceptions was moved to a different location. not sure if intentional or not.
+import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -26,7 +20,6 @@ public class EmployeeJpaController implements Serializable {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
-    //private EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
 
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
@@ -38,7 +31,6 @@ public class EmployeeJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(employee);
-            em.flush();
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -53,7 +45,6 @@ public class EmployeeJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(employee);
-            em.flush();
             em.getTransaction().commit();
             return employee;
         } finally {

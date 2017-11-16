@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
@@ -49,8 +44,8 @@ public class ItemsOrdered implements Serializable {
     @JoinColumn(name = "item_in_order", referencedColumnName = "item_id", nullable = false)
     @ManyToOne(optional = false)
     private Item itemInOrder;
-    @JoinColumn(name = "order_id", referencedColumnName = "order_number", nullable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "order_id", referencedColumnName = "order_number")
+    @ManyToOne
     private Orders orderId;
     @JoinColumn(name = "subitem_ordered", referencedColumnName = "subitem_id")
     @ManyToOne
@@ -138,7 +133,7 @@ public class ItemsOrdered implements Serializable {
 
     @Override
     public String toString() {
-        return "ItemsOrdered[ lineItemId=" + lineItemId + getOrderId() + getItemInOrder() + getSubitemOrdered() +" ]";
+        return "cs4310.fulfillment.program.Model.ItemsOrdered[ lineItemId=" + lineItemId + " ]";
     }
     
 }

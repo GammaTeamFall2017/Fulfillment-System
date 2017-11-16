@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -66,8 +60,8 @@ public class Orders implements Serializable {
     @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderId")
-    private Set<ItemsOrdered> itemsOrderedSet;
+    @OneToMany(mappedBy = "orderId")
+    private Collection<ItemsOrdered> itemsOrderedCollection;
 
     public Orders() {
     }
@@ -138,12 +132,12 @@ public class Orders implements Serializable {
     }
 
     @XmlTransient
-    public Set<ItemsOrdered> getItemsOrderedSet() {
-        return itemsOrderedSet;
+    public Collection<ItemsOrdered> getItemsOrderedCollection() {
+        return itemsOrderedCollection;
     }
 
-    public void setItemsOrderedSet(Set<ItemsOrdered> itemsOrderedSet) {
-        this.itemsOrderedSet = itemsOrderedSet;
+    public void setItemsOrderedCollection(Collection<ItemsOrdered> itemsOrderedCollection) {
+        this.itemsOrderedCollection = itemsOrderedCollection;
     }
 
     @Override
@@ -168,7 +162,7 @@ public class Orders implements Serializable {
 
     @Override
     public String toString() {
-        return "Orders[ orderNumber=" + orderNumber + " ]";
+        return "cs4310.fulfillment.program.Model.Orders[ orderNumber=" + orderNumber + " ]";
     }
     
 }

@@ -14,6 +14,7 @@ import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import static java.lang.reflect.Array.set;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -33,37 +34,46 @@ public class DbUtilityCollection {
     private EmployeeJpaController employeeInstance = new EmployeeJpaController(emf);
     private ItemJpaController itemInstance = new ItemJpaController(emf);
     private SubitemJpaController subItemInstance = new SubitemJpaController(emf);
+    private ItemsOrderedJpaController itemsOrderedInstance = new ItemsOrderedJpaController(emf);
     
     //***** Create New Order Functions *****//
+    
+    public ItemsOrdered createNewItemsOrdered(ItemsOrdered itemsOrdered){
+        return itemsOrderedInstance.createAndReturn(itemsOrdered);
+    }
     
     // First instantiate a new order by creating it in the database before adding ItemsOrdered to it
     // Needed to generate an automatic primary key ID for an Orders object
     public Orders createNewOrder(){
         Orders newOrder = new Orders();
         newOrder.setTableNumber("No table");
-        newOrder.setKitchenComplete(null);
-        newOrder.setRequestWaitstaff(null);
-        newOrder.setOrderPaid(null);
+        newOrder.setKitchenComplete(Boolean.FALSE);
+        newOrder.setRequestWaitstaff(Boolean.FALSE);
+        newOrder.setOrderPaid(Boolean.FALSE);
         BigDecimal num = new BigDecimal(0.00);
         newOrder.setTotalPrice(num);
         return orderInstance.createAndReturn(newOrder);
     }
     
     // Edit Order after adding all of the ItemsOrdered to it and submitting order at the Menu/Order scene
-    public void updateNewOrder(Orders newOrder, Set<ItemsOrdered> itemSet, String newTable, BigDecimal newPrice, Date timeCreated) throws NonexistentEntityException, Exception{
-        newOrder.setItemsOrderedSet(itemSet);
+    public void updateNewOrder(Orders newOrder, Collection<ItemsOrdered> itemSet, String newTable, BigDecimal newPrice, Date timeCreated) throws NonexistentEntityException, Exception{
+        newOrder.setItemsOrderedCollection(itemSet);
         newOrder.setTableNumber(newTable);
         newOrder.setTotalPrice(newPrice);
         newOrder.setDateCreated(timeCreated);
-        newOrder.setKitchenComplete(false);
-        newOrder.setRequestWaitstaff(false);
-        newOrder.setOrderPaid(false);
+        newOrder.setKitchenComplete(Boolean.FALSE);
+        newOrder.setRequestWaitstaff(Boolean.FALSE);
+        newOrder.setOrderPaid(Boolean.FALSE);
         orderInstance.edit(newOrder);
     }
     
     // If new order is canceled, need to remove it from the database
-    public void removeNewOrder(Orders newOrder) throws IllegalOrphanException, NonexistentEntityException{
+    public void removeOrder(Orders newOrder) throws IllegalOrphanException, cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException{
         orderInstance.destroy(newOrder.getOrderNumber());
+    }
+    
+    public void removeOrderLineItem(ItemsOrdered lineItem) throws IllegalOrphanException, cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException{
+        itemsOrderedInstance.destroy(lineItem.getLineItemId());
     }
     
     public Item getItemByID(Integer id){
@@ -75,12 +85,12 @@ public class DbUtilityCollection {
     }
     
     // Keep using this function to add selected items in the current order and store this function's results into a Set of ItemsOrdered: Set<ItemsOrdered>
-    public ItemsOrdered addItemsToOrder(Orders order, Item item, Subitem subitem, int itemQuantiry, String specialInstructions){
+    public ItemsOrdered addItemsToOrder(Orders order, Item item, Subitem subitem, int itemQuantity, String specialInstructions){
         ItemsOrdered newItemOrdered = new ItemsOrdered();
         newItemOrdered.setOrderId(order);
         newItemOrdered.setItemInOrder(item);
         newItemOrdered.setSubitemOrdered(subitem);
-        newItemOrdered.setItemQuantity(itemQuantiry);
+        newItemOrdered.setItemQuantity(itemQuantity);
         newItemOrdered.setSpecialInstructions(specialInstructions);
         return newItemOrdered;
     }
@@ -126,7 +136,7 @@ public class DbUtilityCollection {
     }
     
     // Calculate Item price with or without addons
-    public BigDecimal getTotalItemPrice(Set<ItemsOrdered> itemSet, Item item){
+    public BigDecimal getTotalItemPrice(Collection<ItemsOrdered> itemSet, Item item){
         BigDecimal total = item.getItemPrice(); // save total for Item
         for (Iterator<ItemsOrdered> i = itemSet.iterator(); i.hasNext();) {
             ItemsOrdered e =  i.next();
@@ -141,7 +151,7 @@ public class DbUtilityCollection {
     }
     
     // Calculate Item ETA
-    public int getTotalItemETA(Set<ItemsOrdered> itemSet, Item item){
+    public int getTotalItemETA(Collection<ItemsOrdered> itemSet, Item item){
         int total = item.getItemEta(); // save total for Item
         for (Iterator<ItemsOrdered> i = itemSet.iterator(); i.hasNext();) {
             ItemsOrdered e =  i.next();
@@ -156,7 +166,7 @@ public class DbUtilityCollection {
     }
     
     // Display an order's line items
-    public void displayOrderLineItems(Set<ItemsOrdered> itemSet){
+    public void displayOrderLineItems(Collection<ItemsOrdered> itemSet){
         Item saveItem = null; // save previous item to compare
         for (Iterator<ItemsOrdered> i = itemSet.iterator(); i.hasNext();) {
             ItemsOrdered e =  i.next();
@@ -176,7 +186,7 @@ public class DbUtilityCollection {
     }
     
     // Display the kitchen's view of an order's line items, needed for displayKitchenOrders()
-    public void displayKitchenOrderLineItems(Set<ItemsOrdered> itemSet){
+    public void displayKitchenOrderLineItems(Collection<ItemsOrdered> itemSet){
         Item saveItem = null; // save previous item to compare
         for (Iterator<ItemsOrdered> i = itemSet.iterator(); i.hasNext();) {
             ItemsOrdered e =  i.next();
@@ -222,7 +232,7 @@ public class DbUtilityCollection {
         for (Orders currentOrder: orderList){  
             if(currentOrder.getKitchenComplete() == false){
                 System.out.println(currentOrder.getOrderNumber());
-                displayKitchenOrderLineItems(currentOrder.getItemsOrderedSet());
+                displayKitchenOrderLineItems(currentOrder.getItemsOrderedCollection());
                     
             }
         }
