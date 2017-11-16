@@ -7,9 +7,7 @@ package cs4310.fulfillment.program.Model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,11 +15,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,7 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Item.findByItemName", query = "SELECT i FROM Item i WHERE i.itemName = :itemName")
     , @NamedQuery(name = "Item.findByItemDescription", query = "SELECT i FROM Item i WHERE i.itemDescription = :itemDescription")
     , @NamedQuery(name = "Item.findByItemEta", query = "SELECT i FROM Item i WHERE i.itemEta = :itemEta")
-    , @NamedQuery(name = "Item.findByItemPrice", query = "SELECT i FROM Item i WHERE i.itemPrice = :itemPrice")})
+    , @NamedQuery(name = "Item.findByItemPrice", query = "SELECT i FROM Item i WHERE i.itemPrice = :itemPrice")
+    , @NamedQuery(name = "Item.findByImgPath", query = "SELECT i FROM Item i WHERE i.imgPath = :imgPath")})
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -58,10 +55,8 @@ public class Item implements Serializable {
     @Basic(optional = false)
     @Column(name = "item_price", nullable = false, precision = 7, scale = 2)
     private BigDecimal itemPrice;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemInOrder")
-    private Set<ItemsOrdered> itemsOrderedSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itemId")
-    private Set<Subitem> subitemSet;
+    @Column(name = "img_path", length = 255)
+    private String imgPath;
 
     public Item() {
     }
@@ -117,22 +112,12 @@ public class Item implements Serializable {
         this.itemPrice = itemPrice;
     }
 
-    @XmlTransient
-    public Set<ItemsOrdered> getItemsOrderedSet() {
-        return itemsOrderedSet;
+    public String getImgPath() {
+        return imgPath;
     }
 
-    public void setItemsOrderedSet(Set<ItemsOrdered> itemsOrderedSet) {
-        this.itemsOrderedSet = itemsOrderedSet;
-    }
-
-    @XmlTransient
-    public Set<Subitem> getSubitemSet() {
-        return subitemSet;
-    }
-
-    public void setSubitemSet(Set<Subitem> subitemSet) {
-        this.subitemSet = subitemSet;
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 
     @Override
@@ -157,7 +142,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "Item[ itemId=" + itemId + " ]";
+        return "cs4310.fulfillment.program.Model.Item[ itemId=" + itemId + " ]";
     }
     
 }

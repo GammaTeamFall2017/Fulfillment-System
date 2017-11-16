@@ -5,7 +5,7 @@
  */
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -40,11 +40,6 @@ public class SubitemJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Item itemId = subitem.getItemId();
-            if (itemId != null) {
-                itemId = em.getReference(itemId.getClass(), itemId.getItemId());
-                subitem.setItemId(itemId);
-            }
             Set<ItemsOrdered> attachedItemsOrderedSet = new HashSet<ItemsOrdered>();
             for (ItemsOrdered itemsOrderedSetItemsOrderedToAttach : subitem.getItemsOrderedSet()) {
                 itemsOrderedSetItemsOrderedToAttach = em.getReference(itemsOrderedSetItemsOrderedToAttach.getClass(), itemsOrderedSetItemsOrderedToAttach.getLineItemId());
@@ -52,10 +47,6 @@ public class SubitemJpaController implements Serializable {
             }
             subitem.setItemsOrderedSet(attachedItemsOrderedSet);
             em.persist(subitem);
-            if (itemId != null) {
-                itemId.getSubitemSet().add(subitem);
-                itemId = em.merge(itemId);
-            }
             for (ItemsOrdered itemsOrderedSetItemsOrdered : subitem.getItemsOrderedSet()) {
                 Subitem oldSubitemOrderedOfItemsOrderedSetItemsOrdered = itemsOrderedSetItemsOrdered.getSubitemOrdered();
                 itemsOrderedSetItemsOrdered.setSubitemOrdered(subitem);
@@ -79,14 +70,8 @@ public class SubitemJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Subitem persistentSubitem = em.find(Subitem.class, subitem.getSubitemId());
-            Item itemIdOld = persistentSubitem.getItemId();
-            Item itemIdNew = subitem.getItemId();
             Set<ItemsOrdered> itemsOrderedSetOld = persistentSubitem.getItemsOrderedSet();
             Set<ItemsOrdered> itemsOrderedSetNew = subitem.getItemsOrderedSet();
-            if (itemIdNew != null) {
-                itemIdNew = em.getReference(itemIdNew.getClass(), itemIdNew.getItemId());
-                subitem.setItemId(itemIdNew);
-            }
             Set<ItemsOrdered> attachedItemsOrderedSetNew = new HashSet<ItemsOrdered>();
             for (ItemsOrdered itemsOrderedSetNewItemsOrderedToAttach : itemsOrderedSetNew) {
                 itemsOrderedSetNewItemsOrderedToAttach = em.getReference(itemsOrderedSetNewItemsOrderedToAttach.getClass(), itemsOrderedSetNewItemsOrderedToAttach.getLineItemId());
@@ -95,14 +80,6 @@ public class SubitemJpaController implements Serializable {
             itemsOrderedSetNew = attachedItemsOrderedSetNew;
             subitem.setItemsOrderedSet(itemsOrderedSetNew);
             subitem = em.merge(subitem);
-            if (itemIdOld != null && !itemIdOld.equals(itemIdNew)) {
-                itemIdOld.getSubitemSet().remove(subitem);
-                itemIdOld = em.merge(itemIdOld);
-            }
-            if (itemIdNew != null && !itemIdNew.equals(itemIdOld)) {
-                itemIdNew.getSubitemSet().add(subitem);
-                itemIdNew = em.merge(itemIdNew);
-            }
             for (ItemsOrdered itemsOrderedSetOldItemsOrdered : itemsOrderedSetOld) {
                 if (!itemsOrderedSetNew.contains(itemsOrderedSetOldItemsOrdered)) {
                     itemsOrderedSetOldItemsOrdered.setSubitemOrdered(null);
@@ -148,11 +125,6 @@ public class SubitemJpaController implements Serializable {
                 subitem.getSubitemId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The subitem with id " + id + " no longer exists.", enfe);
-            }
-            Item itemId = subitem.getItemId();
-            if (itemId != null) {
-                itemId.getSubitemSet().remove(subitem);
-                itemId = em.merge(itemId);
             }
             Set<ItemsOrdered> itemsOrderedSet = subitem.getItemsOrderedSet();
             for (ItemsOrdered itemsOrderedSetItemsOrdered : itemsOrderedSet) {

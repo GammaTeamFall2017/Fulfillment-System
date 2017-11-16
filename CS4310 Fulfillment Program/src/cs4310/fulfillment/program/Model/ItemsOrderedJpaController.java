@@ -5,7 +5,7 @@
  */
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
+import cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -35,11 +35,6 @@ public class ItemsOrderedJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Item itemInOrder = itemsOrdered.getItemInOrder();
-            if (itemInOrder != null) {
-                itemInOrder = em.getReference(itemInOrder.getClass(), itemInOrder.getItemId());
-                itemsOrdered.setItemInOrder(itemInOrder);
-            }
             Orders orderId = itemsOrdered.getOrderId();
             if (orderId != null) {
                 orderId = em.getReference(orderId.getClass(), orderId.getOrderNumber());
@@ -51,10 +46,6 @@ public class ItemsOrderedJpaController implements Serializable {
                 itemsOrdered.setSubitemOrdered(subitemOrdered);
             }
             em.persist(itemsOrdered);
-            if (itemInOrder != null) {
-                itemInOrder.getItemsOrderedSet().add(itemsOrdered);
-                itemInOrder = em.merge(itemInOrder);
-            }
             if (orderId != null) {
                 orderId.getItemsOrderedSet().add(itemsOrdered);
                 orderId = em.merge(orderId);
@@ -70,6 +61,39 @@ public class ItemsOrderedJpaController implements Serializable {
             }
         }
     }
+    
+        public ItemsOrdered createAndReturn(ItemsOrdered itemsOrdered) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Orders orderId = itemsOrdered.getOrderId();
+            if (orderId != null) {
+                orderId = em.getReference(orderId.getClass(), orderId.getOrderNumber());
+                itemsOrdered.setOrderId(orderId);
+            }
+            Subitem subitemOrdered = itemsOrdered.getSubitemOrdered();
+            if (subitemOrdered != null) {
+                subitemOrdered = em.getReference(subitemOrdered.getClass(), subitemOrdered.getSubitemId());
+                itemsOrdered.setSubitemOrdered(subitemOrdered);
+            }
+            em.persist(itemsOrdered);
+            if (orderId != null) {
+                orderId.getItemsOrderedSet().add(itemsOrdered);
+                orderId = em.merge(orderId);
+            }
+            if (subitemOrdered != null) {
+                subitemOrdered.getItemsOrderedSet().add(itemsOrdered);
+                subitemOrdered = em.merge(subitemOrdered);
+            }
+            em.getTransaction().commit();
+            return itemsOrdered;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public void edit(ItemsOrdered itemsOrdered) throws NonexistentEntityException, Exception {
         EntityManager em = null;
@@ -77,16 +101,10 @@ public class ItemsOrderedJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             ItemsOrdered persistentItemsOrdered = em.find(ItemsOrdered.class, itemsOrdered.getLineItemId());
-            Item itemInOrderOld = persistentItemsOrdered.getItemInOrder();
-            Item itemInOrderNew = itemsOrdered.getItemInOrder();
             Orders orderIdOld = persistentItemsOrdered.getOrderId();
             Orders orderIdNew = itemsOrdered.getOrderId();
             Subitem subitemOrderedOld = persistentItemsOrdered.getSubitemOrdered();
             Subitem subitemOrderedNew = itemsOrdered.getSubitemOrdered();
-            if (itemInOrderNew != null) {
-                itemInOrderNew = em.getReference(itemInOrderNew.getClass(), itemInOrderNew.getItemId());
-                itemsOrdered.setItemInOrder(itemInOrderNew);
-            }
             if (orderIdNew != null) {
                 orderIdNew = em.getReference(orderIdNew.getClass(), orderIdNew.getOrderNumber());
                 itemsOrdered.setOrderId(orderIdNew);
@@ -96,14 +114,6 @@ public class ItemsOrderedJpaController implements Serializable {
                 itemsOrdered.setSubitemOrdered(subitemOrderedNew);
             }
             itemsOrdered = em.merge(itemsOrdered);
-            if (itemInOrderOld != null && !itemInOrderOld.equals(itemInOrderNew)) {
-                itemInOrderOld.getItemsOrderedSet().remove(itemsOrdered);
-                itemInOrderOld = em.merge(itemInOrderOld);
-            }
-            if (itemInOrderNew != null && !itemInOrderNew.equals(itemInOrderOld)) {
-                itemInOrderNew.getItemsOrderedSet().add(itemsOrdered);
-                itemInOrderNew = em.merge(itemInOrderNew);
-            }
             if (orderIdOld != null && !orderIdOld.equals(orderIdNew)) {
                 orderIdOld.getItemsOrderedSet().remove(itemsOrdered);
                 orderIdOld = em.merge(orderIdOld);
@@ -148,11 +158,6 @@ public class ItemsOrderedJpaController implements Serializable {
                 itemsOrdered.getLineItemId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The itemsOrdered with id " + id + " no longer exists.", enfe);
-            }
-            Item itemInOrder = itemsOrdered.getItemInOrder();
-            if (itemInOrder != null) {
-                itemInOrder.getItemsOrderedSet().remove(itemsOrdered);
-                itemInOrder = em.merge(itemInOrder);
             }
             Orders orderId = itemsOrdered.getOrderId();
             if (orderId != null) {
