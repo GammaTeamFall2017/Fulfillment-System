@@ -24,24 +24,25 @@ public class AdjustOrderSceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         newScene = new SceneController();
+        changeTimeButton.disableProperty().bind(selectTime.valueProperty().isNull());
         selectTime.getItems().addAll(0,5,10,15,20,25,30,35,40,45,50,55,60);
     }  
     @FXML
     public void handleOrderCompleteButton(ActionEvent e) {
         //return to list of orders, remove order from list of orders
         
-        newScene.setScene("/cs4310/fulfillment/program/View/ListofOrdersScene.fxml", (Button)e.getSource());
+        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)e.getSource());
     }
     @FXML
     public void handleChangeTimeButton(ActionEvent e) {
         //return to list of orders, change remaining wait time
         
-        newScene.setScene("/cs4310/fulfillment/program/View/ListofOrdersScene.fxml", (Button)e.getSource());
+        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)e.getSource());
     }
     
     @FXML
     public void handleCancelButton(ActionEvent e) {
-        newScene.setScene("/cs4310/fulfillment/program/View/ListofOrdersScene.fxml", (Button)e.getSource());
+        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)e.getSource());
     }
     
       
