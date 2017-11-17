@@ -76,7 +76,7 @@ public class AdminOptionSceneController implements Initializable {
 
     @FXML
     private void handleViewOrderListButton(ActionEvent event) {
-        newScene.setScene("/cs4310/fulfillment/program/View/OrderListScene.fxml", (Button)event.getSource());
+        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)event.getSource());
     }
 
     @FXML

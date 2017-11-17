@@ -69,11 +69,11 @@ public class DbUtilityCollection {
     }
     
     // If new order is canceled, need to remove it from the database
-    public void removeOrder(Orders newOrder) throws IllegalOrphanException, cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException{
+    public void removeOrder(Orders newOrder) throws IllegalOrphanException, cs4310.fulfillment.program.exceptions.NonexistentEntityException{
         orderInstance.destroy(newOrder.getOrderNumber());
     }
     
-    public void removeOrderLineItem(ItemsOrdered lineItem) throws IllegalOrphanException, cs4310.fulfillment.program.Model.exceptions.NonexistentEntityException{
+    public void removeOrderLineItem(ItemsOrdered lineItem) throws IllegalOrphanException, cs4310.fulfillment.program.exceptions.NonexistentEntityException{
         itemsOrderedInstance.destroy(lineItem.getLineItemId());
     }
     

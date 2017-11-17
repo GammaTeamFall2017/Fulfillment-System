@@ -22,6 +22,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +30,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -38,6 +40,9 @@ import javafx.stage.Stage;
 public class MenuOrderScene  implements Initializable {
     
     @FXML private Button submitOrder;
+    @FXML private Button requestWaitstaff;
+    @FXML private Button adminOptions;
+    @FXML private Button selectTable;
     @FXML private VBox VBoxQuantity;
     @FXML private VBox VBoxFood;
     @FXML private VBox VBoxPrice;
@@ -48,30 +53,39 @@ public class MenuOrderScene  implements Initializable {
     @FXML private Label totalCost;
     @FXML private Label subPrice;
     @FXML private Label taxAmout;
+    @FXML private Label tableRequest;
+    @FXML private ChoiceBox<String> tableChoiceBox;
     
-    SceneController newScene = new SceneController();   
-    DbUtilityCollection newDB = new DbUtilityCollection();
-    List<Item> itemsArray = new ArrayList<Item>();
-    List<Button> itemDeleteButtons = new ArrayList<Button>();
-    List<Label> itemNameList = new ArrayList<Label>();
-    List<Label> priceList = new ArrayList<Label>();
-    List<Label> quantityList = new ArrayList<Label>();
-    List<Item> orderArray = new ArrayList<Item>();
-    int buttonsPerRow = 6;
-    int buttonHeight = 100;
-    int widthOfScrollPane = 720;
-    BigDecimal taxRate = new BigDecimal("0.10");
-    BigDecimal totalOrderPrice = new BigDecimal("0.00");
+    private SceneController newScene = new SceneController();   
+    private DbUtilityCollection DatabaseConnecter = new DbUtilityCollection();
+    private List<Item> itemsArray = new ArrayList<Item>();
+    private List<Button> itemDeleteButtons = new ArrayList<Button>();
+    private List<Label> itemNameList = new ArrayList<Label>();
+    private List<Label> priceList = new ArrayList<Label>();
+    private List<Label> quantityList = new ArrayList<Label>();
+    private List<Item> orderArray = new ArrayList<Item>();
+    private int buttonsPerRow = 6;
+    private int buttonHeight = 100;
+    private int widthOfScrollPane = 720;
+    private BigDecimal taxRate = new BigDecimal("0.10");
+    private BigDecimal totalOrderPrice = new BigDecimal("0.00");
+    private boolean newOrder = false;
+    
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        itemsArray = newDB.getAllItems();///this is the connecter for the db
+        requestWaitstaff.setVisible(false);
+        tableRequest.setVisible(false);
+        tableChoiceBox.setVisible(false);
+        selectTable.setVisible(false);
+        adminOptions.setVisible(false);
+        itemsArray = DatabaseConnecter.getAllItems();///this is the connecter for the db
         foodButtonPane.setStyle("-fx-box-border: transparent;");
         orderPane.setStyle("-fx-box-border: transparent; -fx-background-color: #e0e0e0");
         
-        BigDecimal bd = new BigDecimal("1.50");
-        //This is to temp fill a array of items
         
+        //This is to temp fill a array of items
+            BigDecimal bd = new BigDecimal("1.50");
             for(int i = 0; i < 38; i++){
                 Item tempItems = new Item(i, "food" + i, i+1, bd );
                 itemsArray.add(tempItems);
@@ -116,13 +130,75 @@ public class MenuOrderScene  implements Initializable {
             }
             VBoxButtons.getChildren().add(tempHBox);
         }
+        if(CS4310FulfillmentProgram.currentUserRole == "Customer"){
+            requestWaitstaff.setVisible(true);
+            
+        }
+        else if(CS4310FulfillmentProgram.currentUserRole == "waitstaff"){
+            tableChoiceBox.getItems().addAll("Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7");
+            tableRequest.setVisible(true);
+            tableChoiceBox.setVisible(true);
+            selectTable.setVisible(true);
+            
+        }
+        else if(CS4310FulfillmentProgram.currentUserRole == "admin"){
+            tableChoiceBox.getItems().addAll("Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7");
+            tableRequest.setVisible(true);
+            tableChoiceBox.setVisible(true);
+            selectTable.setVisible(true);
+            adminOptions.setVisible(true);
+        }
+            
+    }
+    
+    //checks the table number for initializing the scene. 
+    //If it is a new order it will set a flag, and assign a new order number for the table. 
+    //If not it will access the correct information for that order.
+    private void checkTableNumber(){
+        //DatabaseConnecter.
+    }
+    
+    @FXML public void handleRequestWaitstaffButton(ActionEvent event) throws IOException{
+        //adding DB call for waitstaff
+        
+        requestWaitstaff.setStyle("-fx-background-color: blue;");
+    }
+    
+    @FXML public void handleSelectTableButton(ActionEvent event) throws IOException{
+        tableChoiceBox.getValue().toString();
+        //get order from the table. 
+        //display everything from the order
+    }
+    
+    @FXML public void handleAdminOptions(ActionEvent event) throws IOException{
+        newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button)event.getSource());
     }
     
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
-        newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
+        for(int i = 0; i < orderArray.size(); i++){
+           //DatabaseConnecter. = orderArray; //sets the items in the order to the DB
+        
+        }    
+        if(CS4310FulfillmentProgram.currentUserRole == ""){
+            newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
+        }
+        if(CS4310FulfillmentProgram.currentUserRole == "waitstaff"){
+            
+        }
+        submitOrder.setText("Pay");
+        newOrder = true;
+        
     }
+    
     @FXML private void handleCancelButton(ActionEvent e) throws IOException{
-        newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
+        newOrder = false;
+        if(CS4310FulfillmentProgram.currentUserRole == "Customer" ){
+            newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
+        }
+        else {
+            //clear the order
+        }
+            
     }
     
     @FXML private void addItemToOrder(Item itemToAdd){
@@ -142,6 +218,7 @@ public class MenuOrderScene  implements Initializable {
         totalCost.setText("$" + tempString);
                 
         deleteItemButton.setText("X");
+        deleteItemButton.setTextFill(Color.RED);
         deleteItemButton.setOnAction((ActionEvent event) -> {
             int index = itemDeleteButtons.indexOf(deleteItemButton);
             VBoxFood.getChildren().remove(index);
@@ -174,13 +251,5 @@ public class MenuOrderScene  implements Initializable {
         VBoxDelete.getChildren().add(deleteItemButton);
     }
     
-    private double addTax(){
-        double tempAmount = 0;
-        System.out.println("tax: " + totalOrderPrice);
-        System.out.println("tax = " + taxRate.multiply(totalOrderPrice));
-        tempAmount = taxRate.multiply(totalOrderPrice).doubleValue();
-        System.out.println("amount: " + tempAmount);
-        return tempAmount;
-    }
-    
+      
 }
