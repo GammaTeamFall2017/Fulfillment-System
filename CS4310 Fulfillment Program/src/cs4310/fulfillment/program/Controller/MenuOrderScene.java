@@ -8,10 +8,14 @@ package cs4310.fulfillment.program.Controller;
 import cs4310.fulfillment.program.Controller.SceneController;
 import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import cs4310.fulfillment.program.Model.Item;
+import cs4310.fulfillment.program.Model.ItemsOrdered;
+import cs4310.fulfillment.program.Model.Orders;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Application;
@@ -63,13 +67,16 @@ public class MenuOrderScene  implements Initializable {
     private List<Label> itemNameList = new ArrayList<Label>();
     private List<Label> priceList = new ArrayList<Label>();
     private List<Label> quantityList = new ArrayList<Label>();
-    private List<Item> orderArray = new ArrayList<Item>();
+    private List<ItemsOrdered> orderArray = new ArrayList<ItemsOrdered>();
     private int buttonsPerRow = 6;
     private int buttonHeight = 100;
     private int widthOfScrollPane = 720;
     private BigDecimal taxRate = new BigDecimal("0.10");
     private BigDecimal totalOrderPrice = new BigDecimal("0.00");
-    private boolean newOrder = false;
+    private boolean isNewOrder = false;
+    private boolean receivedOrder = false;
+    private Orders newOrder;
+    
     
     
     @Override
@@ -112,13 +119,18 @@ public class MenuOrderScene  implements Initializable {
                 Button newButton = new Button(tempItem.getItemName());
                 newButton.setOnAction(new EventHandler<ActionEvent>(){
                     @Override public void handle(ActionEvent e){
-                    
+                        ItemsOrdered itemsToOrder = new ItemsOrdered();
                         //add this scene in when it is created
                         //newScene.setScene("/cs4310/fulfillment/program/View/.fxml", (Button)e.getSource());
-                        addItemToOrder(tempItem);
-                        orderArray.add(tempItem);
-                        
-                         
+                        if(isNewOrder == false){
+                            newOrder = DatabaseConnecter.createNewOrder();
+                            isNewOrder = true;
+                        }
+                        itemsToOrder.setItemInOrder(tempItem);
+                        itemsToOrder.setOrderId(newOrder);
+                        itemsToOrder.setItemQuantity(1);
+                        //addItemToOrder();//need set this correctly
+                        orderArray.add(itemsToOrder);
                     }
                 });
                 newButton.setMinWidth(tempHBox.getPrefWidth());
@@ -156,6 +168,7 @@ public class MenuOrderScene  implements Initializable {
     //If not it will access the correct information for that order.
     private void checkTableNumber(){
         //DatabaseConnecter.
+        
     }
     
     @FXML public void handleRequestWaitstaffButton(ActionEvent event) throws IOException{
@@ -175,23 +188,25 @@ public class MenuOrderScene  implements Initializable {
     }
     
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
-        for(int i = 0; i < orderArray.size(); i++){
-           //DatabaseConnecter. = orderArray; //sets the items in the order to the DB
-        
-        }    
+           
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
         }
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff")){
             
         }
-        submitOrder.setText("Pay");
-        newOrder = true;
+        submitOrder.setText("Recieved");
+        receivedOrder = true;
+        isNewOrder = true;
+        newOrder.setItemsOrderedCollection(orderArray);
         
+        Calendar cal = Calendar.getInstance();
+        Date currentDate = new Date(cal.getTimeInMillis());
+        //DatabaseConnecter.updateNewOrder(newOrder, orderArray, newTable, totalCost.getText(), currentDate);
     }
     
     @FXML private void handleCancelButton(ActionEvent e) throws IOException{
-        newOrder = false;
+        isNewOrder = false;
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer" )){
             newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
         }

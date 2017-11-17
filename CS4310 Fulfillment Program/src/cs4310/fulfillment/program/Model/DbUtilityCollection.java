@@ -171,9 +171,7 @@ public class DbUtilityCollection {
         for (Iterator<ItemsOrdered> i = itemSet.iterator(); i.hasNext();) {
             ItemsOrdered e =  i.next();
             
-            if (e.getItemInOrder().equals(saveItem)) {
-               ;
-            }else{
+            if (!e.getItemInOrder().equals(saveItem)){
                 Item item = e.getItemInOrder();
                 saveItem = item;
                 
