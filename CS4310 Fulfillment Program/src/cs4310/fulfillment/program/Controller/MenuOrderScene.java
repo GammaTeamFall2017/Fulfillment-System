@@ -130,18 +130,18 @@ public class MenuOrderScene  implements Initializable {
             }
             VBoxButtons.getChildren().add(tempHBox);
         }
-        if(CS4310FulfillmentProgram.currentUserRole == "Customer"){
+        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             requestWaitstaff.setVisible(true);
             
         }
-        else if(CS4310FulfillmentProgram.currentUserRole == "waitstaff"){
+        else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff")){
             tableChoiceBox.getItems().addAll("Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7");
             tableRequest.setVisible(true);
             tableChoiceBox.setVisible(true);
             selectTable.setVisible(true);
             
         }
-        else if(CS4310FulfillmentProgram.currentUserRole == "admin"){
+        else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")) {
             tableChoiceBox.getItems().addAll("Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7");
             tableRequest.setVisible(true);
             tableChoiceBox.setVisible(true);
@@ -179,10 +179,10 @@ public class MenuOrderScene  implements Initializable {
            //DatabaseConnecter. = orderArray; //sets the items in the order to the DB
         
         }    
-        if(CS4310FulfillmentProgram.currentUserRole == ""){
+        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
         }
-        if(CS4310FulfillmentProgram.currentUserRole == "waitstaff"){
+        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff")){
             
         }
         submitOrder.setText("Pay");
@@ -192,7 +192,7 @@ public class MenuOrderScene  implements Initializable {
     
     @FXML private void handleCancelButton(ActionEvent e) throws IOException{
         newOrder = false;
-        if(CS4310FulfillmentProgram.currentUserRole == "Customer" ){
+        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer" )){
             newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
         }
         else {

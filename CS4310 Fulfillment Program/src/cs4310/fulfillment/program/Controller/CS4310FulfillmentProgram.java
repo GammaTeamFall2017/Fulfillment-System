@@ -16,7 +16,7 @@ import javafx.stage.Stage;
  * @author jacobh
  */
 public class CS4310FulfillmentProgram extends Application {
-    public static String currentUserRole = "";
+    private static String currentUserRole = "";
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/cs4310/fulfillment/program/View/StartScene.fxml"));
@@ -33,5 +33,16 @@ public class CS4310FulfillmentProgram extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    public static String getCurrentUserRole() {
+        return currentUserRole;
+    }
+
+    public static void setCurrentUserRole(String currentUserRole) {
+        CS4310FulfillmentProgram.currentUserRole = currentUserRole;
+    }
+    
+    
+    
     
 }

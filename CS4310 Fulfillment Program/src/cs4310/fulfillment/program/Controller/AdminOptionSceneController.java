@@ -86,7 +86,7 @@ public class AdminOptionSceneController implements Initializable {
 
     @FXML
     private void handleLogoutButton(ActionEvent event) {
-        CS4310FulfillmentProgram.currentUserRole = "";
+        CS4310FulfillmentProgram.setCurrentUserRole("");
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)event.getSource());
     }
     
