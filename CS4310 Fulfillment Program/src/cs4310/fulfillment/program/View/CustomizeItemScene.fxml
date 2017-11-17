@@ -24,7 +24,9 @@
       <Button fx:id="cancelButton" layoutX="772.0" layoutY="605.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
       <Button fx:id="submitButton" layoutX="902.0" layoutY="606.0" mnemonicParsing="false" onAction="#handleSubmitButton" text="Submit" />
       <TextField fx:id="quantityField" layoutX="830.0" layoutY="417.0" />
-      <Label fx:id="subTotalLabel" layoutX="728.0" layoutY="530.0" text="Current Subtotal:" />
+      <Label fx:id="subTotalLabel" layoutX="728.0" layoutY="530.0" text="Current Subtotal:$" />
       <Button fx:id="updateButton" layoutX="841.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleUpdateButton" text="Update" />
+      <Label fx:id="subTotalAmountLabel" layoutX="827.0" layoutY="530.0" text="0.00" />
+      <Button fx:id="addButton" layoutX="625.0" layoutY="155.0" mnemonicParsing="false" onAction="#handleAddButton" text="Add" />
    </children>
 </AnchorPane>
