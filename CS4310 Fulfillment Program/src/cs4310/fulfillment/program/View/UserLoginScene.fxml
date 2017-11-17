@@ -18,10 +18,10 @@
       <Button fx:id="loginButton" layoutX="560.0" layoutY="443.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Login" />
       <ChoiceBox fx:id="roleSelectBox" layoutX="508.0" layoutY="395.0" prefWidth="150.0" />
       <TextField fx:id="usernameField" layoutX="512.0" layoutY="264.0" />
-      <TextField fx:id="passwordField" layoutX="512.0" layoutY="335.0" />
       <Label fx:id="usernameLabel" layoutX="444.0" layoutY="268.0" text="Username" />
       <Label fx:id="passwordLabel" layoutX="444.0" layoutY="339.0" text="Password" />
       <Label fx:id="roleLabel" layoutX="444.0" layoutY="399.0" text="Role" />
       <Label fx:id="authenticateLabel" layoutX="623.0" layoutY="447.0" text="Authentication failed" textFill="RED" visible="false" />
+      <PasswordField fx:id="passwordField" layoutX="512.0" layoutY="335.0" />
    </children>
 </AnchorPane>
