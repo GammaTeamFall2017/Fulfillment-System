@@ -13,6 +13,7 @@ import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
 import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import static java.lang.reflect.Array.set;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -94,6 +95,8 @@ public class DbUtilityCollection {
         newItemOrdered.setSpecialInstructions(specialInstructions);
         return newItemOrdered;
     }
+    
+
     
     //***** END Create New Order Functions *****//
     
@@ -216,30 +219,47 @@ public class DbUtilityCollection {
             System.out.println("\t\tSubitem: " + subitem.getSubitemName()); // Have to replace this with Labels or table cells we can attach the data to
         }
     }
+    //*****  END Item related Functions      *****//
+    
+    
+    
+    //*****     Get Order Functions     *****//
+    // Get whole list of kitchen orders
+    public List<Orders> getKitchenOrders(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
+        OrdersJpaController orderInstance2 = new OrdersJpaController(emf);
+        List<Orders> orderList = orderInstance2.findOrdersEntities(); 
+        List<Orders> kitchenOrders = new ArrayList();
+        
+        for (Orders currentOrder: orderList){  
+            if(currentOrder.getKitchenComplete() == false){
+                kitchenOrders.add(currentOrder);
+                //System.out.println(currentOrder.getOrderNumber());
+                //displayKitchenOrderLineItems(currentOrder.getItemsOrderedCollection());
+                    
+            }
+        }
+        return kitchenOrders;
+    }
+    
+    // Get all Orders from database
+    public List<Orders> getAllOrders(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
+        OrdersJpaController orderInstance2 = new OrdersJpaController(emf);
+        return orderInstance2.findOrdersEntities(); 
+    }
+    //*****   END  Get Order Functions     *****//
+    
+    //Testing
+    public int getTotalOrder(){
+        return orderInstance.getOrdersCount();
+    }
     
     public void displayItemsOnMenu(){
         List<Item> storeItems = itemInstance.findItemEntities();
         for (Item currentItem: storeItems){ 
             System.out.println("Item: " + currentItem.getItemName()); // Have to replace this with buttons we can attach the data to
         }
-    }
-    // Display whole list of kitchen orders, needs displayKitchenOrderLineItems()
-    public void displayKitchenOrders(){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
-        OrdersJpaController orderInstance2 = new OrdersJpaController(emf);
-        List<Orders> orderList = orderInstance2.findOrdersEntities(); 
-        
-        for (Orders currentOrder: orderList){  
-            if(currentOrder.getKitchenComplete() == false){
-                System.out.println(currentOrder.getOrderNumber());
-                displayKitchenOrderLineItems(currentOrder.getItemsOrderedCollection());
-                    
-            }
-        }
-    }
-    //Testing
-    public int getTotalOrder(){
-        return orderInstance.getOrdersCount();
     }
     //end testing
     //***** END Item related Functions  *****//
