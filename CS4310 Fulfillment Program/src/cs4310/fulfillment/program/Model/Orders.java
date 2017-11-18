@@ -124,6 +124,8 @@ public class Orders implements Serializable {
     }
 
     public Date getDateCreated() {
+        //Just incase order has no date setting default to current time, debuggin purpose remove later if needed
+        if(dateCreated == null){dateCreated = new Date();}
         return dateCreated;
     }
 

@@ -204,6 +204,9 @@ public class DbUtilityCollection {
                 Calendar cal = Calendar.getInstance();
                 Date currentTime = new Date(cal.getTimeInMillis());
                 // Calculate remaining time
+                //Added incase orderTime is null, remove later if not needed
+                if(orderTime == null){orderTime = new Date();}
+                //
                 long timeDifferenceMins = (currentTime.getTime() - orderTime.getTime())/ (60 * 1000) % 60; // time difference in minutes
                 long timeAllocatedForOrder = (long)getTotalItemETA(itemSet, item);
                 long minutesRemaining = timeAllocatedForOrder - timeDifferenceMins;
