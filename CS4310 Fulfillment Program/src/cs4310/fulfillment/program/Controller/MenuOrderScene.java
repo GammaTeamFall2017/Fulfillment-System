@@ -5,7 +5,6 @@
  */
 package cs4310.fulfillment.program.Controller;
 
-import cs4310.fulfillment.program.Controller.SceneController;
 import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import cs4310.fulfillment.program.Model.Item;
 import cs4310.fulfillment.program.Model.ItemsOrdered;
@@ -18,24 +17,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 /**
  *
@@ -67,13 +60,15 @@ public class MenuOrderScene  implements Initializable {
     private List<Label> itemNameList = new ArrayList<Label>();
     private List<Label> priceList = new ArrayList<Label>();
     private List<Label> quantityList = new ArrayList<Label>();
+    private List<String> usedTables = new ArrayList<String>(8);
     private List<ItemsOrdered> orderArray = new ArrayList<ItemsOrdered>();
     private int buttonsPerRow = 6;
     private int buttonHeight = 100;
     private int widthOfScrollPane = 720;
+    private String tableNumber = "-1";
+    private String orderNumber;
     private BigDecimal taxRate = new BigDecimal("0.10");
     private BigDecimal totalOrderPrice = new BigDecimal("0.00");
-    private boolean isNewOrder = false;
     private boolean receivedOrder = false;
     private Orders newOrder;
     
@@ -81,6 +76,8 @@ public class MenuOrderScene  implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
+            
         requestWaitstaff.setVisible(false);
         tableRequest.setVisible(false);
         tableChoiceBox.setVisible(false);
@@ -93,7 +90,7 @@ public class MenuOrderScene  implements Initializable {
         
         //This is to temp fill a array of items
             BigDecimal bd = new BigDecimal("1.50");
-            for(int i = 0; i < 38; i++){
+            for(int i = 0; i < 18; i++){
                 Item tempItems = new Item(i, "food" + i, i+1, bd );
                 itemsArray.add(tempItems);
             }
@@ -122,13 +119,15 @@ public class MenuOrderScene  implements Initializable {
                         ItemsOrdered itemsToOrder = new ItemsOrdered();
                         //add this scene in when it is created
                         //newScene.setScene("/cs4310/fulfillment/program/View/.fxml", (Button)e.getSource());
-                        if(isNewOrder == false){
+                        if(tableNumber == "-1"){
+                            tableNumber = getValidTableNumber();
                             newOrder = DatabaseConnecter.createNewOrder();
-                            isNewOrder = true;
                         }
+                        newOrder.setTableNumber(tableNumber);
                         itemsToOrder.setItemInOrder(tempItem);
                         itemsToOrder.setOrderId(newOrder);
                         itemsToOrder.setItemQuantity(1);
+                        
                         //addItemToOrder();//need set this correctly
                         orderArray.add(itemsToOrder);
                     }
@@ -148,6 +147,8 @@ public class MenuOrderScene  implements Initializable {
         }
         else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff")){
             tableChoiceBox.getItems().addAll("Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7");
+            tableNumber = getValidTableNumber();
+            tableChoiceBox.getSelectionModel().selectFirst();
             tableRequest.setVisible(true);
             tableChoiceBox.setVisible(true);
             selectTable.setVisible(true);
@@ -155,6 +156,8 @@ public class MenuOrderScene  implements Initializable {
         }
         else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")) {
             tableChoiceBox.getItems().addAll("Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7");
+            tableNumber = getValidTableNumber();
+            tableChoiceBox.getSelectionModel().selectFirst();
             tableRequest.setVisible(true);
             tableChoiceBox.setVisible(true);
             selectTable.setVisible(true);
@@ -166,27 +169,50 @@ public class MenuOrderScene  implements Initializable {
     //checks the table number for initializing the scene. 
     //If it is a new order it will set a flag, and assign a new order number for the table. 
     //If not it will access the correct information for that order.
-    private void checkTableNumber(){
-        //DatabaseConnecter.
-        
+   /* public boolean checkTableNumber(){
+        List<Orders> allOrder = DatabaseConnecter.getAllOrders();
+        boolean hasATableNumber = false;
+        for(Orders o: allOrder){
+            if(tableNumber == o.getOrderNumber()){
+                //usedTables.add(o.getTableNumber());
+                hasATableNumber = true;
+            }
+        }
+        return hasATableNumber;
+    }*/
+    
+    //Checks if the table is avalible or not.
+    //It will return the first table avalible in the array.
+    //If no tables are avalible it will return -1
+    public String getValidTableNumber(){
+        for(int i = 0; i < usedTables.size(); i++){
+            if(usedTables.get(i) == "-1"){
+                usedTables.set(i, Integer.toString(i));
+                return usedTables.get(i);
+            }
+        }   
+        return "-1";
     }
     
+    //Request Waitstaff button
     @FXML public void handleRequestWaitstaffButton(ActionEvent event) throws IOException{
         //adding DB call for waitstaff
         
         requestWaitstaff.setStyle("-fx-background-color: blue;");
     }
     
+    //select Table button
     @FXML public void handleSelectTableButton(ActionEvent event) throws IOException{
-        tableChoiceBox.getValue().toString();
-        //get order from the table. 
+        tableNumber = tableChoiceBox.getValue().toString();
         //display everything from the order
     }
     
+    //back to admin options
     @FXML public void handleAdminOptions(ActionEvent event) throws IOException{
         newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button)event.getSource());
     }
     
+    //submit order button
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
            
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
@@ -197,7 +223,6 @@ public class MenuOrderScene  implements Initializable {
         }
         submitOrder.setText("Recieved");
         receivedOrder = true;
-        isNewOrder = true;
         newOrder.setItemsOrderedCollection(orderArray);
         
         Calendar cal = Calendar.getInstance();
@@ -205,15 +230,17 @@ public class MenuOrderScene  implements Initializable {
         //DatabaseConnecter.updateNewOrder(newOrder, orderArray, newTable, totalCost.getText(), currentDate);
     }
     
+    //cancel button
     @FXML private void handleCancelButton(ActionEvent e) throws IOException{
-        isNewOrder = false;
-        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer" )){
-            newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
+        
+        try{
+            DatabaseConnecter.removeOrder(newOrder);
         }
-        else {
-            //clear the order
+        catch(Exception execption){
+            System.out.println("Unable to remove Order from database " + execption);
         }
-            
+        
+        newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
     }
     
     @FXML private void addItemToOrder(Item itemToAdd){
