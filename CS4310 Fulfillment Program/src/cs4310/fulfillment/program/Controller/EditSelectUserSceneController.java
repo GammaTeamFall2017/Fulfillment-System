@@ -111,9 +111,9 @@ public class EditSelectUserSceneController implements Initializable {
     }
 
     private void removeEmployee(Employee e, Button removeButton) {
-        // doesn't actually remove user form database yet.
+        // doesn't actually remove user from database yet.
             Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Remove Eeployee");
+            alert.setTitle("Remove Employee");
             alert.setHeaderText("Are you sure you want to remove this employee?");
             
             ButtonType buttonTypeOne = new ButtonType("Yes");

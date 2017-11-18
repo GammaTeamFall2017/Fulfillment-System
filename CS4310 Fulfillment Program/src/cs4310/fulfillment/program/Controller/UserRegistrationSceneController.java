@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cs4310.fulfillment.program.Controller;
 
 import cs4310.fulfillment.program.Model.DbUtilityCollection;
@@ -35,7 +30,7 @@ import javax.persistence.Persistence;
  *
  * @author Chris
  */
-public class EditUserSceneController implements Initializable {
+public class UserRegistrationSceneController implements Initializable {
 
     @FXML
     private Label nameLabel;
@@ -66,7 +61,6 @@ public class EditUserSceneController implements Initializable {
     
     private SceneController newScene;
     private Employee emp;
-    private String originalUsername;
     /**
      * Initializes the controller class.
      */
@@ -74,7 +68,6 @@ public class EditUserSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         newScene = new SceneController();
         roleSelectBox.getItems().addAll("waitstaff","kitchen","admin");
-        originalUsername = "uname";
         emp = new Employee();
     }    
 
@@ -100,8 +93,8 @@ public class EditUserSceneController implements Initializable {
             emp.setRole(roleSelectBox.getValue());
             try {
                 //disabled for now.
-                //employeeInstance.edit(emp); 
-                newScene.setScene("/cs4310/fulfillment/program/View/EditSelectUserScene.fxml", (Button)event.getSource());
+                //employeeInstance.create(emp);
+                newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button)event.getSource());
             } catch (Exception ex) {
                 Logger.getLogger(EditUserSceneController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -113,7 +106,7 @@ public class EditUserSceneController implements Initializable {
 
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        newScene.setScene("/cs4310/fulfillment/program/View/EditSelectUserScene.fxml", (Button)event.getSource());
+        newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button)event.getSource());
     }
     
     public List<String> validateFields()
@@ -141,24 +134,6 @@ public class EditUserSceneController implements Initializable {
             emptyFields.add("Job title");
         }
         return emptyFields;
-    }
-    public void setFields(String username)
-    {
-        try
-        {
-        DbUtilityCollection db = new DbUtilityCollection();
-        emp = db.getEmployeeByUsername(username);
-        nameLabel.setText(emp.getFirstName() + " " + emp.getLastName());
-        firstNameField.setText(emp.getFirstName());
-        lastNameField.setText(emp.getLastName());
-        usernameField.setText(emp.getUsername());
-        passwordField.setText(emp.getPassword());
-        roleSelectBox.setValue(emp.getRole());
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
     }
     public void createPopup(List<String> emptyFields)
     {
