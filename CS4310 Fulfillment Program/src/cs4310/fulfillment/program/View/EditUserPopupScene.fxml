@@ -17,6 +17,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="81.0" text="Username is missing. Please add username." />
+      <Label fx:id="bodyLabel" layoutX="14.0" layoutY="81.0" text="Username is missing. Please add username." />
    </children>
 </AnchorPane>

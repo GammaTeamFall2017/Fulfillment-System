@@ -26,6 +26,8 @@ public class EditUserPopupSceneController implements Initializable {
     private Button okButton;
     @FXML
     private Label titleLabel;
+    @FXML
+    private Label bodyLabel;
 
     /**
      * Initializes the controller class.
@@ -42,7 +44,12 @@ public class EditUserPopupSceneController implements Initializable {
     }
     public void setText(List<String> emptyFields)
     {
-        //TODO
+        String text = "";
+        for (String s : emptyFields)
+        {
+            text += s + " is missing. Please add " + s + ".\n";
+        }
+        bodyLabel.setText(text);
     }
     
 }

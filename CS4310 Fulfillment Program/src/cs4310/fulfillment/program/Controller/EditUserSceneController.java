@@ -76,7 +76,6 @@ public class EditUserSceneController implements Initializable {
         roleSelectBox.getItems().addAll("waitstaff","kitchen","admin");
         originalUsername = "uname";
         emp = new Employee();
-        setFields(originalUsername);
     }    
 
     @FXML
