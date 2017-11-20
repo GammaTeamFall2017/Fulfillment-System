@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import cs4310.fulfillment.program.Model.DbUtilityCollection;
+import cs4310.fulfillment.program.Model.Item;
+import cs4310.fulfillment.program.Model.Orders;//remove when finished
 import cs4310.fulfillment.program.Model.ItemsOrdered;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -36,7 +38,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
-
+import java.util.concurrent.ThreadLocalRandom;
 /**
  * FXML Controller class
  *
@@ -61,11 +63,12 @@ public class ListOfOrdersSceneController implements Initializable {
         //Remove order debug only remove later
         /*
         try{
-                db.removeOrder(db.getAllOrders().get(2));
+             for(int i = 0 ; i<2;i++)
+                db.removeOrder(db.getAllOrders().get(i+1));
             }catch(IllegalOrphanException e){
             }catch(NonexistentEntityException e){}
         //
-         */
+        */
         //
         int totalOrders = db.getTotalOrder();
         int itemsPerOrder = 10;
@@ -111,7 +114,7 @@ public class ListOfOrdersSceneController implements Initializable {
             for (int x = 0; x
                     < db.getAllOrders().get(i).getItemsOrderedCollection().size();
                     x++) {
-                System.out.println("Items per order " + db.getAllOrders().get(i).getItemsOrderedCollection().size());
+                //System.out.println("Items per order " + db.getAllOrders().get(i).getItemsOrderedCollection().size());
                 List list = (List) db.getAllOrders().get(i).getItemsOrderedCollection();
 
                 ItemsOrdered itemO = (ItemsOrdered) list.get(x);
@@ -137,7 +140,7 @@ public class ListOfOrdersSceneController implements Initializable {
         }
 
     }
-
+    
     @FXML
     public void handleLogoutButton(ActionEvent e) throws IOException {
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button) e.getSource());
@@ -146,5 +149,13 @@ public class ListOfOrdersSceneController implements Initializable {
     @FXML
     public void handleRefreshButton(ActionEvent e) throws IOException {
         newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button) e.getSource());
+    }
+    @FXML
+    public void handleBackButton(ActionEvent e) throws IOException {
+        newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button) e.getSource());
+    }
+    @FXML
+    public void handleRefreshButtonAdmin(ActionEvent e) throws IOException {
+        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());
     }
 }

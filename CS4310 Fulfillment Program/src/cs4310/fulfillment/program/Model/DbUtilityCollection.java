@@ -262,6 +262,12 @@ public class DbUtilityCollection {
             System.out.println("Item: " + currentItem.getItemName()); // Have to replace this with buttons we can attach the data to
         }
     }
+    //For debugging to get list of items on menu
+    public List<Item> getItems(){
+        List<Item> storeItems = itemInstance.findItemEntities();
+        return storeItems;
+    }
+    //
     //end testing
     //***** END Item related Functions  *****//
     
