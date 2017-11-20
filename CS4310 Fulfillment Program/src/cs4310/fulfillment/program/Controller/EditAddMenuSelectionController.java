@@ -109,13 +109,13 @@ public class EditAddMenuSelectionController implements Initializable {
 
     private void updateItem(Item i, Button updateButton) {
         try {
-            //Stage stage = (Stage) updateButton.getScene().getWindow();
-            //FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/cs4310/fulfillment/program/View/UpdateItemScene.fxml"));
-            // Parent root = (Parent) fxmlLoader.load();
-            //UpdateItemSceneController cont = fxmlLoader.getController();
-            //cont.setFields(i.getItemId());
-            //stage.setScene(new Scene(root));
-            //stage.show();
+            Stage stage = (Stage) updateButton.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/cs4310/fulfillment/program/View/UpdateItemScene.fxml"));
+             Parent root = (Parent) fxmlLoader.load();
+            UpdateItemSceneController cont = fxmlLoader.getController();
+            cont.setFields(i);
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (Exception ex) {
             Logger.getLogger(EditSelectUserSceneController.class.getName()).log(Level.SEVERE, null, ex);
         }
