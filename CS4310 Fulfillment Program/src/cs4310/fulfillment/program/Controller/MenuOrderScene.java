@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -248,9 +249,21 @@ public class MenuOrderScene  implements Initializable {
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff")){
             
         }
-        submitOrder.setText("Recieved");
+        submitOrder.setText("Received");
         receivedOrder = true;
-        newOrder.setItemsOrderedCollection(orderArray);
+        
+        // Create line item entries in the database
+        List<ItemsOrdered> tempOrderArray = new ArrayList<ItemsOrdered>(); // Store the ItemsOrdered object created in database to new list with their new id
+        // If these are the items we want in the order, first add each line item as entries into the database to ItemsOrdered 
+        for (Iterator<ItemsOrdered> i = orderArray.iterator(); i.hasNext();) {
+            ItemsOrdered lineItem =  i.next();
+            
+            ItemsOrdered tempItemsOrdered = DatabaseConnecter.createNewItemsOrdered(lineItem);
+            tempOrderArray.add(tempItemsOrdered);
+        }
+        
+        // Attach the tempOrderArray to our order since it contains the ids needed to associated the new order with its line items in the database 
+        newOrder.setItemsOrderedCollection(tempOrderArray);
         
         Calendar cal = Calendar.getInstance();
         Date currentDate = new Date(cal.getTimeInMillis());
