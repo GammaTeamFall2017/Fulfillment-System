@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -59,12 +60,11 @@ public class MenuOrderScene  implements Initializable {
     @FXML private Label totalCost;
     @FXML private Label subPrice;
     @FXML private Label taxAmout;
-    @FXML private Label tableRequest;
     @FXML private Label tableLabel;
     @FXML private ChoiceBox<String> tableChoiceBox;
     
     private SceneController newScene = new SceneController();   
-    private DbUtilityCollection DatabaseConnecter = new DbUtilityCollection();
+    private DbUtilityCollection DatabaseConnecter = new DbUtilityCollection();//this is the connecter for the db
     private List<Item> itemsArray = new ArrayList<Item>();
     private List<Button> itemDeleteButtons = new ArrayList<Button>();
     private List<Label> itemNameList = new ArrayList<Label>();
@@ -89,17 +89,17 @@ public class MenuOrderScene  implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         
         requestWaitstaff.setVisible(false);
-        tableRequest.setVisible(false);
         tableChoiceBox.setVisible(false);
         selectTable.setVisible(false);
         adminOptions.setVisible(false);
         tableLabel.setVisible(false);
-        itemsArray = DatabaseConnecter.getAllItems();///this is the connecter for the db
+        itemsArray = DatabaseConnecter.getAllItems();///this gets all of the food items in the database
         foodButtonPane.setStyle("-fx-box-border: transparent;");
         orderPane.setStyle("-fx-box-border: transparent; -fx-background-color: #e0e0e0");
         //itemsArray.get(0).setImgPath("/cs4310/fulfillment/program/View/Food/pizza.png");
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             requestWaitstaff.setVisible(true);
+            
             if(tableNumber == "-1"){
                 tableNumber = getValidTableNumber();
                 newOrder = DatabaseConnecter.createNewOrder();
@@ -121,20 +121,29 @@ public class MenuOrderScene  implements Initializable {
             tableChoiceBox.getItems().addAll("1", "2", "3", "4", "5", "6", "7");
             tableNumber = getValidTableNumber();
             tableChoiceBox.getSelectionModel().selectFirst();
-            tableRequest.setVisible(true);
             tableChoiceBox.setVisible(true);
             selectTable.setVisible(true);
             tableLabel.setVisible(true);
+            try{
+                TimeUnit.SECONDS.sleep(1);
+                checkRequestWaitstaff();
+            }
+            catch(Exception timer){
+                System.out.println("Timer failed " + timer);
+            }
+                
+            
         }
         else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")) {
             tableChoiceBox.getItems().addAll("1", "2", "3", "4", "5", "6", "7");
             tableNumber = getValidTableNumber();
             tableChoiceBox.getSelectionModel().selectFirst();
-            tableRequest.setVisible(true);
             tableChoiceBox.setVisible(true);
             selectTable.setVisible(true);
             adminOptions.setVisible(true);
             tableLabel.setVisible(true);
+            
+                checkRequestWaitstaff();
         }
         
         //This is to temp fill a array of items
@@ -207,9 +216,47 @@ public class MenuOrderScene  implements Initializable {
     
     //Request Waitstaff button
     @FXML public void handleRequestWaitstaffButton(ActionEvent event) throws IOException{
-        //adding DB call for waitstaff
-        
+        newOrder.setRequestWaitstaff(true);
+        try{
+            DatabaseConnecter.requestWaitstaffUpdate(newOrder);
+        }
+        catch(Exception e){
+            System.out.println("Unable to request waitstaff " + e);
+        }
         requestWaitstaff.setStyle("-fx-background-color: blue;");
+    }
+    
+    private void checkRequestWaitstaff(){
+        
+        try{
+            TimeUnit.SECONDS.sleep(1);
+            allOrders = DatabaseConnecter.getAllOrders();
+            for(Orders o : allOrders){
+                if(o.getRequestWaitstaff()){
+                    Button newClearRequestWaitstaffButton = new Button();
+                    newClearRequestWaitstaffButton.setLayoutX(15);
+                    newClearRequestWaitstaffButton.setLayoutX(15);
+                    newClearRequestWaitstaffButton.setText("Table" + o.getTableNumber());
+                    newClearRequestWaitstaffButton.setOnAction(new EventHandler<ActionEvent>(){
+                        @Override public void handle(ActionEvent e){
+                            o.setRequestWaitstaff(false);
+                            try{
+                                DatabaseConnecter.finishRequestWaitstaffUpdate(o);
+                            }
+                            catch(Exception eventClearRequest){
+                                System.out.println("Unable to clear request for waitstaff: " + eventClearRequest);
+                            }
+                        }
+                    });
+                }
+            }
+            System.out.println("wait");
+        }
+        catch(Exception sleepTimer)
+        {
+            System.out.println("Sleep timer failes: " + sleepTimer);
+        }
+        
     }
     
     //select Table button
