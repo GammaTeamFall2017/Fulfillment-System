@@ -77,6 +77,57 @@ public class ItemJpaController implements Serializable {
             }
         }
     }
+    
+    public Item createAndReturn(Item item) {
+        if (item.getItemsOrderedCollection() == null) {
+            item.setItemsOrderedCollection(new ArrayList<ItemsOrdered>());
+        }
+        if (item.getSubitemCollection() == null) {
+            item.setSubitemCollection(new ArrayList<Subitem>());
+        }
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Collection<ItemsOrdered> attachedItemsOrderedCollection = new ArrayList<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedCollectionItemsOrderedToAttach : item.getItemsOrderedCollection()) {
+                itemsOrderedCollectionItemsOrderedToAttach = em.getReference(itemsOrderedCollectionItemsOrderedToAttach.getClass(), itemsOrderedCollectionItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedCollection.add(itemsOrderedCollectionItemsOrderedToAttach);
+            }
+            item.setItemsOrderedCollection(attachedItemsOrderedCollection);
+            Collection<Subitem> attachedSubitemCollection = new ArrayList<Subitem>();
+            for (Subitem subitemCollectionSubitemToAttach : item.getSubitemCollection()) {
+                subitemCollectionSubitemToAttach = em.getReference(subitemCollectionSubitemToAttach.getClass(), subitemCollectionSubitemToAttach.getSubitemId());
+                attachedSubitemCollection.add(subitemCollectionSubitemToAttach);
+            }
+            item.setSubitemCollection(attachedSubitemCollection);
+            em.persist(item);
+            for (ItemsOrdered itemsOrderedCollectionItemsOrdered : item.getItemsOrderedCollection()) {
+                Item oldItemInOrderOfItemsOrderedCollectionItemsOrdered = itemsOrderedCollectionItemsOrdered.getItemInOrder();
+                itemsOrderedCollectionItemsOrdered.setItemInOrder(item);
+                itemsOrderedCollectionItemsOrdered = em.merge(itemsOrderedCollectionItemsOrdered);
+                if (oldItemInOrderOfItemsOrderedCollectionItemsOrdered != null) {
+                    oldItemInOrderOfItemsOrderedCollectionItemsOrdered.getItemsOrderedCollection().remove(itemsOrderedCollectionItemsOrdered);
+                    oldItemInOrderOfItemsOrderedCollectionItemsOrdered = em.merge(oldItemInOrderOfItemsOrderedCollectionItemsOrdered);
+                }
+            }
+            for (Subitem subitemCollectionSubitem : item.getSubitemCollection()) {
+                Item oldItemIdOfSubitemCollectionSubitem = subitemCollectionSubitem.getItemId();
+                subitemCollectionSubitem.setItemId(item);
+                subitemCollectionSubitem = em.merge(subitemCollectionSubitem);
+                if (oldItemIdOfSubitemCollectionSubitem != null) {
+                    oldItemIdOfSubitemCollectionSubitem.getSubitemCollection().remove(subitemCollectionSubitem);
+                    oldItemIdOfSubitemCollectionSubitem = em.merge(oldItemIdOfSubitemCollectionSubitem);
+                }
+            }
+            em.getTransaction().commit();
+            return item;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public void edit(Item item) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;

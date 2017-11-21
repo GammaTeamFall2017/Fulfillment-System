@@ -1,17 +1,8 @@
 package cs4310.fulfillment.program.Model;
 
-import cs4310.fulfillment.program.Model.Employee;
-import cs4310.fulfillment.program.Model.EmployeeJpaController;
-import cs4310.fulfillment.program.Model.Item;
-import cs4310.fulfillment.program.Model.ItemJpaController;
-import cs4310.fulfillment.program.Model.ItemsOrdered;
-import cs4310.fulfillment.program.Model.Orders;
-import cs4310.fulfillment.program.Model.OrdersJpaController;
-import cs4310.fulfillment.program.Model.Subitem;
-import cs4310.fulfillment.program.Model.SubitemJpaController;
+
 import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
 import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
-import static java.lang.reflect.Array.set;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,8 +10,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -37,8 +26,11 @@ public class DbUtilityCollection {
     private SubitemJpaController subItemInstance = new SubitemJpaController(emf);
     private ItemsOrderedJpaController itemsOrderedInstance = new ItemsOrderedJpaController(emf);
     
+    
+    
     //***** Create New Order Functions *****//
     
+    // Create a new line item entry in the database
     public ItemsOrdered createNewItemsOrdered(ItemsOrdered itemsOrdered){
         return itemsOrderedInstance.createAndReturn(itemsOrdered);
     }
@@ -73,16 +65,9 @@ public class DbUtilityCollection {
         orderInstance.destroy(newOrder.getOrderNumber());
     }
     
+    // Remove a new line item entry from the database
     public void removeOrderLineItem(ItemsOrdered lineItem) throws IllegalOrphanException, cs4310.fulfillment.program.exceptions.NonexistentEntityException{
         itemsOrderedInstance.destroy(lineItem.getLineItemId());
-    }
-    
-    public Item getItemByID(Integer id){
-        return itemInstance.findItem(id);
-    }
-    
-    public Subitem getSubitemByID(Integer id){
-        return subItemInstance.findSubitem(id);
     }
     
     // Keep using this function to add selected items in the current order and store this function's results into a Set of ItemsOrdered: Set<ItemsOrdered>
@@ -94,11 +79,10 @@ public class DbUtilityCollection {
         newItemOrdered.setItemQuantity(itemQuantity);
         newItemOrdered.setSpecialInstructions(specialInstructions);
         return newItemOrdered;
-    }
-    
-
-    
+    } 
     //***** END Create New Order Functions *****//
+    
+    
     
     
     //*****     Update Order Functions    *****//
@@ -129,6 +113,45 @@ public class DbUtilityCollection {
     
     //*****  END Update Order Functions   *****//
     
+   
+    
+    
+    //*****     Get Order Functions     *****//
+    
+    // Get whole list of kitchen orders
+    public List<Orders> getKitchenOrders(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
+        OrdersJpaController orderInstance2 = new OrdersJpaController(emf);
+        List<Orders> orderList = orderInstance2.findOrdersEntities(); 
+        List<Orders> kitchenOrders = new ArrayList();
+        
+        for (Orders currentOrder: orderList){  
+            if(currentOrder.getKitchenComplete() == false){
+                kitchenOrders.add(currentOrder);
+                //System.out.println(currentOrder.getOrderNumber());
+                //displayKitchenOrderLineItems(currentOrder.getItemsOrderedCollection());
+                    
+            }
+        }
+        return kitchenOrders;
+    }
+    
+    // Get all Orders from database
+    public List<Orders> getAllOrders(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
+        OrdersJpaController orderInstance2 = new OrdersJpaController(emf);
+        return orderInstance2.findOrdersEntities(); 
+    }
+    
+    // Get total number of orders in the database
+    public int getTotalOrder(){
+        return orderInstance.getOrdersCount();
+    }
+    
+    //*****   END  Get Order Functions     *****//
+    
+    
+    
     
     //*****   Item related Functions      *****//
     
@@ -138,6 +161,15 @@ public class DbUtilityCollection {
        return itemInstance.findItemEntities();
     }
     
+    // Get item from database by its item id
+    public Item getItemByID(Integer id){
+        return itemInstance.findItem(id);
+    }
+    
+    // Get subitem from database by its subitem id
+    public Subitem getSubitemByID(Integer id){
+        return subItemInstance.findSubitem(id);
+    }
     // Calculate Item price with or without addons
     public BigDecimal getTotalItemPrice(Collection<ItemsOrdered> itemSet, Item item){
         BigDecimal total = item.getItemPrice(); // save total for Item
@@ -168,6 +200,99 @@ public class DbUtilityCollection {
         return total;
     }
     
+    //////////// Item functions for the admin option scenes ////////////
+    // Create an item entry in the database
+    public Item createItem(Item item){
+        return itemInstance.createAndReturn(item);
+    }
+    
+    // Update an item entry in the database
+    public void updateItem(Item item) throws NonexistentEntityException, Exception{
+        itemInstance.edit(item);
+    }
+    
+    // Delete an item entry in the database
+    public void removeItem(Item item) throws IllegalOrphanException, NonexistentEntityException{
+        itemInstance.destroy(item.getItemId());
+    }
+    
+    // Create a subitem entry in the database
+    public Subitem createSubitem(Subitem subitem){
+        return subItemInstance.createAndReturn(subitem);
+    }
+    
+    // Update a subitem entry in the database
+    public void updateSubitem(Subitem subitem) throws Exception{
+        subItemInstance.edit(subitem);
+    }
+    
+    // Delete a subitem entry in the database
+    public void removeSubitem(Subitem subitem) throws NonexistentEntityException{
+        subItemInstance.destroy(subitem.getSubitemId());
+    }
+
+    //*****  END Item related Functions      *****//
+
+    
+    
+    
+    //*****  Employee related Functions  *****//
+    
+    // Input is from input fields on UI
+    public boolean authenticateEmployee(String username, String password){
+        List<Employee> employeeList = employeeInstance.findEmployeeEntities();
+         for (Employee currentEmployee: employeeList){
+             if(currentEmployee.getUsername().equals(username)){
+                 if(currentEmployee.getPassword().equals(password)){
+                     return true;
+                 }
+                 else{
+                     return false;
+                 }
+             }
+         }
+         // if username not in database, return false
+         return false;   
+    }
+    
+    // Get an employee's entry from the database by searching for it with their username
+    public Employee getEmployeeByUsername(String username){      
+        List<Employee> employeeList = employeeInstance.findEmployeeEntities();
+        for (Employee currentEmployee: employeeList){
+            if(currentEmployee.getUsername().equals(username)){
+               return currentEmployee;         
+            }
+        }
+        return null;
+    }
+    
+    // Create a new employee entry in the database
+    public Employee createEmployee(Employee employee){
+        return employeeInstance.createAndReturn(employee);
+    }
+    
+    // Update an employee's entry in the database
+    public void updateEmployee(Employee employee) throws Exception{
+        employeeInstance.edit(employee);
+    }
+    
+    // Remove an employee's entry in the database
+    public void removeEmployee(Employee employee) throws NonexistentEntityException{
+        employeeInstance.destroy(employee.getEmployeeId());
+    }
+    
+    //***** END Employee related Functions  *****//
+    
+    
+    
+    
+    //*****   Testing/Debugging related Functions    *****//
+     public void displayItemsOnMenu(){
+        List<Item> storeItems = itemInstance.findItemEntities();
+        for (Item currentItem: storeItems){ 
+            System.out.println("Item: " + currentItem.getItemName()); // Have to replace this with buttons we can attach the data to
+        }
+    }   
     // Display an order's line items
     public void displayOrderLineItems(Collection<ItemsOrdered> itemSet){
         Item saveItem = null; // save previous item to compare
@@ -220,57 +345,6 @@ public class DbUtilityCollection {
             System.out.println("\t\tSubitem: " + subitem.getSubitemName()); // Have to replace this with Labels or table cells we can attach the data to
         }
     }
-    //*****  END Item related Functions      *****//
-    
-    
-    
-    //*****     Get Order Functions     *****//
-    // Get whole list of kitchen orders
-    public List<Orders> getKitchenOrders(){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
-        OrdersJpaController orderInstance2 = new OrdersJpaController(emf);
-        List<Orders> orderList = orderInstance2.findOrdersEntities(); 
-        List<Orders> kitchenOrders = new ArrayList();
-        
-        for (Orders currentOrder: orderList){  
-            if(currentOrder.getKitchenComplete() == false){
-                kitchenOrders.add(currentOrder);
-                //System.out.println(currentOrder.getOrderNumber());
-                //displayKitchenOrderLineItems(currentOrder.getItemsOrderedCollection());
-                    
-            }
-        }
-        return kitchenOrders;
-    }
-    
-    // Get all Orders from database
-    public List<Orders> getAllOrders(){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
-        OrdersJpaController orderInstance2 = new OrdersJpaController(emf);
-        return orderInstance2.findOrdersEntities(); 
-    }
-    //*****   END  Get Order Functions     *****//
-    
-    //Testing
-    public int getTotalOrder(){
-        return orderInstance.getOrdersCount();
-    }
-    
-    public void displayItemsOnMenu(){
-        List<Item> storeItems = itemInstance.findItemEntities();
-        for (Item currentItem: storeItems){ 
-            System.out.println("Item: " + currentItem.getItemName()); // Have to replace this with buttons we can attach the data to
-        }
-    }
-    //For debugging to get list of items on menu
-    public List<Item> getItems(){
-        List<Item> storeItems = itemInstance.findItemEntities();
-        return storeItems;
-    }
-    //
-    //end testing
-    //***** END Item related Functions  *****//
-    
     /*
     // Sample function to display all orders and an order's items and subitems that were ordere
     public void displayOrderIDs() {
@@ -302,41 +376,6 @@ public class DbUtilityCollection {
         }
     }
     */
-    
-    //*****  Employee related Functions  *****//
-    
-    // input is from input fields on UI
-    public boolean authenticateEmployee(String username, String password){
-        List<Employee> employeeList = employeeInstance.findEmployeeEntities();
-         for (Employee currentEmployee: employeeList){
-             if(currentEmployee.getUsername().equals(username)){
-                 if(currentEmployee.getPassword().equals(password)){
-                     return true;
-                 }
-                 else{
-                     return false;
-                 }
-             }
-         }
-         // if username not in database, return false
-         return false;   
-    }
-    
-    public Employee getEmployeeByUsername(String username){      
-        List<Employee> employeeList = employeeInstance.findEmployeeEntities();
-        for (Employee currentEmployee: employeeList){
-            if(currentEmployee.getUsername().equals(username)){
-               return currentEmployee;         
-            }
-        }
-        return null;
-    }
-    
-    public Employee createNewEmployee(Employee newEmployee){
-        return employeeInstance.createAndReturn(newEmployee);
-    }
-    
-    //***** END Employee related Functions  *****//
-    
+    //***** END Testing/Debugging related Functions  *****//
 }
 

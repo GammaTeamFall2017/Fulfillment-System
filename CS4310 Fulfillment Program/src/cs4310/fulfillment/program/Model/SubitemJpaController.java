@@ -67,6 +67,48 @@ public class SubitemJpaController implements Serializable {
             }
         }
     }
+    
+    public Subitem createAndReturn(Subitem subitem) {
+        if (subitem.getItemsOrderedCollection() == null) {
+            subitem.setItemsOrderedCollection(new ArrayList<ItemsOrdered>());
+        }
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Item itemId = subitem.getItemId();
+            if (itemId != null) {
+                itemId = em.getReference(itemId.getClass(), itemId.getItemId());
+                subitem.setItemId(itemId);
+            }
+            Collection<ItemsOrdered> attachedItemsOrderedCollection = new ArrayList<ItemsOrdered>();
+            for (ItemsOrdered itemsOrderedCollectionItemsOrderedToAttach : subitem.getItemsOrderedCollection()) {
+                itemsOrderedCollectionItemsOrderedToAttach = em.getReference(itemsOrderedCollectionItemsOrderedToAttach.getClass(), itemsOrderedCollectionItemsOrderedToAttach.getLineItemId());
+                attachedItemsOrderedCollection.add(itemsOrderedCollectionItemsOrderedToAttach);
+            }
+            subitem.setItemsOrderedCollection(attachedItemsOrderedCollection);
+            em.persist(subitem);
+            if (itemId != null) {
+                itemId.getSubitemCollection().add(subitem);
+                itemId = em.merge(itemId);
+            }
+            for (ItemsOrdered itemsOrderedCollectionItemsOrdered : subitem.getItemsOrderedCollection()) {
+                Subitem oldSubitemOrderedOfItemsOrderedCollectionItemsOrdered = itemsOrderedCollectionItemsOrdered.getSubitemOrdered();
+                itemsOrderedCollectionItemsOrdered.setSubitemOrdered(subitem);
+                itemsOrderedCollectionItemsOrdered = em.merge(itemsOrderedCollectionItemsOrdered);
+                if (oldSubitemOrderedOfItemsOrderedCollectionItemsOrdered != null) {
+                    oldSubitemOrderedOfItemsOrderedCollectionItemsOrdered.getItemsOrderedCollection().remove(itemsOrderedCollectionItemsOrdered);
+                    oldSubitemOrderedOfItemsOrderedCollectionItemsOrdered = em.merge(oldSubitemOrderedOfItemsOrderedCollectionItemsOrdered);
+                }
+            }
+            em.getTransaction().commit();
+            return subitem;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public void edit(Subitem subitem) throws NonexistentEntityException, Exception {
         EntityManager em = null;

@@ -59,6 +59,7 @@ public class TestDbUtilityCollection {
         // Add rows of the same item until all of its subitems are added
         // If an item is ordered with no subitems, leave the subitem field null, and we would only need one row for this type of item
         Collection<ItemsOrdered> tempNewItemsInOrder = new ArrayList<ItemsOrdered>();
+        
         ItemsOrdered itemInOrder = instance.addItemsToOrder(order, item1, subitem3, 1, "none");
         tempNewItemsInOrder.add(itemInOrder);
         // System.out.println(itemInOrder); // Debug statement
