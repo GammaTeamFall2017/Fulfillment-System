@@ -9,11 +9,13 @@ import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import cs4310.fulfillment.program.Model.Item;
 import cs4310.fulfillment.program.Model.ItemsOrdered;
 import cs4310.fulfillment.program.Model.Orders;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -24,7 +26,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -51,6 +59,7 @@ public class MenuOrderScene  implements Initializable {
     @FXML private Label subPrice;
     @FXML private Label taxAmout;
     @FXML private Label tableRequest;
+    @FXML private Label tableLabel;
     @FXML private ChoiceBox<String> tableChoiceBox;
     
     private SceneController newScene = new SceneController();   
@@ -60,7 +69,7 @@ public class MenuOrderScene  implements Initializable {
     private List<Label> itemNameList = new ArrayList<Label>();
     private List<Label> priceList = new ArrayList<Label>();
     private List<Label> quantityList = new ArrayList<Label>();
-    private List<String> usedTables = new ArrayList<String>(8);
+    private List<String> usedTables = new ArrayList<String>(Collections.nCopies(8, "-1"));
     private List<ItemsOrdered> orderArray = new ArrayList<ItemsOrdered>();
     private int buttonsPerRow = 6;
     private int buttonHeight = 100;
@@ -71,30 +80,69 @@ public class MenuOrderScene  implements Initializable {
     private BigDecimal totalOrderPrice = new BigDecimal("0.00");
     private boolean receivedOrder = false;
     private Orders newOrder;
+    List<Orders> allOrders;
     
     
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
-            
         requestWaitstaff.setVisible(false);
         tableRequest.setVisible(false);
         tableChoiceBox.setVisible(false);
         selectTable.setVisible(false);
         adminOptions.setVisible(false);
+        tableLabel.setVisible(false);
         itemsArray = DatabaseConnecter.getAllItems();///this is the connecter for the db
         foodButtonPane.setStyle("-fx-box-border: transparent;");
         orderPane.setStyle("-fx-box-border: transparent; -fx-background-color: #e0e0e0");
-        
+        //itemsArray.get(0).setImgPath("/cs4310/fulfillment/program/View/Food/pizza.png");
+        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
+            requestWaitstaff.setVisible(true);
+            if(tableNumber == "-1"){
+                tableNumber = getValidTableNumber();
+                newOrder = DatabaseConnecter.createNewOrder();
+            }
+            else {
+                allOrders = DatabaseConnecter.getAllOrders();
+                for(Orders o : allOrders){
+                    if(tableNumber == o.getTableNumber())//tableNumber needs to be set when returning from enjoy scene
+                    {
+                       orderArray.addAll(o.getItemsOrderedCollection());
+                    }
+                }
+                for(ItemsOrdered itemsOrderedInDB : orderArray){
+                    addItemToOrder(itemsOrderedInDB.getItemInOrder());
+                }
+            }
+        }
+        else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff")){
+            tableChoiceBox.getItems().addAll("1", "2", "3", "4", "5", "6", "7");
+            tableNumber = getValidTableNumber();
+            tableChoiceBox.getSelectionModel().selectFirst();
+            tableRequest.setVisible(true);
+            tableChoiceBox.setVisible(true);
+            selectTable.setVisible(true);
+            tableLabel.setVisible(true);
+        }
+        else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")) {
+            tableChoiceBox.getItems().addAll("1", "2", "3", "4", "5", "6", "7");
+            tableNumber = getValidTableNumber();
+            tableChoiceBox.getSelectionModel().selectFirst();
+            tableRequest.setVisible(true);
+            tableChoiceBox.setVisible(true);
+            selectTable.setVisible(true);
+            adminOptions.setVisible(true);
+            tableLabel.setVisible(true);
+        }
         
         //This is to temp fill a array of items
             BigDecimal bd = new BigDecimal("1.50");
-            for(int i = 0; i < 18; i++){
+            for(int i = 0; i < 9; i++){
                 Item tempItems = new Item(i, "food" + i, i+1, bd );
                 itemsArray.add(tempItems);
+                
             }
-        
         //end of temp area
         
         int row = (itemsArray.size() / buttonsPerRow) + 1;//gets the total rows
@@ -119,67 +167,29 @@ public class MenuOrderScene  implements Initializable {
                         ItemsOrdered itemsToOrder = new ItemsOrdered();
                         //add this scene in when it is created
                         //newScene.setScene("/cs4310/fulfillment/program/View/.fxml", (Button)e.getSource());
-                        if(tableNumber == "-1"){
-                            tableNumber = getValidTableNumber();
-                            newOrder = DatabaseConnecter.createNewOrder();
-                        }
+                        
                         newOrder.setTableNumber(tableNumber);
                         itemsToOrder.setItemInOrder(tempItem);
                         itemsToOrder.setOrderId(newOrder);
                         itemsToOrder.setItemQuantity(1);
                         
-                        //addItemToOrder();//need set this correctly
+                        addItemToOrder(tempItem);
                         orderArray.add(itemsToOrder);
                     }
                 });
+                //sets the image of the button
+                //BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(tempItem.getImgPath()).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                //Background background = new Background(backgroundImage);
                 newButton.setMinWidth(tempHBox.getPrefWidth());
                 newButton.setMinHeight(tempHBox.getPrefHeight());
+                //newButton.setBackground(background);
                 newPane.getChildren().add(newButton);
                 tempHBox.getChildren().add(newPane);
                 tempHBox.setFillHeight(true);
-                
             }
             VBoxButtons.getChildren().add(tempHBox);
         }
-        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
-            requestWaitstaff.setVisible(true);
-            
-        }
-        else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff")){
-            tableChoiceBox.getItems().addAll("Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7");
-            tableNumber = getValidTableNumber();
-            tableChoiceBox.getSelectionModel().selectFirst();
-            tableRequest.setVisible(true);
-            tableChoiceBox.setVisible(true);
-            selectTable.setVisible(true);
-            
-        }
-        else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")) {
-            tableChoiceBox.getItems().addAll("Table 1", "Table 2", "Table 3", "Table 4", "Table 5", "Table 6", "Table 7");
-            tableNumber = getValidTableNumber();
-            tableChoiceBox.getSelectionModel().selectFirst();
-            tableRequest.setVisible(true);
-            tableChoiceBox.setVisible(true);
-            selectTable.setVisible(true);
-            adminOptions.setVisible(true);
-        }
-            
     }
-    
-    //checks the table number for initializing the scene. 
-    //If it is a new order it will set a flag, and assign a new order number for the table. 
-    //If not it will access the correct information for that order.
-   /* public boolean checkTableNumber(){
-        List<Orders> allOrder = DatabaseConnecter.getAllOrders();
-        boolean hasATableNumber = false;
-        for(Orders o: allOrder){
-            if(tableNumber == o.getOrderNumber()){
-                //usedTables.add(o.getTableNumber());
-                hasATableNumber = true;
-            }
-        }
-        return hasATableNumber;
-    }*/
     
     //Checks if the table is avalible or not.
     //It will return the first table avalible in the array.
@@ -205,6 +215,23 @@ public class MenuOrderScene  implements Initializable {
     @FXML public void handleSelectTableButton(ActionEvent event) throws IOException{
         tableNumber = tableChoiceBox.getValue().toString();
         //display everything from the order
+        
+        if(usedTables.get(Integer.valueOf(tableNumber)) == "-1"){
+            tableNumber = getValidTableNumber();
+            newOrder = DatabaseConnecter.createNewOrder();
+        }
+        else{
+            allOrders = DatabaseConnecter.getAllOrders();
+            for(Orders o : allOrders){
+                if(tableNumber == o.getTableNumber())//tableNumber needs to be set when returning from enjoy scene
+                {
+                   orderArray.addAll(o.getItemsOrderedCollection());
+                }
+            }
+            for(ItemsOrdered iO : orderArray){//needs better name than iO
+                addItemToOrder(iO.getItemInOrder());
+            }
+        }
     }
     
     //back to admin options

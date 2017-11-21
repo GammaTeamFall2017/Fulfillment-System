@@ -49,11 +49,12 @@
             </ScrollPane>
          </children>
       </AnchorPane>
-      <Button layoutX="1068.0" layoutY="671.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="26.0" prefWidth="79.0" text="Cancel" />
-      <Button fx:id="requestWaitstaff" layoutX="14.0" layoutY="672.0" mnemonicParsing="false" onAction="#handleRequestWaitstaffButton" text="Request Waitstaff" />
+      <Button layoutX="1081.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
+      <Button fx:id="requestWaitstaff" layoutX="14.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleRequestWaitstaffButton" text="Request Waitstaff" />
       <Label fx:id="tableRequest" layoutX="14.0" layoutY="30.0" />
-      <ChoiceBox fx:id="tableChoiceBox" layoutX="581.0" layoutY="672.0" prefWidth="150.0" />
-      <Button fx:id="selectTable" layoutX="738.0" layoutY="672.0" mnemonicParsing="false" onAction="#handleSelectTableButton" text="Select" />
-      <Button fx:id="adminOptions" layoutX="310.0" layoutY="672.0" mnemonicParsing="false" onAction="#handleAdminOptions" text="Admin Options" />
+      <ChoiceBox fx:id="tableChoiceBox" layoutX="683.0" layoutY="670.0" prefHeight="25.0" prefWidth="48.0" />
+      <Button fx:id="selectTable" layoutX="738.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleSelectTableButton" text="Select" />
+      <Button fx:id="adminOptions" layoutX="310.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleAdminOptions" text="Admin Options" />
+      <Label fx:id="tableLabel" layoutX="641.0" layoutY="674.0" text="Table" />
    </children>
 </AnchorPane>
