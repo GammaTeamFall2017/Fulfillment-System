@@ -54,11 +54,11 @@ public class ListOfOrdersSceneController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    private SceneController newScene;
+    private SceneController newScene = new SceneController();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        newScene = new SceneController();
+        
         DbUtilityCollection db = new DbUtilityCollection();
         //Remove order debug only remove later
         /*
@@ -82,13 +82,7 @@ public class ListOfOrdersSceneController implements Initializable {
                 //creates popup window, need to find way for adjustOrderScene to know which order called it
                 public void handle(ActionEvent e) {
                     try {
-                        Stage stage = new Stage();
-                        
-                        Parent root = FXMLLoader.load(getClass().getResource("/cs4310/fulfillment/program/View/AdjustOrderPopup.fxml"));
-                        //get reference to scene1
-                        Scene myScene = new Scene(root);
-                        stage.setScene(myScene);
-                        stage.show();
+                        newScene.setScene("/cs4310/fulfillment/program/View/AdjustOrderPopup.fxml", (Button)e.getSource());
                         
                     } catch (Exception es) {
                         System.out.println("Unable to set the scene: " + es);
@@ -111,9 +105,7 @@ public class ListOfOrdersSceneController implements Initializable {
             vbox[i].getChildren().add(bt);
             vbox[i].getChildren().add(orderNumber);
             //adds order information adds each item as label with information below it
-            for (int x = 0; x
-                    < db.getAllOrders().get(i).getItemsOrderedCollection().size();
-                    x++) {
+            for (int x = 0; x < db.getAllOrders().get(i).getItemsOrderedCollection().size(); x++) {
                 //System.out.println("Items per order " + db.getAllOrders().get(i).getItemsOrderedCollection().size());
                 List list = (List) db.getAllOrders().get(i).getItemsOrderedCollection();
 

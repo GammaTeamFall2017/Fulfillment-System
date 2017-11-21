@@ -143,7 +143,13 @@ public class MenuOrderScene  implements Initializable {
             adminOptions.setVisible(true);
             tableLabel.setVisible(true);
             
+            try{
+                TimeUnit.SECONDS.sleep(1);
                 checkRequestWaitstaff();
+            }
+            catch(Exception timer){
+                System.out.println("Timer failed " + timer);
+            }
         }
         
         //This is to temp fill a array of items
@@ -326,8 +332,9 @@ public class MenuOrderScene  implements Initializable {
         catch(Exception execption){
             System.out.println("Unable to remove Order from database " + execption);
         }
-        
-        newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)e.getSource());
+        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
+            newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", submitOrder);
+        }
     }
     
     @FXML private void addItemToOrder(Item itemToAdd){
