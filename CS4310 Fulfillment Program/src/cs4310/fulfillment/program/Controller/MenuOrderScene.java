@@ -154,15 +154,6 @@ public class MenuOrderScene  implements Initializable {
             }
         }
         
-        //This is to temp fill a array of items
-            BigDecimal bd = new BigDecimal("1.50");
-            for(int i = 0; i < 9; i++){
-                Item tempItems = new Item(i, "food" + i, i+1, bd );
-                itemsArray.add(tempItems);
-                
-            }
-        //end of temp area
-        
         int row = (itemsArray.size() / buttonsPerRow) + 1;//gets the total rows
         int col = buttonsPerRow;
         int end = itemsArray.size() % buttonsPerRow;//gets the total for the last row
@@ -196,11 +187,16 @@ public class MenuOrderScene  implements Initializable {
                     }
                 });
                 //sets the image of the button
-                //BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(tempItem.getImgPath()).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-                //Background background = new Background(backgroundImage);
+                if(tempItem.getImgPath() != null){
+                    //pic size = 168x147  change the size in the image
+                    BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(tempItem.getImgPath()).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+                    Background background = new Background(backgroundImage);
+                    newButton.setBackground(background);
+                }
+                
                 newButton.setMinWidth(tempHBox.getPrefWidth());
                 newButton.setMinHeight(tempHBox.getPrefHeight());
-                //newButton.setBackground(background);
+                
                 newPane.getChildren().add(newButton);
                 tempHBox.getChildren().add(newPane);
                 tempHBox.setFillHeight(true);
