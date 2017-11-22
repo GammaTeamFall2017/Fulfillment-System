@@ -124,6 +124,7 @@ public class MenuOrderScene  implements Initializable {
             tableChoiceBox.setVisible(true);
             selectTable.setVisible(true);
             tableLabel.setVisible(true);
+            
             try{
                 TimeUnit.SECONDS.sleep(1);
                 checkRequestWaitstaff();
@@ -256,7 +257,6 @@ public class MenuOrderScene  implements Initializable {
                     });
                 }
             }
-            System.out.println("wait");
         }
         catch(Exception sleepTimer)
         {

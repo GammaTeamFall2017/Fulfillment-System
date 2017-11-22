@@ -43,13 +43,11 @@ public class UserLoginSceneController implements Initializable {
         newScene = new SceneController();
     }    
 
-    @FXML
-    private void handleCancelButton(ActionEvent event) {
+    @FXML private void handleCancelButton(ActionEvent event) {
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button)event.getSource());
     }
 
-    @FXML
-    private void handleLoginButton(ActionEvent event) {
+    @FXML private void handleLoginButton(ActionEvent event) {
         DbUtilityCollection db = new DbUtilityCollection();
         
         if (db.authenticateEmployee(usernameField.getText(), passwordField.getText()))

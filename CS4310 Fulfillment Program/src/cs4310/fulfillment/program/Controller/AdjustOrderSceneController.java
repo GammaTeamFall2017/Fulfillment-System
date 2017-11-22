@@ -42,7 +42,12 @@ public class AdjustOrderSceneController implements Initializable {
     @FXML
     public void handleOrderCompleteButton(ActionEvent e) {
         //return to list of orders, remove order from list of orders
-        db.removeOrder(order);
+        try{
+            db.removeOrder(order);
+        }
+        catch(Exception exception){
+            System.out.println("Unable to remove order " + exception);
+        }
         newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)e.getSource());
     }
     @FXML
