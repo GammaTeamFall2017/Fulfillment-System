@@ -26,7 +26,6 @@ public class UserLoginSceneController implements Initializable {
 
     @FXML private Button cancelButton;
     @FXML private Button loginButton;
-    @FXML private ChoiceBox<String> roleSelectBox;
     @FXML private TextField usernameField;
     @FXML private PasswordField passwordField;
     @FXML private Label usernameLabel;
@@ -42,7 +41,6 @@ public class UserLoginSceneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         newScene = new SceneController();
-         roleSelectBox.getItems().addAll("waitstaff","kitchen","admin");
     }    
 
     @FXML
@@ -58,11 +56,12 @@ public class UserLoginSceneController implements Initializable {
         {
             System.out.println("user: " + db.getEmployeeByUsername(usernameField.getText()).getRole());
             CS4310FulfillmentProgram.setCurrentUserRole(db.getEmployeeByUsername(usernameField.getText()).getRole());// = db.getEmployeeByUsername(usernameField.getText()).getRole();
+            System.out.println("user role: " + CS4310FulfillmentProgram.getCurrentUserRole());
             if (CS4310FulfillmentProgram.getCurrentUserRole().equals("admin"))
                 newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", loginButton);
-            if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff"))
+            else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff"))
                 newScene.setScene("/cs4310/fulfillment/program/View/MenuOrderScene.fxml", loginButton);
-            if(CS4310FulfillmentProgram.getCurrentUserRole().equals("kitchen"))
+            else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("kitchen"))
                 newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", loginButton);
         }
         else
