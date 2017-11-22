@@ -57,6 +57,7 @@ public class MenuOrderScene  implements Initializable {
     @FXML private VBox VBoxButtons;
     @FXML private AnchorPane foodButtonPane;
     @FXML private AnchorPane orderPane;
+    @FXML private AnchorPane anchorPane;
     @FXML private Label totalCost;
     @FXML private Label subPrice;
     @FXML private Label taxAmout;
@@ -240,10 +241,12 @@ public class MenuOrderScene  implements Initializable {
             allOrders = DatabaseConnecter.getAllOrders();
             for(Orders o : allOrders){
                 if(o.getRequestWaitstaff()){
+                    System.out.println("waitstaff requested");
+                    Pane newPane = new Pane();
                     Button newClearRequestWaitstaffButton = new Button();
                     newClearRequestWaitstaffButton.setLayoutX(15);
                     newClearRequestWaitstaffButton.setLayoutX(15);
-                    newClearRequestWaitstaffButton.setText("Table" + o.getTableNumber());
+                    newClearRequestWaitstaffButton.setText("Table " + o.getTableNumber());
                     newClearRequestWaitstaffButton.setOnAction(new EventHandler<ActionEvent>(){
                         @Override public void handle(ActionEvent e){
                             o.setRequestWaitstaff(false);
@@ -255,6 +258,8 @@ public class MenuOrderScene  implements Initializable {
                             }
                         }
                     });
+                    newPane.getChildren().add(newClearRequestWaitstaffButton);
+                    anchorPane.getChildren().add(newPane);
                 }
             }
         }
@@ -327,7 +332,9 @@ public class MenuOrderScene  implements Initializable {
     @FXML private void handleCancelButton(ActionEvent e) throws IOException{
         
         try{
-            DatabaseConnecter.removeOrder(newOrder);
+            if(newOrder != null){
+                DatabaseConnecter.removeOrder(newOrder);
+            }
         }
         catch(Exception execption){
             System.out.println("Unable to remove Order from database " + execption);
@@ -365,6 +372,8 @@ public class MenuOrderScene  implements Initializable {
             priceList.remove(index);
             quantityList.remove(index);
             itemDeleteButtons.remove(index);
+            ///remove item from db
+            orderArray.remove(index);
         });
         double height = 20;
         deleteItemButton.setMinHeight(height);
