@@ -99,8 +99,7 @@ public class EditUserSceneController implements Initializable {
             emp.setPassword(passwordField.getText());
             emp.setRole(roleSelectBox.getValue());
             try {
-                //disabled for now.
-                //employeeInstance.edit(emp); 
+                employeeInstance.edit(emp); 
                 newScene.setScene("/cs4310/fulfillment/program/View/EditSelectUserScene.fxml", (Button)event.getSource());
             } catch (Exception ex) {
                 Logger.getLogger(EditUserSceneController.class.getName()).log(Level.SEVERE, null, ex);

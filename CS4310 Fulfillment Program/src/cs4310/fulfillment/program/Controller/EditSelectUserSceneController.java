@@ -8,6 +8,7 @@ package cs4310.fulfillment.program.Controller;
 import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import cs4310.fulfillment.program.Model.Employee;
 import cs4310.fulfillment.program.Model.EmployeeJpaController;
+import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -126,7 +127,11 @@ public class EditSelectUserSceneController implements Initializable {
                 VBoxRole.getChildren().remove(index);
                 VBoxUpdate.getChildren().remove(index);
                 VBoxRemove.getChildren().remove(index);
-                //db.removeEmployee(e);
+                try {
+                    db.removeEmployee(e);
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(EditSelectUserSceneController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
             // ... user chose No or closed the dialog
             }

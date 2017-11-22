@@ -8,6 +8,8 @@ package cs4310.fulfillment.program.Controller;
 import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import cs4310.fulfillment.program.Model.Employee;
 import cs4310.fulfillment.program.Model.Item;
+import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
+import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -122,7 +124,6 @@ public class EditAddMenuSelectionController implements Initializable {
     }
 
     private void removeItem(Item i, Button removeButton) {
-       // doesn't actually remove item from database yet.
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Remove Item");
             alert.setHeaderText("Are you sure you want to remove this item?");
@@ -138,7 +139,13 @@ public class EditAddMenuSelectionController implements Initializable {
                 VBoxETA.getChildren().remove(index);
                 VBoxUpdate.getChildren().remove(index);
                 VBoxRemove.getChildren().remove(index);
-                //db.removeItem(i);
+                try {
+                    db.removeItem(i);
+                } catch (IllegalOrphanException ex) {
+                    Logger.getLogger(EditAddMenuSelectionController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(EditAddMenuSelectionController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
             // ... user chose No or closed the dialog
             }

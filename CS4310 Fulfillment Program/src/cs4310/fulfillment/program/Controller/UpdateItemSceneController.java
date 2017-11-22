@@ -9,6 +9,7 @@ import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import cs4310.fulfillment.program.Model.Item;
 import cs4310.fulfillment.program.Model.ItemJpaController;
 import cs4310.fulfillment.program.Model.Subitem;
+import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -83,6 +84,7 @@ public class UpdateItemSceneController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        db = new DbUtilityCollection();
         subitemTypeBox.getItems().addAll("add-on", "attribute");
         newScene = new SceneController();
         setOfSubitems = new HashSet<Subitem>();  
@@ -99,13 +101,19 @@ public class UpdateItemSceneController implements Initializable {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
             ItemJpaController itemInstance = new ItemJpaController(emf);
             BigDecimal price = new BigDecimal(itemPriceField.getText());
+            String imgPath = "/cs4310/fulfillment/program/View/Food/" + updateItem.getItemName() + ".png";
             updateItem.setItemName(itemNameField.getText());
             updateItem.setItemPrice(price);
             updateItem.setItemEta(Integer.parseInt(itemETAField.getText()));
+            updateItem.setImgPath(imgPath);
             updateItem.setSubitemCollection(setOfSubitems);
-            //set id for item
-            //disabled for now
-            //itemInstance.edit(updateItem);
+            try {
+                itemInstance.edit(updateItem);
+            }
+            catch (Exception ex) {
+                Logger.getLogger(UpdateItemSceneController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //System.out.println(setOfSubitems.toString());
             newScene.setScene("/cs4310/fulfillment/program/View/EditAddMenuSelection.fxml", (Button)event.getSource());
         }
         else
@@ -127,16 +135,17 @@ public class UpdateItemSceneController implements Initializable {
         boolean valid = (emptyFields.isEmpty());
         if(valid)
         {
-            newSubitem = new Subitem(id++);
+            newSubitem = new Subitem();
             BigDecimal price = new BigDecimal(subitemPriceField.getText());
             newSubitem.setSubitemName(subitemNameField.getText());
             newSubitem.setSubitemPrice(price);
             newSubitem.setSubitemEta(Integer.parseInt(subitemETAField.getText()));
             newSubitem.setSubitemType(subitemTypeBox.getValue());
+            newSubitem.setItemId(updateItem);
+            newSubitem = db.createSubitem(newSubitem);
             if(setOfSubitems.add(newSubitem))
             {
                 addSubitemtoList(newSubitem);
-                
             }
         }
         else
@@ -215,11 +224,15 @@ public class UpdateItemSceneController implements Initializable {
     }
 
     private void removeSubitem(Subitem s, Button removeButton) {
-        //doesn't actually remove subitem from database yet.
         int index = VBoxRemove.getChildren().indexOf(removeButton);
         VBoxSubitems.getChildren().remove(index);
         VBoxRemove.getChildren().remove(index);
         setOfSubitems.remove(s);
+        try {
+            db.removeSubitem(s);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(UpdateItemSceneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     private void setHeight(double height, Control... nodes)
     {
@@ -254,6 +267,7 @@ public class UpdateItemSceneController implements Initializable {
         setOfSubitems = updateItem.getSubitemCollection();
         for (Subitem s : setOfSubitems)
         {
+            System.out.println(s.getSubitemId());
             Label nameLabel = new Label(s.getSubitemName() + "(" + s.getSubitemType() +  ")");
             Button removeButton = new Button("X");
              removeButton.setOnAction((ActionEvent event) -> {

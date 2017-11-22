@@ -84,6 +84,7 @@ public class AddFoodItemController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        db = new DbUtilityCollection();
         subitemTypeBox.getItems().addAll("add-on", "attribute");
         newScene = new SceneController();
         setOfSubitems = new HashSet<Subitem>();
@@ -101,13 +102,14 @@ public class AddFoodItemController implements Initializable {
             ItemJpaController itemInstance = new ItemJpaController(emf);
             newItem = new Item();
             BigDecimal price = new BigDecimal(itemPriceField.getText());
+            String imgPath = "/cs4310/fulfillment/program/View/Food/" + newItem.getItemName() + ".png";
             newItem.setItemName(itemNameField.getText());
             newItem.setItemPrice(price);
             newItem.setItemEta(Integer.parseInt(itemETAField.getText()));
             newItem.setSubitemCollection(setOfSubitems);
-            //set id for item
-            //disabled for now
-            //itemInstance.create(newItem);
+            //newItem.setImgPath("/cs4310/fulfillment/program/View/Food/blank.png");
+            newItem.setImgPath(imgPath);
+            itemInstance.create(newItem);
            
             newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button)event.getSource());
         }
@@ -130,12 +132,15 @@ public class AddFoodItemController implements Initializable {
         boolean valid = (emptyFields.isEmpty());
         if(valid)
         {
-            newSubitem = new Subitem(id++);
+            newSubitem = new Subitem();
             BigDecimal price = new BigDecimal(subitemPriceField.getText());
             newSubitem.setSubitemName(subitemNameField.getText());
             newSubitem.setSubitemPrice(price);
             newSubitem.setSubitemEta(Integer.parseInt(subitemETAField.getText()));
             newSubitem.setSubitemType(subitemTypeBox.getValue());
+            newSubitem.setItemId(newItem);
+            System.out.println(newSubitem.getSubitemName());
+            newSubitem = db.createSubitem(newSubitem);
             if(setOfSubitems.add(newSubitem))
             {
                 addSubitemtoList(newSubitem);
@@ -218,7 +223,6 @@ public class AddFoodItemController implements Initializable {
     }
 
     private void removeSubitem(Subitem s, Button removeButton) {
-        //doesn't actually remove subitem from database yet.
         int index = VBoxRemove.getChildren().indexOf(removeButton);
         VBoxSubitems.getChildren().remove(index);
         VBoxRemove.getChildren().remove(index);
