@@ -29,10 +29,23 @@ public class EstimatedTimeOfArrival implements Initializable {
     @FXML Label minutesLeft;
     String timeLeft;
     
+    EstimatedTimeOfArrival(String time){
+        timeLeft = time;
+    }
+
+    public String getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(String timeLeft) {
+        this.timeLeft = timeLeft;
+    }
+    
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //get time left for the order
+        minutesLeft.setText(timeLeft);
     }
     
     public void handleRequestWaitstaffButton(ActionEvent event) throws IOException{

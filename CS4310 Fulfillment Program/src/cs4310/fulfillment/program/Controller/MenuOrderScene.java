@@ -12,6 +12,7 @@ import cs4310.fulfillment.program.Model.Orders;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,6 +74,7 @@ public class MenuOrderScene  implements Initializable {
     private List<Label> quantityList = new ArrayList<Label>();
     private List<String> usedTables = new ArrayList<String>(Collections.nCopies(8, "-1"));
     private List<ItemsOrdered> orderArray = new ArrayList<ItemsOrdered>();
+    private List<Integer> etaOfItem = new ArrayList<Integer>();
     private int buttonsPerRow = 6;
     private int buttonHeight = 100;
     private int widthOfScrollPane = 720;
@@ -296,15 +298,20 @@ public class MenuOrderScene  implements Initializable {
     
     //submit order button
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
-           
+        Integer totalETA;
+        for(int i = 0; i < etaOfItem.size(); i++){
+            //totalETA += Integer.parseInt(etaOfItem.get(i));
+        }
+           //newOrder.get
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
+            EstimatedTimeOfArrival estimatedScene = new EstimatedTimeOfArrival("12");
             newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
         }
-        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff")){
-            
+        else{
+            submitOrder.setText("Received");
+            receivedOrder = true;
         }
-        submitOrder.setText("Received");
-        receivedOrder = true;
+        
         
         // Create line item entries in the database
         List<ItemsOrdered> tempOrderArray = new ArrayList<ItemsOrdered>(); // Store the ItemsOrdered object created in database to new list with their new id
@@ -355,7 +362,9 @@ public class MenuOrderScene  implements Initializable {
         tempString = totalOrderPrice.add(taxRate.multiply(totalOrderPrice)).toString();
         tempString = tempString.substring(0, Math.min(tempString.length(), 5));
         totalCost.setText("$" + tempString);
+        etaOfItem.add(itemToAdd.getItemEta());
                 
+        
         deleteItemButton.setText("X");
         deleteItemButton.setTextFill(Color.RED);
         deleteItemButton.setOnAction((ActionEvent event) -> {
@@ -368,8 +377,11 @@ public class MenuOrderScene  implements Initializable {
             priceList.remove(index);
             quantityList.remove(index);
             itemDeleteButtons.remove(index);
-            ///remove item from db
+            //change the order when it is removed
+            etaOfItem.remove(index);
             orderArray.remove(index);
+            
+            totalOrderPrice = totalOrderPrice.subtract(itemToAdd.getItemPrice());
         });
         double height = 20;
         deleteItemButton.setMinHeight(height);
