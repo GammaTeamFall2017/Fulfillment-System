@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.MenuOrderScene">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.MenuOrderScene">
    <children>
       <Label layoutX="607.0" layoutY="25.0" text="Order Scene">
          <font>
@@ -38,7 +38,7 @@
       </ScrollPane>
       <AnchorPane fx:id="foodButtonPane" layoutX="14.0" layoutY="80.0" prefHeight="580.0" prefWidth="738.0">
          <children>
-            <ScrollPane prefHeight="580.0" prefWidth="738.0">
+            <ScrollPane prefHeight="580.0" prefWidth="738.0" stylesheets="@css/food.css">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
@@ -51,7 +51,6 @@
       </AnchorPane>
       <Button layoutX="1081.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
       <Button fx:id="requestWaitstaff" layoutX="14.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleRequestWaitstaffButton" text="Request Waitstaff" />
-      <Label fx:id="tableRequest" layoutX="14.0" layoutY="30.0" />
       <ChoiceBox fx:id="tableChoiceBox" layoutX="683.0" layoutY="670.0" prefHeight="25.0" prefWidth="48.0" />
       <Button fx:id="selectTable" layoutX="738.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleSelectTableButton" text="Select" />
       <Button fx:id="adminOptions" layoutX="310.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleAdminOptions" text="Admin Options" />

@@ -76,7 +76,7 @@ public class MenuOrderScene  implements Initializable {
     private List<ItemsOrdered> orderArray = new ArrayList<ItemsOrdered>();
     private List<Integer> etaOfItem = new ArrayList<Integer>();
     private int buttonsPerRow = 6;
-    private int buttonHeight = 100;
+    private int buttonHeight = 120;
     private int widthOfScrollPane = 720;
     private String tableNumber = "-1";
     private String orderNumber;
@@ -105,6 +105,9 @@ public class MenuOrderScene  implements Initializable {
             
             if(tableNumber == "-1"){
                 tableNumber = getValidTableNumber();
+                System.out.println("tableNumber = " + tableNumber + " Size of usedTables = " + usedTables.size());
+                //usedTables.add(0,"1");//add in table here
+                //usedTables.add(Integer.getInteger(tableNumber), "1");
                 newOrder = DatabaseConnecter.createNewOrder();
             }
             else {
@@ -163,6 +166,7 @@ public class MenuOrderScene  implements Initializable {
         int counter = 0;
         for(int i = 0; i < row; i++){
             int buttonsWidth = widthOfScrollPane / buttonsPerRow; //720 is the size of the VBox
+            System.out.println("buttonwidth: " + buttonsWidth);
             HBox tempHBox = new HBox(buttonsWidth);
             tempHBox.setPrefWidth(buttonsWidth); 
             tempHBox.setPrefHeight(buttonHeight);
@@ -172,7 +176,7 @@ public class MenuOrderScene  implements Initializable {
             for(int j = 0; j < col; j++) {
                 Item tempItem = itemsArray.get(counter++);
                 Pane newPane = new Pane();
-                Button newButton = new Button(tempItem.getItemName());
+                Button newButton = new Button();
                 newButton.setOnAction(new EventHandler<ActionEvent>(){
                     @Override public void handle(ActionEvent e){
                         ItemsOrdered itemsToOrder = new ItemsOrdered();
@@ -198,7 +202,6 @@ public class MenuOrderScene  implements Initializable {
                 
                 newButton.setMinWidth(tempHBox.getPrefWidth());
                 newButton.setMinHeight(tempHBox.getPrefHeight());
-                
                 newPane.getChildren().add(newButton);
                 tempHBox.getChildren().add(newPane);
                 tempHBox.setFillHeight(true);
@@ -284,6 +287,7 @@ public class MenuOrderScene  implements Initializable {
                 {
                    orderArray.addAll(o.getItemsOrderedCollection());
                 }
+                //if(o.)//check if the order has been submited to the kitchen 
             }
             for(ItemsOrdered iO : orderArray){//needs better name than iO
                 addItemToOrder(iO.getItemInOrder());
@@ -298,13 +302,15 @@ public class MenuOrderScene  implements Initializable {
     
     //submit order button
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
-        Integer totalETA;
+        int totalETA = 0;
         for(int i = 0; i < etaOfItem.size(); i++){
-            //totalETA += Integer.parseInt(etaOfItem.get(i));
+            totalETA += etaOfItem.get(i);
         }
+        
            //newOrder.get
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
-            EstimatedTimeOfArrival estimatedScene = new EstimatedTimeOfArrival("12");
+            EstimatedTimeOfArrival estimatedScene = new EstimatedTimeOfArrival(String.valueOf(totalETA));
+            estimatedScene.setTimeLeft(String.valueOf(totalETA));
             newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
         }
         else{
@@ -342,6 +348,7 @@ public class MenuOrderScene  implements Initializable {
         catch(Exception execption){
             System.out.println("Unable to remove Order from database " + execption);
         }
+        usedTables.add(Integer.getInteger(tableNumber), "-1");
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", submitOrder);
         }
