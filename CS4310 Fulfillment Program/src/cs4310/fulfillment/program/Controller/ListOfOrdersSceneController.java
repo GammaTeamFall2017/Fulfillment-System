@@ -39,6 +39,7 @@ import javafx.scene.Parent;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * FXML Controller class
  *
@@ -50,6 +51,7 @@ public class ListOfOrdersSceneController implements Initializable {
     private HBox hbox;
     @FXML
     private AnchorPane orderAnchorPane;
+    DbUtilityCollection db;
 
     /**
      * Initializes the controller class.
@@ -58,39 +60,68 @@ public class ListOfOrdersSceneController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        DbUtilityCollection db = new DbUtilityCollection();
+
+        db = new DbUtilityCollection();
         //Remove order debug only remove later
         /*
         try{
              for(int i = 0 ; i<2;i++)
-                db.removeOrder(db.getAllOrders().get(i+1));
+                db.removeOrder(db.getKitchenOrders().get(i+1));
             }catch(IllegalOrphanException e){
             }catch(NonexistentEntityException e){}
         //
-        */
+         */
         //
-        int totalOrders = db.getTotalOrder();
+        int totalOrders = db.getKitchenOrders().size();
+
         int itemsPerOrder = 10;
         VBox vbox[] = new VBox[totalOrders];
 
         //loads information of order to each vbox
         for (int i = 0; i < totalOrders; i++) {
-            Button bt = new Button("Table " + (i + 1));
+
+            Button bt = new Button("Table " + db.getKitchenOrders().get(i).getTableNumber());
+            Button orderComplete = new Button("Order Complete");
+            orderComplete.setId("" + db.getKitchenOrders().get(i).getOrderNumber());
             bt.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 //creates popup window, need to find way for adjustOrderScene to know which order called it
                 public void handle(ActionEvent e) {
                     try {
-                        newScene.setScene("/cs4310/fulfillment/program/View/AdjustOrderPopup.fxml", (Button)e.getSource());
-                        
+                        newScene.setScene("/cs4310/fulfillment/program/View/AdjustOrderPopup.fxml", (Button) e.getSource());
+
                     } catch (Exception es) {
                         System.out.println("Unable to set the scene: " + es);
-                        
+
                     }
                 }
             });
-            Label orderNumber = new Label("Order Number: " + db.getAllOrders().get(i).getOrderNumber() + "\nOrder Time : \n   " + db.getAllOrders().get(i).getDateCreated());
+            orderComplete.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                //creates popup window, need to find way for adjustOrderScene to know which order called it
+                public void handle(ActionEvent e) {
+                    int count = 0;
+                    int id = Integer.parseInt(((Button) e.getSource()).getId());
+                    System.out.println(db.getKitchenOrders().size());
+                    while (db.getKitchenOrders().get(count).getOrderNumber() != id) {
+                        count++;
+                    }
+                    db.getKitchenOrders().get(count).setKitchenComplete(true);
+
+                    try {
+                        db.updateKitchenOrder(db.getKitchenOrders().get(count));
+                    } catch (Exception ex) {
+                        System.out.println("Unable to request waitstaff " + e);
+                    }
+                    if(CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")){
+                        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());
+                    }else
+                        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button) e.getSource());
+                    //System.out.println(db.getKitchenOrders().get(0).getKitchenComplete());
+
+                }
+            });
+            Label orderNumber = new Label("Order Number: " + db.getKitchenOrders().get(i).getOrderNumber() + "\nOrder Time : \n   " + db.getKitchenOrders().get(i).getDateCreated());
             //Label kitchenComplete = new Label("Food is ready");
             Label label[] = new Label[itemsPerOrder];
             vbox[i] = new VBox();
@@ -103,11 +134,12 @@ public class ListOfOrdersSceneController implements Initializable {
                     + "-fx-border-color: black");
             //adds button and order number label
             vbox[i].getChildren().add(bt);
+            vbox[i].getChildren().add(orderComplete);
             vbox[i].getChildren().add(orderNumber);
             //adds order information adds each item as label with information below it
-            for (int x = 0; x < db.getAllOrders().get(i).getItemsOrderedCollection().size(); x++) {
-                //System.out.println("Items per order " + db.getAllOrders().get(i).getItemsOrderedCollection().size());
-                List list = (List) db.getAllOrders().get(i).getItemsOrderedCollection();
+            for (int x = 0; x < db.getKitchenOrders().get(i).getItemsOrderedCollection().size(); x++) {
+                //System.out.println("Items per order " + db.getKitchenOrders().get(i).getItemsOrderedCollection().size());
+                List list = (List) db.getKitchenOrders().get(i).getItemsOrderedCollection();
 
                 ItemsOrdered itemO = (ItemsOrdered) list.get(x);
                 String itemInfo = "";
@@ -132,7 +164,7 @@ public class ListOfOrdersSceneController implements Initializable {
         }
 
     }
-    
+
     @FXML
     public void handleLogoutButton(ActionEvent e) throws IOException {
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button) e.getSource());
@@ -142,10 +174,12 @@ public class ListOfOrdersSceneController implements Initializable {
     public void handleRefreshButton(ActionEvent e) throws IOException {
         newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button) e.getSource());
     }
+
     @FXML
     public void handleBackButton(ActionEvent e) throws IOException {
         newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button) e.getSource());
     }
+
     @FXML
     public void handleRefreshButtonAdmin(ActionEvent e) throws IOException {
         newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());
