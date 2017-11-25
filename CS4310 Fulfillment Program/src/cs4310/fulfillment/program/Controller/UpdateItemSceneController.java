@@ -78,7 +78,6 @@ public class UpdateItemSceneController implements Initializable {
     private Item updateItem;
     private Subitem newSubitem;
     private Collection<Subitem> setOfSubitems;
-        private int id =0;
     /**
      * Initializes the controller class.
      */
@@ -87,7 +86,7 @@ public class UpdateItemSceneController implements Initializable {
         db = new DbUtilityCollection();
         subitemTypeBox.getItems().addAll("add-on", "attribute");
         newScene = new SceneController();
-        setOfSubitems = new HashSet<Subitem>();  
+        setOfSubitems = new HashSet<>();  
     }    
 
     @FXML
@@ -146,6 +145,7 @@ public class UpdateItemSceneController implements Initializable {
             if(setOfSubitems.add(newSubitem))
             {
                 addSubitemtoList(newSubitem);
+                updateItem.setSubitemCollection(setOfSubitems); // in case user adds subitem but then hits "cancel"
             }
         }
         else

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.persistence.EntityManagerFactory;
@@ -67,6 +68,7 @@ public class EditUserSceneController implements Initializable {
     private SceneController newScene;
     private Employee emp;
     private String originalUsername;
+    private DbUtilityCollection db;
     /**
      * Initializes the controller class.
      */
@@ -74,7 +76,7 @@ public class EditUserSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         newScene = new SceneController();
         roleSelectBox.getItems().addAll("waitstaff","kitchen","admin");
-        originalUsername = "uname";
+        db = new DbUtilityCollection();
         emp = new Employee();
     }    
 
@@ -93,13 +95,34 @@ public class EditUserSceneController implements Initializable {
         {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
             EmployeeJpaController employeeInstance = new EmployeeJpaController(emf);
+            //check if last Admin is being edited to non-Admin.
+            if(db.getEmployeeByUsername(originalUsername).getRole().equals("admin") && !roleSelectBox.getValue().equals("admin"))
+            {
+                List<Employee> employeeList = employeeInstance.findEmployeeEntities();
+                int adminCount = 0;
+                for (Employee empl : employeeList)
+                {
+                if (empl.getRole().equals("admin"))
+                    adminCount++;
+                }
+                if (adminCount <= 1)
+                {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Error");
+                alert.setHeaderText("Can't edit this user's role");
+                alert.setContentText("There must always be at least one Administrator in the database.");
+                alert.showAndWait();
+                return;
+                }
+            }
+            //prepare to update user
             emp.setUsername(usernameField.getText());
             emp.setFirstName(firstNameField.getText());
             emp.setLastName(lastNameField.getText());
             emp.setPassword(passwordField.getText());
             emp.setRole(roleSelectBox.getValue());
             try {
-                employeeInstance.edit(emp); 
+                db.updateEmployee(emp);
                 newScene.setScene("/cs4310/fulfillment/program/View/EditSelectUserScene.fxml", (Button)event.getSource());
             } catch (Exception ex) {
                 Logger.getLogger(EditUserSceneController.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,7 +168,7 @@ public class EditUserSceneController implements Initializable {
     {
         try
         {
-        DbUtilityCollection db = new DbUtilityCollection();
+        originalUsername = username;
         emp = db.getEmployeeByUsername(username);
         nameLabel.setText(emp.getFirstName() + " " + emp.getLastName());
         firstNameField.setText(emp.getFirstName());

@@ -25,7 +25,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Control;
@@ -112,7 +111,25 @@ public class EditSelectUserSceneController implements Initializable {
     }
 
     private void removeEmployee(Employee e, Button removeButton) {
-        // doesn't actually remove user from database yet.
+        //check if e is only admin
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
+        EmployeeJpaController employeeInstance = new EmployeeJpaController(emf);
+        List<Employee> employeeList = employeeInstance.findEmployeeEntities();
+        int adminCount = 0;
+        for (Employee emp : employeeList)
+        {
+            if (emp.getRole() == "admin")
+                adminCount++;
+        }
+        if (adminCount <= 1)
+        {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Error");
+            alert.setHeaderText("Can't remove the only Administrator");
+            alert.showAndWait();
+            return;
+        }
+        //confirm removal
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Remove Employee");
             alert.setHeaderText("Are you sure you want to remove this employee?");
@@ -121,7 +138,7 @@ public class EditSelectUserSceneController implements Initializable {
             ButtonType buttonTypeTwo = new ButtonType("No",ButtonData.CANCEL_CLOSE);
             alert.getButtonTypes().setAll(buttonTypeOne,buttonTypeTwo);
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == buttonTypeOne){
+            if (result.get() == buttonTypeOne){  //user chose Yes
                 int index = VBoxRemove.getChildren().indexOf(removeButton);
                 VBoxUser.getChildren().remove(index);
                 VBoxRole.getChildren().remove(index);
