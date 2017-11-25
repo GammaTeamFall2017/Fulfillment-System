@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.ViewStatisticsSceneController">
+   <children>
+      <Label fx:id="titleLabel" layoutX="560.0" layoutY="37.0" text="Menu Statistics for Today">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="adminOptionsButton" layoutX="1102.0" layoutY="666.0" mnemonicParsing="false" onAction="#handleAdminOptionsButton" text="Admin Options" />
+      <Label layoutX="211.0" layoutY="127.0" text="Total Revenue: ">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="211.0" layoutY="189.0" text="Most Ordered Item:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="211.0" layoutY="303.0" text="Most Revenue Earning Item:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="782.0" layoutY="189.0" text="Least Ordered Item:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="782.0" layoutY="303.0" text="Least Revenue Earning Item:">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="totalRevenueLabel" layoutX="347.0" layoutY="127.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="mostOrderedItemLabel" layoutX="377.0" layoutY="189.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="mostRevenueItemLabel" layoutX="442.0" layoutY="303.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="leastOrderedItemLabel" layoutX="950.0" layoutY="189.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="leastRevenueItemLabel" layoutX="1017.0" layoutY="303.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
