@@ -348,7 +348,8 @@ public class MenuOrderScene  implements Initializable {
         catch(Exception execption){
             System.out.println("Unable to remove Order from database " + execption);
         }
-        usedTables.add(Integer.getInteger(tableNumber), "-1");
+        System.out.println("tableNumber" + tableNumber);
+        //usedTables.add(Integer.getInteger(tableNumber), "-1");
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", submitOrder);
         }
@@ -360,15 +361,7 @@ public class MenuOrderScene  implements Initializable {
         Label newQuantityField = new Label("1");
         Button deleteItemButton = new Button();
         totalOrderPrice = totalOrderPrice.add(itemToAdd.getItemPrice());
-        String tempString = "";
-        tempString = totalOrderPrice.toString();
-        subPrice.setText("$" + tempString);  
-        tempString = Double.toString(taxRate.multiply(totalOrderPrice).doubleValue());
-        tempString = tempString.substring(0, Math.min(tempString.length(), 5));
-        taxAmout.setText("$" + tempString);
-        tempString = totalOrderPrice.add(taxRate.multiply(totalOrderPrice)).toString();
-        tempString = tempString.substring(0, Math.min(tempString.length(), 5));
-        totalCost.setText("$" + tempString);
+        setPrice();
         etaOfItem.add(itemToAdd.getItemEta());
                 
         
@@ -389,6 +382,7 @@ public class MenuOrderScene  implements Initializable {
             orderArray.remove(index);
             
             totalOrderPrice = totalOrderPrice.subtract(itemToAdd.getItemPrice());
+            setPrice();
         });
         double height = 20;
         deleteItemButton.setMinHeight(height);
@@ -411,5 +405,16 @@ public class MenuOrderScene  implements Initializable {
         VBoxDelete.getChildren().add(deleteItemButton);
     }
     
+    public void setPrice(){
+        String tempString = "";
+        tempString = totalOrderPrice.toString();
+        subPrice.setText("$" + tempString);  
+        tempString = Double.toString(taxRate.multiply(totalOrderPrice).doubleValue());
+        tempString = tempString.substring(0, Math.min(tempString.length(), 5));
+        taxAmout.setText("$" + tempString);
+        tempString = totalOrderPrice.add(taxRate.multiply(totalOrderPrice)).toString();
+        tempString = tempString.substring(0, Math.min(tempString.length(), 5));
+        totalCost.setText("$" + tempString);
+    }
       
 }
