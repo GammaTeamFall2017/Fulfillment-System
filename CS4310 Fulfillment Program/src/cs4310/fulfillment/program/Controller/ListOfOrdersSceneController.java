@@ -62,6 +62,7 @@ public class ListOfOrdersSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         db = new DbUtilityCollection();
+        hbox.setStyle("fx-background-color: black;");
         //Remove order debug only remove later
         /*
         try{
@@ -122,6 +123,7 @@ public class ListOfOrdersSceneController implements Initializable {
                 }
             });
             Label orderNumber = new Label("Order Number: " + db.getKitchenOrders().get(i).getOrderNumber() + "\nOrder Time : \n   " + db.getKitchenOrders().get(i).getDateCreated());
+            orderNumber.setStyle("-fx-text-fill: white;");
             //Label kitchenComplete = new Label("Food is ready");
             Label label[] = new Label[itemsPerOrder];
             vbox[i] = new VBox();
@@ -131,7 +133,8 @@ public class ListOfOrdersSceneController implements Initializable {
                     + "-fx-border-width: 1;"
                     + "-fx-min-height: 619px;"
                     + "-fx-max-width: 320px;"
-                    + "-fx-border-color: black");
+                    + "-fx-border-color: black;"
+                    + "-fx-background-color : transparent;");
             //adds button and order number label
             vbox[i].getChildren().add(bt);
             vbox[i].getChildren().add(orderComplete);
@@ -154,6 +157,7 @@ public class ListOfOrdersSceneController implements Initializable {
 
                 label[x] = new Label(itemInfo);
                 label[x].setWrapText(true);
+                label[x].setStyle("-fx-text-fill: white;");
                 vbox[i].getChildren().add(label[x]);
             }
 

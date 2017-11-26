@@ -34,6 +34,7 @@ public class StartSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         newScene = new SceneController();
+        
     } 
     @FXML
     private void handleLoginButton(ActionEvent e){

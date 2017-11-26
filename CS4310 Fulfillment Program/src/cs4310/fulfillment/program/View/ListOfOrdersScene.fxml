@@ -6,22 +6,22 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" fx:id="orderTotal" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.ListOfOrdersSceneController">
+<AnchorPane id="background" fx:id="orderTotal" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.ListOfOrdersSceneController">
    <children>
-      <AnchorPane layoutX="388.0" layoutY="628.0" prefHeight="67.0" prefWidth="477.0">
+      <AnchorPane id="background" layoutX="388.0" layoutY="628.0" prefHeight="67.0" prefWidth="477.0" stylesheets="@css/Buttons.css">
          <children>
-            <Button layoutX="67.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleLogoutButton" prefHeight="50.0" prefWidth="102.0" text="Logout" />
-            <Button layoutX="178.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleRefreshButton" prefHeight="50.0" prefWidth="102.0" text="Refresh" />
+            <Button id="setButton" layoutX="40.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleLogoutButton" prefHeight="57.0" prefWidth="129.0" stylesheets="@css/Buttons.css" text="Logout" />
+            <Button id="setButton" layoutX="178.0" layoutY="12.0" mnemonicParsing="false" onAction="#handleRefreshButton" prefHeight="57.0" prefWidth="129.0" stylesheets="@css/Buttons.css" text="Refresh" />
          </children>
       </AnchorPane>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <AnchorPane fx:id="orderAnchorPane" prefHeight="619.0" prefWidth="1280.0">
+      <AnchorPane id="background" fx:id="orderAnchorPane" prefHeight="619.0" prefWidth="1280.0" stylesheets="@css/Buttons.css">
          <children>
-            <ScrollPane prefHeight="619.0" prefWidth="1280.0">
+            <ScrollPane id="scrollfill" prefHeight="619.0" prefWidth="1280.0" stylesheets="@css/Buttons.css">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0">
+                <AnchorPane id="background" minHeight="0.0" minWidth="0.0" stylesheets="@css/Buttons.css">
                      <children>
-                        <HBox fx:id="hbox" />
+                        <HBox id="background" fx:id="hbox" layoutY="-5.0" prefHeight="7.0" prefWidth="1272.0" stylesheets="@css/Buttons.css" />
                      </children>
                   </AnchorPane>    
               </content>
