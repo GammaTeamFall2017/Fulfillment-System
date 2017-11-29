@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.util.List;
 import cs4310.fulfillment.program.Model.Subitem;
 import cs4310.fulfillment.program.exceptions.*;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
@@ -72,18 +74,20 @@ public class ListOfOrdersSceneController implements Initializable {
             }catch(NonexistentEntityException e){}
         //
          */
-        //
-        int totalOrders = db.getKitchenOrders().size();
+        // Load all kitchen orders
+        List<Orders> kitchenOrders = db.getKitchenOrders();
+        int totalOrders = kitchenOrders.size();
 
-        int itemsPerOrder = 10;
+        int itemsPerOrder = 20;
         VBox vbox[] = new VBox[totalOrders];
-
+    
         //loads information of order to each vbox
-        for (int i = 0; i < totalOrders; i++) {
-
-            Button bt = new Button("Table " + db.getKitchenOrders().get(i).getTableNumber());
+        int count = 0; // needed for vbox[]
+        for (Orders currentOrder: kitchenOrders){
+            Button bt = new Button("Table " + currentOrder.getTableNumber());
             Button orderComplete = new Button("Order Complete");
-            orderComplete.setId("" + db.getKitchenOrders().get(i).getOrderNumber());
+            orderComplete.setId("" + currentOrder.getOrderNumber());
+            
             bt.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 //creates popup window, need to find way for adjustOrderScene to know which order called it
@@ -92,25 +96,27 @@ public class ListOfOrdersSceneController implements Initializable {
                         newScene.setScene("/cs4310/fulfillment/program/View/AdjustOrderPopup.fxml", (Button) e.getSource());
 
                     } catch (Exception es) {
-                        System.out.println("Unable to set the scene: " + es);
+                        //System.out.println("Unable to set the scene: " + es);
+                        es.printStackTrace();;
 
                     }
                 }
             });
+            
             orderComplete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 //creates popup window, need to find way for adjustOrderScene to know which order called it
                 public void handle(ActionEvent e) {
                     int count = 0;
                     int id = Integer.parseInt(((Button) e.getSource()).getId());
-                    System.out.println(db.getKitchenOrders().size());
-                    while (db.getKitchenOrders().get(count).getOrderNumber() != id) {
+                    System.out.println(kitchenOrders.size());
+                    while (kitchenOrders.get(count).getOrderNumber() != id) {
                         count++;
                     }
-                    db.getKitchenOrders().get(count).setKitchenComplete(true);
+                    kitchenOrders.get(count).setKitchenComplete(true);
 
                     try {
-                        db.updateKitchenOrder(db.getKitchenOrders().get(count));
+                        db.updateKitchenOrder(kitchenOrders.get(count));
                     } catch (Exception ex) {
                         System.out.println("Unable to request waitstaff " + e);
                     }
@@ -122,45 +128,37 @@ public class ListOfOrdersSceneController implements Initializable {
 
                 }
             });
-            Label orderNumber = new Label("Order Number: " + db.getKitchenOrders().get(i).getOrderNumber() + "\nOrder Time : \n   " + db.getKitchenOrders().get(i).getDateCreated());
+            
+            Label orderNumber = new Label("Order Number: " + currentOrder.getOrderNumber() + "\nOrder Time : \n   " + currentOrder.getDateCreated());
             orderNumber.setStyle("-fx-text-fill: white;");
             //Label kitchenComplete = new Label("Food is ready");
-            Label label[] = new Label[itemsPerOrder];
-            vbox[i] = new VBox();
-            bt.setMinWidth(320);
-            //adds style to vbox
-            vbox[i].setStyle("-fx-border-style: solid;"
-                    + "-fx-border-width: 1;"
-                    + "-fx-min-height: 619px;"
-                    + "-fx-max-width: 320px;"
-                    + "-fx-border-color: black;"
-                    + "-fx-background-color : transparent;");
-            //adds button and order number label
-            vbox[i].getChildren().add(bt);
-            vbox[i].getChildren().add(orderComplete);
-            vbox[i].getChildren().add(orderNumber);
-            //adds order information adds each item as label with information below it
-            for (int x = 0; x < db.getKitchenOrders().get(i).getItemsOrderedCollection().size(); x++) {
-                //System.out.println("Items per order " + db.getKitchenOrders().get(i).getItemsOrderedCollection().size());
-                List list = (List) db.getKitchenOrders().get(i).getItemsOrderedCollection();
-
-                ItemsOrdered itemO = (ItemsOrdered) list.get(x);
-                String itemInfo = "";
-
-                itemInfo += "Item: " + itemO.getItemInOrder().getItemName();
-                itemInfo += "\nItem Quantity : " + itemO.getItemQuantity();
-
-                if (itemO.getSubitemOrdered() != null) {
-                    itemInfo += "\n   Sub Item : " + itemO.getSubitemOrdered().getSubitemName();
-                }
-                itemInfo += "\n   Special Instructions : " + itemO.getSpecialInstructions();
-
-                label[x] = new Label(itemInfo);
-                label[x].setWrapText(true);
-                label[x].setStyle("-fx-text-fill: white;");
-                vbox[i].getChildren().add(label[x]);
+            
+            Label label = new Label();           
+            if(count < itemsPerOrder){
+                vbox[count] = new VBox();
+          
+                bt.setMinWidth(320);
+                //adds style to vbox
+                vbox[count].setStyle("-fx-border-style: solid;"
+                        + "-fx-border-width: 1;"
+                        + "-fx-min-height: 619px;"
+                        + "-fx-max-width: 320px;"
+                        + "-fx-border-color: black;"
+                        + "-fx-background-color : transparent;");
+                //adds button and order number label
+                vbox[count].getChildren().add(bt);
+                vbox[count].getChildren().add(orderComplete);
+                vbox[count].getChildren().add(orderNumber);
+                
+                // Get all Items in the order at once             
+                Collection<ItemsOrdered> currentOrdersItems = currentOrder.getItemsOrderedCollection();
+                
+                //adds order information adds each item as label with information below it
+                db.displayKitchenOrder(currentOrdersItems, vbox[count], label);
+          
             }
-
+        
+        count++; // counter for vbox
         }
 
         for (int i = 0; i < totalOrders; i++) {

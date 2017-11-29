@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -292,7 +294,8 @@ public class DbUtilityCollection {
         for (Item currentItem: storeItems){ 
             System.out.println("Item: " + currentItem.getItemName()); // Have to replace this with buttons we can attach the data to
         }
-    }   
+    }
+     
     // Display an order's line items
     public void displayOrderLineItems(Collection<ItemsOrdered> itemSet){
         Item saveItem = null; // save previous item to compare
@@ -309,6 +312,49 @@ public class DbUtilityCollection {
             Subitem subitem = e.getSubitemOrdered();
             System.out.println("\t\tSubitem: " + subitem.getSubitemName()); // Have to replace this with Labels or table cells we can attach the data to
         }
+    }
+    
+    // Display the kitchen order's line items
+    public void displayKitchenOrder(Collection<ItemsOrdered> itemSet, VBox vbox,Label label){
+
+        Item saveItem = null; // save previous item to compare
+        String itemInfo = ""; 
+        for (Iterator<ItemsOrdered> i = itemSet.iterator(); i.hasNext();) {
+            ItemsOrdered e =  i.next();
+         
+            //String itemInfo = "";        
+            if (!e.getItemInOrder().equals(saveItem)){
+                Item item = e.getItemInOrder();
+                saveItem = item;
+                
+                
+                itemInfo += "\n\nItem: " + e.getItemInOrder().getItemName();
+                itemInfo += "\nItem Quantity : " + e.getItemQuantity();            
+            }
+            
+            // Find subitems and get subitem names, if any
+            if (e.getSubitemOrdered() != null) {
+                Subitem subitem = e.getSubitemOrdered();
+                itemInfo += "\n\tSub Item : " +  subitem.getSubitemName();
+            }
+            // Only display special instruction if there are any
+            String s = e.getSpecialInstructions();
+            String s2 = "none";
+            System.out.println(s);
+            if(e.getSpecialInstructions() != null ){
+                if(!s.equalsIgnoreCase(s2)){
+                    // Add any special instructions
+                    itemInfo += "\n\tSpecial Instructions : " + e.getSpecialInstructions();
+                }
+                
+            }
+
+        }
+        // Attach all retrieved info to a label and add to vbox
+            label = new Label(itemInfo);
+            label.setWrapText(true);
+            label.setStyle("-fx-text-fill: white;");
+            vbox.getChildren().add(label);
     }
     
     // Display the kitchen's view of an order's line items, needed for displayKitchenOrders()
