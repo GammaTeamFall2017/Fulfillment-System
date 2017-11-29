@@ -100,7 +100,7 @@ public class EditAddMenuSelectionController implements Initializable {
              removeButton.setOnAction((ActionEvent event) -> {
                  removeItem(i,removeButton);
              });
-               setHeight(30, nameLabel,priceLabel,etaLabel,updateButton,removeButton);
+               setHeight(50, nameLabel,priceLabel,etaLabel,updateButton,removeButton);
                VBoxItem.getChildren().add(nameLabel);
                VBoxPrice.getChildren().add(priceLabel);
                VBoxETA.getChildren().add(etaLabel);

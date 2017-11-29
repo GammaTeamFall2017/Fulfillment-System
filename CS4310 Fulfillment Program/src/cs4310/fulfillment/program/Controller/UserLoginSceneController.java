@@ -52,9 +52,7 @@ public class UserLoginSceneController implements Initializable {
         
         if (db.authenticateEmployee(usernameField.getText(), passwordField.getText()))
         {
-            System.out.println("user: " + db.getEmployeeByUsername(usernameField.getText()).getRole());
-            CS4310FulfillmentProgram.setCurrentUserRole(db.getEmployeeByUsername(usernameField.getText()).getRole());// = db.getEmployeeByUsername(usernameField.getText()).getRole();
-            System.out.println("user role: " + CS4310FulfillmentProgram.getCurrentUserRole());
+            CS4310FulfillmentProgram.setCurrentUserRole(db.getEmployeeByUsername(usernameField.getText()).getRole());
             if (CS4310FulfillmentProgram.getCurrentUserRole().equals("admin"))
                 newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", loginButton);
             else if(CS4310FulfillmentProgram.getCurrentUserRole().equals("waitstaff"))

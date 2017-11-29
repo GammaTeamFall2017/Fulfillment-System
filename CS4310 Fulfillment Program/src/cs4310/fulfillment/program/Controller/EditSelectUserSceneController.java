@@ -87,7 +87,7 @@ public class EditSelectUserSceneController implements Initializable {
              removeButton.setOnAction((ActionEvent event) -> {
                  removeEmployee(e,removeButton);
              });
-             setHeight(30,nameLabel,roleLabel,updateButton,removeButton);
+             setHeight(50,nameLabel,roleLabel,updateButton,removeButton);
              VBoxUser.getChildren().add(nameLabel);
              VBoxRole.getChildren().add(roleLabel);
              VBoxUpdate.getChildren().add(updateButton);

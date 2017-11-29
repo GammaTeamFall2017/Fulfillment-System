@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.EditAddMenuSelectionController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.EditAddMenuSelectionController">
    <children>
       <Label layoutX="549.0" layoutY="30.0" text="Edit or Add Menu Item">
          <font>
@@ -40,8 +40,8 @@
       </Label>
       <VBox fx:id="VBoxItem" layoutX="142.0" layoutY="147.0" prefHeight="200.0" prefWidth="182.0" />
       <VBox fx:id="VBoxPrice" layoutX="455.0" layoutY="147.0" prefHeight="200.0" prefWidth="100.0" />
-      <VBox fx:id="VBoxETA" layoutX="640.0" layoutY="147.0" prefHeight="200.0" prefWidth="100.0" />
-      <VBox fx:id="VBoxUpdate" layoutX="731.0" layoutY="147.0" prefHeight="200.0" prefWidth="100.0" />
-      <VBox fx:id="VBoxRemove" layoutX="831.0" layoutY="147.0" prefHeight="200.0" prefWidth="100.0" />
+      <VBox fx:id="VBoxETA" layoutX="640.0" layoutY="147.0" prefHeight="200.0" prefWidth="140.0" />
+      <VBox fx:id="VBoxRemove" layoutX="910.0" layoutY="147.0" prefHeight="200.0" prefWidth="140.0" />
+      <VBox fx:id="VBoxUpdate" layoutX="759.0" layoutY="147.0" prefHeight="200.0" prefWidth="145.0" />
    </children>
 </AnchorPane>

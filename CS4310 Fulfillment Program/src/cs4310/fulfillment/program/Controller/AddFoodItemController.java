@@ -217,7 +217,7 @@ public class AddFoodItemController implements Initializable {
              removeButton.setOnAction((ActionEvent event) -> {
                  removeSubitem(s,removeButton);
              });
-             setHeight(30,nameLabel,removeButton);
+             setHeight(50,nameLabel,removeButton);
              VBoxSubitems.getChildren().add(nameLabel);
              VBoxRemove.getChildren().add(removeButton);
     }
