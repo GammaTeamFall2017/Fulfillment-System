@@ -11,14 +11,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.UpdateItemSceneController">
+<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.UpdateItemSceneController">
    <children>
       <TextField fx:id="itemNameField" layoutX="566.0" layoutY="23.0" promptText="Input Menu Item Name" />
       <TextField fx:id="itemPriceField" layoutX="458.0" layoutY="65.0" promptText="Input Price" />
       <TextField fx:id="itemETAField" layoutX="683.0" layoutY="65.0" promptText="Input ETA" />
       <Button fx:id="updateItemButton" layoutX="757.0" layoutY="663.0" mnemonicParsing="false" onAction="#handleUpdateItemButton" text="Update Item" />
       <TextField fx:id="subitemNameField" layoutX="339.0" layoutY="210.0" promptText="Input Sub-item Name" />
-      <ChoiceBox fx:id="subitemTypeBox" layoutX="339.0" layoutY="177.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="subitemTypeBox" layoutX="339.0" layoutY="164.0" prefWidth="150.0" />
       <TextField fx:id="subitemPriceField" layoutX="339.0" layoutY="242.0" promptText="Input Price" />
       <TextField fx:id="subitemETAField" layoutX="339.0" layoutY="274.0" promptText="Input ETA" />
       <Button fx:id="cancelButton" layoutX="458.0" layoutY="663.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />

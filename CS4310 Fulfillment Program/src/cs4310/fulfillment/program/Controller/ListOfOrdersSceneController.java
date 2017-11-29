@@ -174,7 +174,10 @@ public class ListOfOrdersSceneController implements Initializable {
 
     @FXML
     public void handleRefreshButton(ActionEvent e) throws IOException {
-        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button) e.getSource());
+        if (CS4310FulfillmentProgram.getCurrentUserRole().equals("admin"))
+              newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());  
+        else
+            newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button) e.getSource());
     }
 
     @FXML
