@@ -302,6 +302,7 @@ public class MenuOrderScene  implements Initializable {
     
     //submit order button
     @FXML public void handleSubmitButton(ActionEvent event) throws IOException{
+        System.out.println("1order paided: " + newOrder.getOrderPaid());
         int totalETA = 0;
         for(int i = 0; i < etaOfItem.size(); i++){
             totalETA += etaOfItem.get(i);
@@ -313,12 +314,33 @@ public class MenuOrderScene  implements Initializable {
             estimatedScene.setTimeLeft(String.valueOf(totalETA));
             newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
         }
-        else{
-            submitOrder.setText("Received");
-            receivedOrder = true;
+        else if(!CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
+            System.out.println("not customer");
+            if(newOrder.getOrderPaid() == true){
+                submitOrder.setText("Submit Order");
+                VBoxFood.getChildren().clear();
+                VBoxPrice.getChildren().clear();
+                VBoxQuantity.getChildren().clear();
+                VBoxDelete.getChildren().clear();
+                itemNameList.clear();
+                priceList.clear();
+                quantityList.clear();
+                itemDeleteButtons.clear();
+                etaOfItem.clear();
+                orderArray.clear();
+                newOrder = DatabaseConnecter.createNewOrder();
+                totalOrderPrice = BigDecimal.ZERO;
+                setPrice();
+                System.out.println("received");
+            }
+            else if(newOrder.getOrderPaid() == false){
+                submitOrder.setText("Received");
+                newOrder.setOrderPaid(true);
+                System.out.println("submit");
+            }
         }
         
-        
+        System.out.println("2order paided: " + newOrder.getOrderPaid());
         // Create line item entries in the database
         List<ItemsOrdered> tempOrderArray = new ArrayList<ItemsOrdered>(); // Store the ItemsOrdered object created in database to new list with their new id
         // If these are the items we want in the order, first add each line item as entries into the database to ItemsOrdered 

@@ -53,7 +53,7 @@ public class Orders implements Serializable {
     @Column(name = "request_waitstaff")
     private Boolean requestWaitstaff;
     @Column(name = "order_paid")
-    private Boolean orderPaid;
+    private Boolean orderPaid = false;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "total_price", precision = 7, scale = 2)
     private BigDecimal totalPrice;
