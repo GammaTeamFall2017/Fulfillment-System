@@ -7,19 +7,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.UserLoginSceneController">
+<AnchorPane id="background" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.UserLoginSceneController">
    <children>
-      <Label fx:id="titleLabel" alignment="CENTER" layoutX="368.0" layoutY="131.0" text="EasyOrder System" textAlignment="CENTER">
+      <Label id="Text" fx:id="titleLabel" alignment="CENTER" layoutX="368.0" layoutY="131.0" stylesheets="@css/Buttons.css" text="EasyOrder System" textAlignment="CENTER">
          <font>
             <Font size="55.0" />
          </font>
       </Label>
-      <TextField fx:id="usernameField" layoutX="512.0" layoutY="264.0" />
+      <TextField id="t" fx:id="usernameField" layoutX="512.0" layoutY="264.0" />
       <PasswordField fx:id="passwordField" layoutX="512.0" layoutY="335.0" />
-      <Button fx:id="loginButton" layoutX="560.0" layoutY="443.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Login" />
-      <Button fx:id="cancelButton" layoutX="560.0" layoutY="505.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
-      <Label fx:id="usernameLabel" layoutX="444.0" layoutY="268.0" text="Username" />
-      <Label fx:id="passwordLabel" layoutX="444.0" layoutY="339.0" text="Password" />
+      <Button id="setButton" fx:id="loginButton" layoutX="532.0" layoutY="418.0" mnemonicParsing="false" onAction="#handleLoginButton" stylesheets="@css/Buttons.css" text="Login" />
+      <Button id="setButton" fx:id="cancelButton" layoutX="528.0" layoutY="483.0" mnemonicParsing="false" onAction="#handleCancelButton" stylesheets="@css/Buttons.css" text="Cancel" />
+      <Label id="Text" fx:id="usernameLabel" layoutX="444.0" layoutY="268.0" text="Username" />
+      <Label id="Text" fx:id="passwordLabel" layoutX="444.0" layoutY="339.0" stylesheets="@css/Buttons.css" text="Password" />
       <Label fx:id="authenticateLabel" layoutX="623.0" layoutY="447.0" text="Authentication failed" textFill="RED" visible="false" />
    </children>
 </AnchorPane>
