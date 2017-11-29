@@ -13,42 +13,42 @@
 
 <AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.EditUserSceneController">
    <children>
-      <Label fx:id="nameLabel" layoutX="603.0" layoutY="25.0" stylesheets="@css/Buttons.css" text="Employee Name">
+      <Label fx:id="nameLabel" layoutX="603.0" layoutY="25.0" text="Employee Name">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <TextField fx:id="firstNameField" layoutX="293.0" layoutY="147.0" prefHeight="25.0" prefWidth="478.0" stylesheets="@css/Buttons.css" />
-      <TextField fx:id="lastNameField" layoutX="293.0" layoutY="254.0" prefHeight="25.0" prefWidth="478.0" stylesheets="@css/Buttons.css" />
-      <TextField fx:id="usernameField" layoutX="293.0" layoutY="360.0" prefHeight="25.0" prefWidth="478.0" stylesheets="@css/Buttons.css" />
-      <TextField fx:id="passwordField" layoutX="293.0" layoutY="476.0" prefHeight="25.0" prefWidth="478.0" stylesheets="@css/Buttons.css" />
-      <ChoiceBox fx:id="roleSelectBox" layoutX="293.0" layoutY="581.0" prefWidth="150.0" stylesheets="@css/Buttons.css" />
-      <Label fx:id="firstNameLabel" layoutX="118.0" layoutY="146.0" stylesheets="@css/Buttons.css" text="First Name">
+      <TextField fx:id="firstNameField" layoutX="293.0" layoutY="147.0" prefHeight="25.0" prefWidth="478.0" />
+      <TextField fx:id="lastNameField" layoutX="293.0" layoutY="254.0" prefHeight="25.0" prefWidth="478.0" />
+      <TextField fx:id="usernameField" layoutX="293.0" layoutY="360.0" prefHeight="25.0" prefWidth="478.0" />
+      <TextField fx:id="passwordField" layoutX="293.0" layoutY="476.0" prefHeight="25.0" prefWidth="478.0" />
+      <ChoiceBox fx:id="roleSelectBox" layoutX="293.0" layoutY="581.0" prefWidth="150.0" />
+      <Label fx:id="firstNameLabel" layoutX="118.0" layoutY="146.0" text="First Name">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="roleLabel" layoutX="124.0" layoutY="580.0" stylesheets="@css/Buttons.css" text="Job Title">
+      <Label fx:id="roleLabel" layoutX="124.0" layoutY="580.0" text="Job Title">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="passwordLabel" layoutX="124.0" layoutY="475.0" stylesheets="@css/Buttons.css" text="Password">
+      <Label fx:id="passwordLabel" layoutX="124.0" layoutY="475.0" text="Password">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="usernameLabel" layoutX="122.0" layoutY="359.0" stylesheets="@css/Buttons.css" text="User Name">
+      <Label fx:id="usernameLabel" layoutX="122.0" layoutY="359.0" text="User Name">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="lastNameLabel" layoutX="119.0" layoutY="253.0" stylesheets="@css/Buttons.css" text="Last Name">
+      <Label fx:id="lastNameLabel" layoutX="119.0" layoutY="253.0" text="Last Name">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="saveButton" layoutX="1015.0" layoutY="203.0" mnemonicParsing="false" onAction="#handleSaveButton" stylesheets="@css/Buttons.css" text="Save" />
-      <Button fx:id="cancelButton" layoutX="1009.0" layoutY="418.0" mnemonicParsing="false" onAction="#handleCancelButton" stylesheets="@css/Buttons.css" text="Cancel" />
+      <Button fx:id="saveButton" layoutX="1015.0" layoutY="203.0" mnemonicParsing="false" onAction="#handleSaveButton" text="Save" />
+      <Button fx:id="cancelButton" layoutX="1009.0" layoutY="418.0" mnemonicParsing="false" onAction="#handleCancelButton" text="Cancel" />
    </children>
 </AnchorPane>
