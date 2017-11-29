@@ -352,6 +352,21 @@ public class MenuOrderScene  implements Initializable {
         //usedTables.add(Integer.getInteger(tableNumber), "-1");
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", submitOrder);
+        }else{
+            // Remove all line items and reset prices
+            VBoxFood.getChildren().clear();
+            VBoxPrice.getChildren().clear();
+            VBoxQuantity.getChildren().clear();
+            VBoxDelete.getChildren().clear();
+            itemNameList.clear();
+            priceList.clear();
+            quantityList.clear();
+            itemDeleteButtons.clear();
+            etaOfItem.clear();
+            orderArray.clear();
+            
+            totalOrderPrice = BigDecimal.ZERO;
+            setPrice();
         }
     }
     
