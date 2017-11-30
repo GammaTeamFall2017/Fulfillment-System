@@ -197,16 +197,20 @@ public class MenuOrderScene  implements Initializable {
                     }
                 });
                 //sets the image of the button
-                System.out.println("works up to here");
-                /*
-                //this breaks the code when adding new items
                 if(tempItem.getImgPath() != null){
+                    try{
                     //pic size = 168x147  change the size in the image
                     BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(tempItem.getImgPath()).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
                     Background background = new Background(backgroundImage);
                     newButton.setBackground(background);
+                    }
+                    catch (Exception e)
+                    {
+                        newButton.setText(tempItem.getItemName());
+                        System.out.println(e.getMessage());
+                    }
                 }
-                */
+                
                 newButton.setMinWidth(tempHBox.getPrefWidth());
                 newButton.setMinHeight(tempHBox.getPrefHeight());
                 newPane.getChildren().add(newButton);
