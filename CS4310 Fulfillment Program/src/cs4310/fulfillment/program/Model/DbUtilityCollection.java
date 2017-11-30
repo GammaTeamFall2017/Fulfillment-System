@@ -45,6 +45,7 @@ public class DbUtilityCollection {
         newOrder.setKitchenComplete(Boolean.FALSE);
         newOrder.setRequestWaitstaff(Boolean.FALSE);
         newOrder.setOrderPaid(Boolean.FALSE);
+        newOrder.setDateCreated(new Date());
         BigDecimal num = new BigDecimal(0.00);
         newOrder.setTotalPrice(num);
         return orderInstance.createAndReturn(newOrder);
