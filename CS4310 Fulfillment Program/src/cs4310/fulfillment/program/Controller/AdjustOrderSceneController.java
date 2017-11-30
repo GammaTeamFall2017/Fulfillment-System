@@ -13,6 +13,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
 
 /**
@@ -21,16 +23,17 @@ import javafx.stage.Stage;
  */
 
 public class AdjustOrderSceneController implements Initializable {
-
-    @FXML private Button orderCompleteButton;
-    @FXML private Button changeTimeButton;
-    @FXML private Button cancelButton;
-    @FXML private ChoiceBox<Integer> selectTime;
-    @FXML private SceneController newScene;
+    @FXML
+    private ChoiceBox<Integer> selectTime;
+    private SceneController newScene;
     
     private Subitem item;
     private Orders order;
+    private ListOfOrdersSceneController parentController;
     DbUtilityCollection db = new DbUtilityCollection();
+    @FXML
+    private Button changeTimeButton;
+    private Button callingButton;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -43,24 +46,35 @@ public class AdjustOrderSceneController implements Initializable {
     public void handleOrderCompleteButton(ActionEvent e) {
         //return to list of orders, remove order from list of orders
         try{
-            db.removeOrder(order);
+            callingButton.fire();
         }
         catch(Exception exception){
             System.out.println("Unable to remove order " + exception);
         }
-        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)e.getSource());
+        Stage stage = (Stage) ((Button)e.getSource()).getScene().getWindow();
+        stage.close();
     }
     @FXML
     public void handleChangeTimeButton(ActionEvent e) {
         //return to list of orders, change remaining wait time
         int newTime = selectTime.getSelectionModel().getSelectedItem();
-        item.setSubitemEta(newTime);
-        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)e.getSource());
+        //item.setSubitemEta(newTime);
+        Stage stage = (Stage) ((Button)e.getSource()).getScene().getWindow();
+        stage.close();
     }
     
     @FXML
     public void handleCancelButton(ActionEvent e) {
-        newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button)e.getSource());
+        Stage stage = (Stage) ((Button)e.getSource()).getScene().getWindow();
+        stage.close();
+    }
+
+    void setParentController(ListOfOrdersSceneController parent) {
+        parentController = parent;
+    }
+
+    void setCallingButton(Button bt) {
+        callingButton = bt;
     }
     
       

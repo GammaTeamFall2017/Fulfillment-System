@@ -41,6 +41,7 @@ import javafx.scene.Parent;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import java.util.concurrent.ThreadLocalRandom;
+import org.eclipse.persistence.exceptions.DescriptorException;
 
 /**
  * FXML Controller class
@@ -87,22 +88,7 @@ public class ListOfOrdersSceneController implements Initializable {
             Button bt = new Button("Table " + currentOrder.getTableNumber());
             Button orderComplete = new Button("Order Complete");
             orderComplete.setId("" + currentOrder.getOrderNumber());
-            
-            bt.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                //creates popup window, need to find way for adjustOrderScene to know which order called it
-                public void handle(ActionEvent e) {
-                    try {
-                        newScene.setScene("/cs4310/fulfillment/program/View/AdjustOrderPopup.fxml", (Button) e.getSource());
-
-                    } catch (Exception es) {
-                        //System.out.println("Unable to set the scene: " + es);
-                        es.printStackTrace();;
-
-                    }
-                }
-            });
-            
+            ListOfOrdersSceneController parentController = this;
             orderComplete.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 //creates popup window, need to find way for adjustOrderScene to know which order called it
@@ -128,6 +114,32 @@ public class ListOfOrdersSceneController implements Initializable {
 
                 }
             });
+            bt.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                //creates popup window, need to find way for adjustOrderScene to know which order called it
+                public void handle(ActionEvent e) {
+                    try {
+                        Stage stage = new Stage();
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/cs4310/fulfillment/program/View/AdjustOrderPopup.fxml"));
+                        Parent root = (Parent) fxmlLoader.load();
+                        AdjustOrderSceneController cont = fxmlLoader.getController();
+                        cont.setParentController(parentController);
+                        cont.setCallingButton(orderComplete);
+                        stage.setScene(new Scene(root));
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initOwner(bt.getScene().getWindow());
+                        stage.showAndWait();
+                        //newScene.setScene("/cs4310/fulfillment/program/View/AdjustOrderPopup.fxml", (Button) e.getSource());
+
+                    } catch (Exception es) {
+                        //System.out.println("Unable to set the scene: " + es);
+                        es.printStackTrace();
+
+                    }
+                }
+            });
+            
+            
             
             Label orderNumber = new Label("Order Number: " + currentOrder.getOrderNumber() + "\nOrder Time : \n   " + currentOrder.getDateCreated());
             orderNumber.setStyle("-fx-text-fill: white;");
@@ -188,5 +200,10 @@ public class ListOfOrdersSceneController implements Initializable {
     @FXML
     public void handleRefreshButtonAdmin(ActionEvent e) throws IOException {
         newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());
+    }
+    
+    public void completeOrder()
+    {
+        
     }
 }
