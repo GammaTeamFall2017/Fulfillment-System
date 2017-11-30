@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -461,14 +462,13 @@ public class MenuOrderScene  implements Initializable {
     
     public void setPrice(){
         String tempString = "";
-        tempString = totalOrderPrice.toString();
-        subPrice.setText("$" + tempString);  
-        tempString = Double.toString(taxRate.multiply(totalOrderPrice).doubleValue());
-        tempString = tempString.substring(0, Math.min(tempString.length(), 5));
-        taxAmout.setText("$" + tempString);
-        tempString = totalOrderPrice.add(taxRate.multiply(totalOrderPrice)).toString();
-        tempString = tempString.substring(0, Math.min(tempString.length(), 5));
-        totalCost.setText("$" + tempString);
+        DecimalFormat df = new DecimalFormat(".00");
+        tempString = df.format( totalOrderPrice.doubleValue());
+        subPrice.setText("Subtotal: $" + tempString);  
+        tempString = df.format(taxRate.multiply(totalOrderPrice).doubleValue());
+        taxAmout.setText("Tax: $" + tempString);
+        tempString = df.format(totalOrderPrice.add(taxRate.multiply(totalOrderPrice)).doubleValue());
+        totalCost.setText("Total: $" + tempString);
     }
       
 }
