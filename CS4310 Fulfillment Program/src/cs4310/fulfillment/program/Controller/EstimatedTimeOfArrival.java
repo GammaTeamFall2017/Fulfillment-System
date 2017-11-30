@@ -59,6 +59,7 @@ public class EstimatedTimeOfArrival implements Initializable {
                        minutesLeft.setText(timeLeft.toString());
                        if (timeLeft <= 0) {
                             timeline.stop();
+                            new SceneController().setScene("/cs4310/fulfillment/program/View/EnjoyScene.fxml", (Button)event.getSource());
                        }
                     }
                 }));

@@ -34,9 +34,8 @@ public class EnjoyScene implements Initializable {
     }
     
     public void handleDoneButton(ActionEvent event) throws IOException{
-        //changes the scene to the menu/order scene with the appropiate information
-        //notifies the waitstaff that the table is done eating
-        
+
+        new SceneController().setScene("/cs4310/fulfillment/program/View/EnjoyScene.fxml", (Button)event.getSource());
     }
     
 }

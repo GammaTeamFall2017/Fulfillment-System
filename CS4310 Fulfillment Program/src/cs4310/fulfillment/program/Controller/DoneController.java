@@ -28,6 +28,8 @@ public class DoneController implements Initializable {
     
     @FXML
     public void handleYesButton(ActionEvent e) {
+        //changes the scene to the menu/order scene with the appropiate information
+        //notifies the waitstaff that the table is done eating
         newScene.setScene("/cs4310/fulfillment/program/View/MenuOrderScene.fxml", (Button)e.getSource());
     }
     
