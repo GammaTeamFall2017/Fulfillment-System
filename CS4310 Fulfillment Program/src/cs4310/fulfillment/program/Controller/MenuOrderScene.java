@@ -25,7 +25,10 @@ import java.util.concurrent.TimeUnit;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -40,6 +43,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 /**
  *
@@ -308,11 +312,14 @@ public class MenuOrderScene  implements Initializable {
             totalETA += etaOfItem.get(i);
         }
         
-           //newOrder.get
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
-            EstimatedTimeOfArrival estimatedScene = new EstimatedTimeOfArrival(String.valueOf(totalETA));
-            estimatedScene.setTimeLeft(String.valueOf(totalETA));
-            newScene.setScene("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml", submitOrder);
+            Stage stage = (Stage) submitOrder.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/cs4310/fulfillment/program/View/EstimateTimeOfArrival1.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            EstimatedTimeOfArrival cont = fxmlLoader.getController();
+            cont.setTimeLeft(totalETA);
+            stage.setScene(new Scene(root));
+            stage.show();
         }
         else if(!CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             System.out.println("not customer");

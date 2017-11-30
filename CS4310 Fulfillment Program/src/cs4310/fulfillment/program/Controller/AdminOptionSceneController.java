@@ -47,6 +47,7 @@ public class AdminOptionSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         newScene = new SceneController();
+        CS4310FulfillmentProgram.setCurrentUserRole("admin");
     }    
 
     @FXML

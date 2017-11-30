@@ -10,6 +10,8 @@ import cs4310.fulfillment.program.Model.Item;
 import cs4310.fulfillment.program.Model.ItemJpaController;
 import cs4310.fulfillment.program.Model.Subitem;
 import cs4310.fulfillment.program.Model.SubitemJpaController;
+import cs4310.fulfillment.program.exceptions.IllegalOrphanException;
+import cs4310.fulfillment.program.exceptions.NonexistentEntityException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -18,6 +20,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
@@ -31,10 +34,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -86,12 +92,13 @@ public class AddFoodItemController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         db = new DbUtilityCollection();
         subitemTypeBox.getItems().addAll("add-on", "attribute");
+        newItem = new Item();
         newScene = new SceneController();
         setOfSubitems = new HashSet<Subitem>();
     }    
 
     @FXML
-    private void handleAddItemButton(ActionEvent event){
+    private void handleAddItemButton(ActionEvent event) throws NonexistentEntityException, Exception{
         if (!checkPriceFormat(itemPriceField))
              return;
         List<String> emptyFields = emptyItemFields();
@@ -100,17 +107,25 @@ public class AddFoodItemController implements Initializable {
         {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
             ItemJpaController itemInstance = new ItemJpaController(emf);
-            newItem = new Item();
+            SubitemJpaController subitemInstance = new SubitemJpaController(emf);
             BigDecimal price = new BigDecimal(itemPriceField.getText());
             String imgPath = "/cs4310/fulfillment/program/View/Food/" + newItem.getItemName() + ".png";
             newItem.setItemName(itemNameField.getText());
             newItem.setItemPrice(price);
             newItem.setItemEta(Integer.parseInt(itemETAField.getText()));
-            newItem.setSubitemCollection(setOfSubitems);
             //newItem.setImgPath("/cs4310/fulfillment/program/View/Food/blank.png");
             newItem.setImgPath(imgPath);
-            itemInstance.create(newItem);
-           
+            newItem = itemInstance.createAndReturn(newItem);
+            //update each subitem with newItem id and add it to database
+            for (Subitem s : setOfSubitems)
+            {
+                s.setItemId(newItem);
+                s.setSubitemId(null);
+                s = db.createSubitem(s);
+                System.out.println(s.getSubitemId());
+            }
+            newItem.setSubitemCollection(setOfSubitems);
+            itemInstance.edit(newItem);
             newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button)event.getSource());
         }
         else
@@ -138,13 +153,12 @@ public class AddFoodItemController implements Initializable {
             newSubitem.setSubitemPrice(price);
             newSubitem.setSubitemEta(Integer.parseInt(subitemETAField.getText()));
             newSubitem.setSubitemType(subitemTypeBox.getValue());
-            newSubitem.setItemId(newItem);
             System.out.println(newSubitem.getSubitemName());
-            newSubitem = db.createSubitem(newSubitem);
+            // have to give subitem a unique id to add it to setOfSubitems
+            newSubitem.setSubitemId(id++); // id is temporary, is replaced once item is added
             if(setOfSubitems.add(newSubitem))
             {
-                addSubitemtoList(newSubitem);
-                
+                addSubitemtoList(newSubitem); 
             }
         }
         else
@@ -213,6 +227,12 @@ public class AddFoodItemController implements Initializable {
 
     private void addSubitemtoList(Subitem s) {
             Label nameLabel = new Label(s.getSubitemName() + "(" + s.getSubitemType() +  ")");
+            nameLabel.setOnMouseClicked((MouseEvent event) -> {
+                subitemNameField.setText(s.getSubitemName());
+                subitemPriceField.setText(s.getSubitemPrice().toString());
+                subitemETAField.setText(Integer.toString(s.getSubitemEta()));
+                subitemTypeBox.setValue(s.getSubitemType());
+            });
             Button removeButton = new Button("X");
              removeButton.setOnAction((ActionEvent event) -> {
                  removeSubitem(s,removeButton);
@@ -223,10 +243,22 @@ public class AddFoodItemController implements Initializable {
     }
 
     private void removeSubitem(Subitem s, Button removeButton) {
-        int index = VBoxRemove.getChildren().indexOf(removeButton);
-        VBoxSubitems.getChildren().remove(index);
-        VBoxRemove.getChildren().remove(index);
-        setOfSubitems.remove(s);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Remove Subitem");
+            alert.setHeaderText("Are you sure you want to remove this subitem?");
+            
+            ButtonType buttonTypeOne = new ButtonType("Yes");
+            ButtonType buttonTypeTwo = new ButtonType("No",ButtonBar.ButtonData.CANCEL_CLOSE);
+            alert.getButtonTypes().setAll(buttonTypeOne,buttonTypeTwo);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOne){
+                int index = VBoxRemove.getChildren().indexOf(removeButton);
+                VBoxSubitems.getChildren().remove(index);
+                VBoxRemove.getChildren().remove(index);
+                setOfSubitems.remove(s);
+            } else {
+            // ... user chose No or closed the dialog
+            }
     }
     private void setHeight(double height, Control... nodes)
     {
