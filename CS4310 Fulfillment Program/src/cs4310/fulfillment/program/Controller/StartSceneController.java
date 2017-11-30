@@ -43,6 +43,6 @@ public class StartSceneController implements Initializable {
     @FXML
     private void handleCustomerButton(ActionEvent e){
         CS4310FulfillmentProgram.setCurrentUserRole("Customer");
-        newScene.setScene("/cs4310/fulfillment/program/View/Menu.fxml", (Button)e.getSource());
+        newScene.setScene("/cs4310/fulfillment/program/View/MenuScene.fxml", (Button)e.getSource());
     }
 }

@@ -25,7 +25,7 @@ public class MenuController implements Initializable {
     @FXML
     ImageView menuImage;
     private int imageCount = 1;
-    private int maxImages = 5;
+    private int maxImages = 9;
     /**
      * Initializes the controller class.
      */
@@ -35,6 +35,9 @@ public class MenuController implements Initializable {
     }    
     @FXML
     public void handleBackButton(ActionEvent e) throws IOException {
+        if(CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")){
+            newScene.setScene("/cs4310/fulfillment/program/View/MenuOrderScene.fxml", (Button) e.getSource());
+        }
         newScene.setScene("/cs4310/fulfillment/program/View/StartScene.fxml", (Button) e.getSource());
     }
 

@@ -79,7 +79,7 @@ public class MenuOrderScene  implements Initializable {
     private List<String> usedTables = new ArrayList<String>(Collections.nCopies(8, "-1"));
     private List<ItemsOrdered> orderArray = new ArrayList<ItemsOrdered>();
     private List<Integer> etaOfItem = new ArrayList<Integer>();
-    private int buttonsPerRow = 6;
+    private int buttonsPerRow = 5;
     private int buttonHeight = 120;
     private int widthOfScrollPane = 720;
     private String tableNumber = "-1";
