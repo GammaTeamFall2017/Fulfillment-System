@@ -74,17 +74,33 @@ public class ListOfOrdersSceneController implements Initializable {
             }catch(IllegalOrphanException e){
             }catch(NonexistentEntityException e){}
         //
-         */
+        */
+        //will Remove later used for removing subitems and then items
+        /*
+        List<Item> iList;
+        iList = db.getAllItems();
+        //System.out.println(iList.get(4).getItemName());
+        List<Subitem> subI = (List)iList.get(4).getSubitemCollection();
+        try {
+            db.removeSubitem(subI.get(0));
+            db.removeItem(iList.get(4));
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(ListOfOrdersSceneController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalOrphanException ex) {
+            Logger.getLogger(ListOfOrdersSceneController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        */ 
+        //System.out.println(iList.get(5).getSubitemCollection().toString());
         // Load all kitchen orders
         List<Orders> kitchenOrders = db.getKitchenOrders();
         int totalOrders = kitchenOrders.size();
 
         int itemsPerOrder = 20;
         VBox vbox[] = new VBox[totalOrders];
-    
+
         //loads information of order to each vbox
         int count = 0; // needed for vbox[]
-        for (Orders currentOrder: kitchenOrders){
+        for (Orders currentOrder : kitchenOrders) {
             Button bt = new Button("Table " + currentOrder.getTableNumber());
             Button orderComplete = new Button("Order Complete");
             orderComplete.setId("" + currentOrder.getOrderNumber());
@@ -106,10 +122,11 @@ public class ListOfOrdersSceneController implements Initializable {
                     } catch (Exception ex) {
                         System.out.println("Unable to request waitstaff " + e);
                     }
-                    if(CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")){
+                    if (CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")) {
                         newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());
-                    }else
+                    } else {
                         newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button) e.getSource());
+                    }
                     //System.out.println(db.getKitchenOrders().get(0).getKitchenComplete());
 
                 }
@@ -138,17 +155,15 @@ public class ListOfOrdersSceneController implements Initializable {
                     }
                 }
             });
-            
-            
-            
+
             Label orderNumber = new Label("Order Number: " + currentOrder.getOrderNumber() + "\nOrder Time : \n   " + currentOrder.getDateCreated());
             orderNumber.setStyle("-fx-text-fill: white;");
             //Label kitchenComplete = new Label("Food is ready");
-            
-            Label label = new Label();           
-            if(count < itemsPerOrder){
+
+            Label label = new Label();
+            if (count < itemsPerOrder) {
                 vbox[count] = new VBox();
-          
+
                 bt.setMinWidth(320);
                 //adds style to vbox
                 vbox[count].setStyle("-fx-border-style: solid;"
@@ -161,16 +176,16 @@ public class ListOfOrdersSceneController implements Initializable {
                 vbox[count].getChildren().add(bt);
                 vbox[count].getChildren().add(orderComplete);
                 vbox[count].getChildren().add(orderNumber);
-                
+
                 // Get all Items in the order at once             
                 Collection<ItemsOrdered> currentOrdersItems = currentOrder.getItemsOrderedCollection();
-                
+
                 //adds order information adds each item as label with information below it
                 db.displayKitchenOrder(currentOrdersItems, vbox[count], label);
-          
+
             }
-        
-        count++; // counter for vbox
+
+            count++; // counter for vbox
         }
 
         for (int i = 0; i < totalOrders; i++) {
@@ -186,10 +201,11 @@ public class ListOfOrdersSceneController implements Initializable {
 
     @FXML
     public void handleRefreshButton(ActionEvent e) throws IOException {
-        if (CS4310FulfillmentProgram.getCurrentUserRole().equals("admin"))
-              newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());  
-        else
+        if (CS4310FulfillmentProgram.getCurrentUserRole().equals("admin")) {
+            newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());
+        } else {
             newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersScene.fxml", (Button) e.getSource());
+        }
     }
 
     @FXML
@@ -201,9 +217,8 @@ public class ListOfOrdersSceneController implements Initializable {
     public void handleRefreshButtonAdmin(ActionEvent e) throws IOException {
         newScene.setScene("/cs4310/fulfillment/program/View/ListOfOrdersSceneAdmin.fxml", (Button) e.getSource());
     }
-    
-    public void completeOrder()
-    {
-        
+
+    public void completeOrder() {
+
     }
 }

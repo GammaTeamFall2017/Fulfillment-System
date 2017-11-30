@@ -8,12 +8,15 @@
 <AnchorPane id="background" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.StartSceneController">
    <children>
       <AnchorPane id="ddddd" layoutX="488.0" layoutY="324.0" />
-      <Button id="setButton" fx:id="loginButton" layoutX="586.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleLoginButton" stylesheets="@css/Buttons.css" text="Login" />
-      <Label id="Text" fx:id="titleLabel" alignment="CENTER" layoutX="415.0" layoutY="94.0" stylesheets="@css/Buttons.css" text="EasyOrder System" textAlignment="CENTER">
+      <Button id="setButton" fx:id="loginButton" layoutX="348.0" layoutY="404.0" mnemonicParsing="false" onAction="#handleLoginButton" prefHeight="75.0" prefWidth="570.0" stylesheets="@css/Buttons.css" text="Login" />
+      <Label id="Text" fx:id="titleLabel" alignment="CENTER" layoutX="355.0" layoutY="37.0" prefHeight="138.0" prefWidth="570.0" stylesheets="@css/Buttons.css" text="EasyOrder" textAlignment="CENTER">
          <font>
-            <Font size="55.0" />
+            <Font name="System Bold" size="94.0" />
          </font>
       </Label>
-      <Button id="setButton" fx:id="customerButton" layoutX="542.0" layoutY="399.0" mnemonicParsing="false" onAction="#handleCustomerButton" prefHeight="125.0" prefWidth="197.0" stylesheets="@css/Buttons.css" text="Customer" />
+      <Button id="setButton" fx:id="customerButton" layoutX="347.0" layoutY="175.0" mnemonicParsing="false" onAction="#handleCustomerButton" prefHeight="227.0" prefWidth="570.0" stylesheets="@css/Buttons.css" text="Customer">
+         <font>
+            <Font size="13.0" />
+         </font></Button>
    </children>
 </AnchorPane>

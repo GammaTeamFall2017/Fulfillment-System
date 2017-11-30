@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.MenuController">
+   <children>
+      <Button mnemonicParsing="false" onAction="#handlePreviousButton" prefHeight="741.0" prefWidth="144.0" text="Previous" />
+      <Button layoutX="1136.0" mnemonicParsing="false" onAction="#handleNextButton" prefHeight="741.0" prefWidth="144.0" text="Next" />
+      <ImageView fx:id="menuImage" fitHeight="741.0" fitWidth="993.0" layoutX="144.0" layoutY="79.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Food/pic1.jpg" />
+         </image>
+      </ImageView>
+      <Button layoutX="144.0" layoutY="-2.0" mnemonicParsing="false" onAction="#handleBackButton" prefHeight="78.0" prefWidth="331.0" text="Back" />
+      <Button layoutX="806.0" layoutY="-2.0" mnemonicParsing="false" onAction="#handleOrderButton" prefHeight="78.0" prefWidth="331.0" text="Order" />
+      <Text fill="WHITE" layoutX="532.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Menu" wrappingWidth="330.99998474121094">
+         <font>
+            <Font name="System Bold" size="85.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

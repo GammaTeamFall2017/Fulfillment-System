@@ -197,18 +197,21 @@ public class MenuOrderScene  implements Initializable {
                     }
                 });
                 //sets the image of the button
+                System.out.println("works up to here");
+                /*
+                //this breaks the code when adding new items
                 if(tempItem.getImgPath() != null){
                     //pic size = 168x147  change the size in the image
                     BackgroundImage backgroundImage = new BackgroundImage( new Image( getClass().getResource(tempItem.getImgPath()).toExternalForm()), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
                     Background background = new Background(backgroundImage);
                     newButton.setBackground(background);
                 }
-                
+                */
                 newButton.setMinWidth(tempHBox.getPrefWidth());
                 newButton.setMinHeight(tempHBox.getPrefHeight());
                 newPane.getChildren().add(newButton);
                 tempHBox.getChildren().add(newPane);
-                tempHBox.setFillHeight(true);
+                tempHBox.setFillHeight(true);               
             }
             VBoxButtons.getChildren().add(tempHBox);
         }
@@ -302,6 +305,9 @@ public class MenuOrderScene  implements Initializable {
     //back to admin options
     @FXML public void handleAdminOptions(ActionEvent event) throws IOException{
         newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button)event.getSource());
+    }
+    @FXML public void handleMenuButton(ActionEvent event) throws IOException{
+        newScene.setScene("/cs4310/fulfillment/program/View/MenuScene.fxml", (Button)event.getSource());
     }
     
     //submit order button
