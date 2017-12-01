@@ -115,20 +115,6 @@ public class EditSelectUserSceneController implements Initializable {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("CS4310_Fulfillment_ProgramPU");
         EmployeeJpaController employeeInstance = new EmployeeJpaController(emf);
         List<Employee> employeeList = employeeInstance.findEmployeeEntities();
-        int adminCount = 0;
-        for (Employee emp : employeeList)
-        {
-            if (emp.getRole() == "admin")
-                adminCount++;
-        }
-        if (adminCount <= 1)
-        {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Error");
-            alert.setHeaderText("Can't remove the only Administrator");
-            alert.showAndWait();
-            return;
-        }
         //confirm removal
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Remove Employee");
