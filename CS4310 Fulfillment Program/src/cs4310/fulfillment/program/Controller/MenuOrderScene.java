@@ -329,6 +329,7 @@ public class MenuOrderScene  implements Initializable {
             Parent root = (Parent) fxmlLoader.load();
             EstimatedTimeOfArrival cont = fxmlLoader.getController();
             cont.setTimeLeft(totalETA);
+            cont.setOrder(newOrder);
             stage.setScene(new Scene(root));
             stage.show();
         }
