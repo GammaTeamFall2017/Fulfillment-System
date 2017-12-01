@@ -407,6 +407,7 @@ public class MenuOrderScene  implements Initializable {
             
             totalOrderPrice = BigDecimal.ZERO;
             setPrice();
+            newScene.setScene("/cs4310/fulfillment/program/View/AdminOptionScene.fxml", (Button)e.getSource());
         }
     }
     
