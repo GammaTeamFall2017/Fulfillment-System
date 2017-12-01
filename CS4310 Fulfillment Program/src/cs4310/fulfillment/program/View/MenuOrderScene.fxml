@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.MenuOrderScene">
+<AnchorPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@css/Buttons.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cs4310.fulfillment.program.Controller.MenuOrderScene">
    <children>
       <Label layoutX="607.0" layoutY="25.0" text="Order" textFill="WHITE">
          <font>
@@ -17,7 +17,7 @@
          </font>
       </Label>
       <Button fx:id="submitOrder" layoutX="1115.0" layoutY="665.0" mnemonicParsing="false" onAction="#handleSubmitButton" stylesheets="@css/Buttons.css" text="Submit Order" />
-      <ScrollPane layoutX="765.0" layoutY="80.0" prefHeight="580.0" prefWidth="500.0">
+      <ScrollPane layoutX="765.0" layoutY="80.0" prefHeight="580.0" prefWidth="500.0" stylesheets="@css/Buttons.css">
         <content>
           <AnchorPane fx:id="orderPane" minHeight="0.0" minWidth="0.0" prefHeight="578.0" prefWidth="498.0">
                <children>
@@ -36,25 +36,21 @@
             </AnchorPane>
         </content>
       </ScrollPane>
-      <AnchorPane fx:id="foodButtonPane" layoutX="14.0" layoutY="80.0" prefHeight="580.0" prefWidth="738.0">
-         <children>
-            <ScrollPane id="background" prefHeight="580.0" prefWidth="738.0" stylesheets="@css/food.css">
-              <content>
-                <AnchorPane id="background" minHeight="0.0" minWidth="0.0" stylesheets="@css/Buttons.css">
-                     <children>
-                        <VBox id="background" fx:id="VBoxButtons" prefHeight="580.0" prefWidth="0.0" stylesheets="@css/Buttons.css" />
-                     </children>
-                  </AnchorPane>
-              </content>
-            </ScrollPane>
-         </children>
-      </AnchorPane>
       <Button layoutX="1017.0" layoutY="665.0" mnemonicParsing="false" onAction="#handleCancelButton" stylesheets="@css/Buttons.css" text="Cancel" />
-      <Button fx:id="requestWaitstaff" layoutX="14.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleRequestWaitstaffButton" stylesheets="@css/Buttons.css" text="Request Waitstaff" />
+      <Button fx:id="requestWaitstaff" layoutX="14.0" layoutY="666.0" mnemonicParsing="false" onAction="#handleRequestWaitstaffButton" stylesheets="@css/Buttons.css" text="Request Waitstaff" />
       <ChoiceBox fx:id="tableChoiceBox" layoutX="683.0" layoutY="670.0" prefHeight="25.0" prefWidth="48.0" stylesheets="@css/Buttons.css" />
-      <Button fx:id="selectTable" layoutX="738.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleSelectTableButton" stylesheets="@css/Buttons.css" text="Select" />
-      <Button fx:id="adminOptions" layoutX="310.0" layoutY="670.0" mnemonicParsing="false" onAction="#handleAdminOptions" stylesheets="@css/Buttons.css" text="Admin Options" />
+      <Button fx:id="selectTable" layoutX="738.0" layoutY="666.0" mnemonicParsing="false" onAction="#handleSelectTableButton" stylesheets="@css/Buttons.css" text="Select" />
+      <Button fx:id="adminOptions" layoutX="310.0" layoutY="666.0" mnemonicParsing="false" onAction="#handleAdminOptions" stylesheets="@css/Buttons.css" text="Admin Options" />
       <Label fx:id="tableLabel" layoutX="641.0" layoutY="674.0" text="Table" />
       <Button layoutX="867.0" layoutY="666.0" mnemonicParsing="false" onAction="#handleMenuButton" prefHeight="49.0" prefWidth="150.0" stylesheets="@css/Buttons.css" text="Menu" />
+      <ScrollPane layoutX="13.0" layoutY="81.0" prefHeight="580.0" prefWidth="745.0" style="-fx-border-color: black; -fx-background: black;" stylesheets="@css/Buttons.css">
+        <content>
+          <AnchorPane id="background" minHeight="0.0" minWidth="0.0" prefHeight="575.0" prefWidth="741.0" style="-fx-box-border: black;" stylesheets="@css/Buttons.css">
+               <children>
+                  <VBox fx:id="VBoxButtons" prefHeight="580.0" prefWidth="0.0" style="-fx-box-boarder: transparent;" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

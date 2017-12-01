@@ -35,10 +35,14 @@
 .label {
     -fx-text-fill: white;
 }
+
+.VBoxBackground{
+    -fx-background-color: black;    
+}
 #background{
     -fx-background-color: black;
 }
-#AnchorPane{
+.AnchorPane{
     -fx-background-color: black;
 }
 #dynamicButton{

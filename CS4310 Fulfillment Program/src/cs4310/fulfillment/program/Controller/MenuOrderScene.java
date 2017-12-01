@@ -82,7 +82,7 @@ public class MenuOrderScene  implements Initializable {
     private List<Integer> etaOfItem = new ArrayList<Integer>();
     private int buttonsPerRow = 5;
     private int buttonHeight = 120;
-    private int widthOfScrollPane = 720;
+    private int widthOfScrollPane = 738;
     private String tableNumber = "-1";
     private String orderNumber;
     private BigDecimal taxRate = new BigDecimal("0.10");
@@ -102,9 +102,7 @@ public class MenuOrderScene  implements Initializable {
         adminOptions.setVisible(false);
         tableLabel.setVisible(false);
         itemsArray = DatabaseConnecter.getAllItems();///this gets all of the food items in the database
-        foodButtonPane.setStyle("-fx-box-border: transparent;");
         orderPane.setStyle("-fx-box-border: transparent; -fx-background-color: #e0e0e0");
-        //itemsArray.get(0).setImgPath("/cs4310/fulfillment/program/View/Food/pizza.png");
         if(CS4310FulfillmentProgram.getCurrentUserRole().equals("Customer")){
             requestWaitstaff.setVisible(true);
             
@@ -214,11 +212,13 @@ public class MenuOrderScene  implements Initializable {
                 
                 newButton.setMinWidth(tempHBox.getPrefWidth());
                 newButton.setMinHeight(tempHBox.getPrefHeight());
+                newPane.setStyle("-fx-box-border: transparent; -fx-background-color: transparent;");
                 newPane.getChildren().add(newButton);
                 tempHBox.getChildren().add(newPane);
                 tempHBox.setFillHeight(true);               
             }
             VBoxButtons.getChildren().add(tempHBox);
+            System.out.println("tempHBox size" + tempHBox.getWidth());
         }
     }
     
