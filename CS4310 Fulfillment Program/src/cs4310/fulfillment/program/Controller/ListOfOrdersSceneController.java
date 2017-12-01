@@ -101,6 +101,10 @@ public class ListOfOrdersSceneController implements Initializable {
         //loads information of order to each vbox
         int count = 0; // needed for vbox[]
         for (Orders currentOrder : kitchenOrders) {
+            if(currentOrder.getItemsOrderedCollection().size()==0){
+                System.out.println("empty order");
+                
+            }
             Button bt = new Button("Table " + currentOrder.getTableNumber());
             Button orderComplete = new Button("Order Complete");
             orderComplete.setId("" + currentOrder.getOrderNumber());

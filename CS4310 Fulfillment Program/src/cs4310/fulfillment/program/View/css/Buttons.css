@@ -39,6 +39,9 @@
 #background{
     -fx-background-color: black;
 }
+#backgroundMenuOrder{
+    -fx-background-color: gray;
+}
 #AnchorPane{
     -fx-background-color: black;
 }
