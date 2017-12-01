@@ -105,7 +105,7 @@ public class ListOfOrdersSceneController implements Initializable {
                 System.out.println("empty order");
                 
             }
-            Button bt = new Button("Table " + currentOrder.getTableNumber());
+            Button bt = new Button("Table " + (count+1));
             Button orderComplete = new Button("Order Complete");
             orderComplete.setId("" + currentOrder.getOrderNumber());
             ListOfOrdersSceneController parentController = this;
@@ -195,7 +195,7 @@ public class ListOfOrdersSceneController implements Initializable {
         for (int i = 0; i < totalOrders; i++) {
             hbox.getChildren().add(vbox[i]);
         }
-
+        
     }
 
     @FXML
