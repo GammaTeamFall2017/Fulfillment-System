@@ -420,7 +420,7 @@ public class MenuOrderScene  implements Initializable {
         setPrice();
         etaOfItem.add(itemToAdd.getItemEta());
                 
-        
+        deleteItemButton.setStyle("-fx-padding:5 5 5 5; -fx-text-fill: red;");
         deleteItemButton.setText("X");
         deleteItemButton.setTextFill(Color.RED);
         deleteItemButton.setOnAction((ActionEvent event) -> {
@@ -440,7 +440,7 @@ public class MenuOrderScene  implements Initializable {
             totalOrderPrice = totalOrderPrice.subtract(itemToAdd.getItemPrice());
             setPrice();
         });
-        double height = 20;
+        double height = 40;
         deleteItemButton.setMinHeight(height);
         deleteItemButton.setMaxHeight(height);
         newItemNameField.setMinHeight(height);
@@ -465,10 +465,13 @@ public class MenuOrderScene  implements Initializable {
         String tempString = "";
         DecimalFormat df = new DecimalFormat(".00");
         tempString = df.format( totalOrderPrice.doubleValue());
+        subPrice.setStyle("-fx-text-fill:black;");
         subPrice.setText("Subtotal: $" + tempString);  
         tempString = df.format(taxRate.multiply(totalOrderPrice).doubleValue());
+        taxAmout.setStyle("-fx-text-fill:black;");
         taxAmout.setText("Tax: $" + tempString);
         tempString = df.format(totalOrderPrice.add(taxRate.multiply(totalOrderPrice)).doubleValue());
+        totalCost.setStyle("-fx-text-fill:black;");
         totalCost.setText("Total: $" + tempString);
     }
       
