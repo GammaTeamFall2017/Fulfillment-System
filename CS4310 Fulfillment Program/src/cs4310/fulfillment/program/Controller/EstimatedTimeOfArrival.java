@@ -37,7 +37,8 @@ public class EstimatedTimeOfArrival implements Initializable {
     private Integer timeLeft;
     private Orders newOrder = new Orders();
     private DbUtilityCollection DatabaseConnecter = new DbUtilityCollection();
-
+    private EnjoyScene enjoy = new EnjoyScene();
+    
     public int getTimeLeft() {
         return timeLeft;
     }
@@ -69,6 +70,7 @@ public class EstimatedTimeOfArrival implements Initializable {
                        minutesLeft.setText(timeLeft.toString());
                        if (timeLeft <= 0) {
                             timeline.stop();
+                            enjoy.setNewOrder(newOrder);
                             new SceneController().setScene("/cs4310/fulfillment/program/View/EnjoyScene.fxml",requestWaitstaff);
                        }
                     }
