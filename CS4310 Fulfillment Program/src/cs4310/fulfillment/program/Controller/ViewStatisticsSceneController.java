@@ -6,6 +6,8 @@
 package cs4310.fulfillment.program.Controller;
 
 import cs4310.fulfillment.program.Model.DbUtilityCollection;
+import cs4310.fulfillment.program.Model.ItemsOrdered;
+import cs4310.fulfillment.program.Model.Orders;
 import java.net.URL;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -50,6 +52,28 @@ public class ViewStatisticsSceneController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         db = new DbUtilityCollection();
         setLabels();
+        //find most ordered item
+        List<Orders> mostOrdered = db.getAllOrders();
+        int size = mostOrdered.size();
+        int count = 0;
+        int maxCount = 0;
+        Orders most = mostOrdered.get(0);
+        Orders mostOccuringOrder = most;
+     
+        for(int index = 0; index<size; index++) {
+        if(mostOrdered.get(index).equals(most)) {
+            count++;
+            if(count > maxCount) {
+                maxCount = count;
+                mostOccuringOrder = most;
+            }
+        } else {
+            count = 1;
+        }
+        most = mostOrdered.get(index);
+     }
+        //need to set to label
+        //mostOrderedItemLabel.setText();
     }    
 
     @FXML
