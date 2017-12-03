@@ -8,6 +8,9 @@ package cs4310.fulfillment.program.Controller;
 import cs4310.fulfillment.program.Controller.SceneController;
 import cs4310.fulfillment.program.Model.DbUtilityCollection;
 import cs4310.fulfillment.program.Model.Subitem;
+import cs4310.fulfillment.program.Model.Item;
+import java.math.BigDecimal;
+import cs4310.fulfillment.program.Model.Orders;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -18,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.CheckBox;
+import javax.persistence.criteria.Order;
 
 /**
  * FXML Controller class
@@ -47,7 +51,10 @@ public class CustomizeItemSceneController implements Initializable {
     
     private Subitem sItem;
     private SceneController newScene;
-    
+    private BigDecimal subtotal;
+    private BigDecimal itemPrice;
+    private Orders order;
+    private Item item;
     DbUtilityCollection db = new DbUtilityCollection();
 
     /**
@@ -58,8 +65,6 @@ public class CustomizeItemSceneController implements Initializable {
        
         newScene = new SceneController();
         sItem = new Subitem();
-        String sInstruction = specialInstructionsField.getText();
-        int quantity = Integer.parseInt(quantityField.getText());
         
         //disable submitButton if quantity field is empty; avoid empty orders
         submitButton.disableProperty().bind(quantityField.textProperty().isEmpty());
@@ -77,7 +82,43 @@ public class CustomizeItemSceneController implements Initializable {
                     + "-fx-border-color: black");
             vb[j].getChildren().add(cb);
         }
+        CheckBox cb1;
+        CheckBox cb2;
+        CheckBox cb3;
+        CheckBox cb4;
+        CheckBox cb5;
+        
+        //testing subitem checkboxes generated for item calling it
+        //checkboxes for subitems
+        cb1 = new CheckBox("Item: " + db.getSubitemByID(1)); 
+        cb2 = new CheckBox("Item: " + db.getSubitemByID(2)); 
+        cb3 = new CheckBox("Item: " + db.getSubitemByID(3)); 
+        cb4 = new CheckBox("Item: " + db.getSubitemByID(4)); 
+        cb5 = new CheckBox("Item: " + db.getSubitemByID(5)); 
+        //check for selected subitems
         boolean isSelected = cb.isSelected();
+        
+        addButton.setOnAction(e -> 
+{
+  
+        if (cb1.isSelected()) {
+            //Subitem.getSubitemPrice();
+            subtotal = subtotal.add(itemPrice);
+        }
+   
+        if (cb2.isSelected())  {
+           subtotal = subtotal.add(itemPrice);
+        }
+    
+        if (cb3.isSelected()) {
+            subtotal = subtotal.add(itemPrice);
+        }
+     
+        if (cb4.isSelected()) {
+            subtotal = subtotal.add(itemPrice);
+        }    
+     }
+);
     }    
 
     @FXML
@@ -87,16 +128,20 @@ public class CustomizeItemSceneController implements Initializable {
 
     @FXML
     private void handleSubmitButton(ActionEvent event) {
-        
+        String sInstruction = specialInstructionsField.getText();
+        int quantity = Integer.parseInt(quantityField.getText());
+        db.addItemsToOrder(order, item, sItem, quantity, sInstruction);
         newScene.setScene("/cs4310/fulfillment/program/View/MenuOrderScene.fxml", (Button)event.getSource());
     }
 
     @FXML
     private void handleUpdateButton(ActionEvent event) {
+         newScene.setScene("/cs4310/fulfillment/program/View/CustomizeItemScene.fxml", (Button)event.getSource());
     }
 
     @FXML
     private void handleAddButton(ActionEvent event) {
+        subTotalAmountLabel.setText(subtotal.toString());
     }
     
 }
