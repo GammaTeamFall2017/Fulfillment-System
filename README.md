@@ -25,14 +25,14 @@ In order to run EasyOrder on your device, you'll need:
 
 ## Screenshots
 
-# Start
+### Start
 Application as it appears after starting it:
 ![alt tag](https://s3-us-west-2.amazonaws.com/aniaio/ScreenshotsEasyOrder/start.png "Start")
 
 Login screen after clicking the Login button at the start screen:
 ![alt tag](https://s3-us-west-2.amazonaws.com/aniaio/ScreenshotsEasyOrder/login.png "Login")
 
-# Customer User
+### Customer User
 View of the customer's order screen after clicking the Customer button at the start screen:
 ![alt tag](https://s3-us-west-2.amazonaws.com/aniaio/ScreenshotsEasyOrder/customer1.png "Customer1")
 
@@ -45,10 +45,10 @@ View of the Estimated Time of Arrival screen after customer submits an order:
 After time passes at the Estimated Time of Arrival screen, the view changes to this Enjoy screen:
 ![alt tag](https://s3-us-west-2.amazonaws.com/aniaio/ScreenshotsEasyOrder/customer4.png "Customer4")
 
-# Waitstaff User
+### Waitstaff User
 View of the order screen after a waitstaff user logs in:
 ![alt tag](https://s3-us-west-2.amazonaws.com/aniaio/ScreenshotsEasyOrder/waiter.png "Waiter")
 
-# Kitchen Staff User:
+### Kitchen Staff User:
 View of list of orders screen after a kitchen staff user logs in:
 ![alt tag](https://s3-us-west-2.amazonaws.com/aniaio/ScreenshotsEasyOrder/kitchen1.png "Kitchen1")
